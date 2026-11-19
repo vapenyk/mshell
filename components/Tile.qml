@@ -48,14 +48,6 @@ QQ.Item {
             }
         }
 
-        QQ.TapHandler {
-            id: settingsTap
-
-            acceptedButtons: Qt.RightButton
-            gesturePolicy: QQ.TapHandler.ReleaseWithinBounds
-            onTapped: root.settingsRequested()
-        }
-
         background: QQ.Rectangle {
             color: root.active ? Theme.primary : Theme.surfaceContainerHigh
             radius: Shape.extraLarge
@@ -65,7 +57,7 @@ QQ.Item {
                 radius: parent.radius
                 contentColor: button._contentColor
                 hovered: button.hovered
-                pressed: button.down || settingsTap.pressed
+                pressed: button.down || settingsArea.pressed
                 focused: button.visualFocus
             }
         }
@@ -139,5 +131,13 @@ QQ.Item {
                 }
             }
         }
+    }
+
+    QQ.MouseArea {
+        id: settingsArea
+
+        anchors.fill: parent
+        acceptedButtons: Qt.RightButton
+        onClicked: root.settingsRequested()
     }
 }
