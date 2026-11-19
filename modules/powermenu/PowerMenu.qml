@@ -21,10 +21,6 @@ Scope {
     }
 
     readonly property Component actions: QQ.Column {
-        function focusFirst(): void {
-            signOut.forceActiveFocus(Qt.TabFocusReason);
-        }
-
         ActionRow {
             text: qsTr("Lock")
             iconName: "lock"
@@ -36,6 +32,7 @@ Scope {
 
             text: qsTr("Sign out")
             iconName: "logout"
+            focus: true
             QQ.KeyNavigation.up: shutDown
             QQ.KeyNavigation.down: restart
             onClicked: root._select("logout")

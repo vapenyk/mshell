@@ -70,12 +70,10 @@ Item {
             closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
 
             onAboutToHide: UiState.powerMenuOpen = false
-            onOpened: actionsLoader.item?.focusFirst()
 
             contentItem: Loader {
-                id: actionsLoader
-
                 active: dropdown.visible
+                focus: true
                 sourceComponent: root.powerActions
             }
 

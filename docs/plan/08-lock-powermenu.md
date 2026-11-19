@@ -15,6 +15,7 @@
 - [x] The Control Center power button and IPC `powermenu toggle` open the same dropdown on the relevant display.
 - Done when: input, confirmation, cancel, and command dispatch work in the nested sandbox with substitute executables.
 - Verified mouse, Escape, outside-click dismissal, IPC from a Control Center subpage, and one command per confirmed action in nested Hyprland.
+- PowerMenu owns its initial row focus. Control Center gives focus to the hosted content through its loader. Verified arrow navigation and Enter from Sign out to Restart.
 
 ## 8.3 Lock
 - Read: shot 18; Quickshell `WlSessionLock` docs; check for a PAM service type in your version
