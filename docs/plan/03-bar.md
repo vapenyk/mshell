@@ -6,8 +6,9 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 ## 3.1 UiState
 - Read: `../conventions/NAMING.md` (Relations between features)
 - Create: `services/UiState.qml`
-- [ ] `openPopup: string` (`""` = none), `open(name)`, `close()`, `toggle(name)`; `editMode: bool`
-- Done when: consumed by pills below (3.3, 3.4)
+- Update: `modules/bar/Bar.qml` to route the existing clock click through UiState.
+- [x] `openPopup: string` (`""` = none), `open(name)`, `close()`, `toggle(name)`; `editMode: bool`
+- Done when: the existing clock pill toggles the calendar state. The dedicated clock and status pills use UiState in 3.3 and 3.4.
 
 ## 3.2 Status services (minimal)
 - Read: `00-OVERVIEW.md` open-question answers (Quickshell 0.3.2, Hyprland); the 0.3.2 docs for `Quickshell.Networking` / `Quickshell.Bluetooth` / `Quickshell.Services.UPower`

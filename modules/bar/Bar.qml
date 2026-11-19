@@ -33,6 +33,7 @@ Variants {
                 verticalCenter: parent.verticalCenter
             }
             text: Format.clock(Time.date, true)
+            onClicked: UiState.toggle("calendar")
 
             trailing: Components.Text {
                 text: Format.dateShort(Time.date)
