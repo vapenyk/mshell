@@ -10,6 +10,7 @@ QQC.AbstractButton {
 
     required property string iconName
     property string variant: "standard"
+    property QQ.color standardColor: Theme.onSurfaceVariant
     property bool toggle: false
     property bool selected: false
 
@@ -20,7 +21,7 @@ QQC.AbstractButton {
                                            : _filled ? Theme.primary : Theme.secondaryContainer
     readonly property QQ.color _contentColor: !enabled ? Theme.onSurface
                                               : _filled ? Theme.onPrimary
-                                              : _tonal ? Theme.onSecondaryContainer : Theme.onSurfaceVariant
+                                              : _tonal ? Theme.onSecondaryContainer : standardColor
 
     implicitWidth: Sizing.sliderHeight
     implicitHeight: implicitWidth

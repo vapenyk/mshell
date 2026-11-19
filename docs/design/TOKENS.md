@@ -30,6 +30,7 @@ Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 | Destructive | `errorContainer` | `onErrorContainer` |
 | Scrim behind dialogs | `scrim` @ 32% | |
 | Notification unread dot | `tertiary` | |
+| Notification reply field | `surfaceContainerLowest` | `onSurface`, placeholder `onSurfaceVariant`, focus outline `primary` |
 
 ## State layers (`State.qml` values live in `Theme.qml`)
 | State | Opacity of content-color overlay |
@@ -92,6 +93,9 @@ Popup `surfaceContainer` over wallpaper; cards `surfaceContainerHigh`. A soft sh
 | Popup gap below bar | 8 |
 | Control center width | 400 (see RESPONSIVE) |
 | Popup inner padding | 16 |
+| Notification avatar and app badge | 40 and 18 |
+| Notification thumbnail and expanded preview | 56 × 40 thumbnail, preview max height 200 |
+| Notification reply field and Send target | 48 high, field radius full |
 | Tile height | 64 |
 | Tile grid | 4 columns, gap 8; large = 2 cols, small = 1 col |
 | Slider height | 40 |

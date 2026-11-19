@@ -10,22 +10,38 @@ Flow {
 
     required property var actions
     required property string link
-    readonly property bool hasActions: link.length > 0 || actionButtons.count > 0
+    property bool canReply: false
+    readonly property bool hasActions: canReply || link.length > 0 || actionButtons.count > 0
+    signal replyRequested()
     signal actionRequested(action: NotificationAction)
 
     spacing: Sizing.popupGap
 
+    function focusReply(): void {
+        if (visible && canReply)
+            replyButton.forceActiveFocus(Qt.OtherFocusReason);
+    }
+
     Repeater {
         id: actionButtons
 
-        model: root.actions.filter(action => action.identifier !== "default" && action.identifier !== "inline-reply")
+        model: root.actions.filter(action => action && action.identifier !== "default" && action.identifier !== "inline-reply")
 
         delegate: NotifActionButton {
             required property NotificationAction modelData
 
-            text: modelData.text
+            text: modelData?.text ?? ""
+            enabled: modelData !== null
             onClicked: root.actionRequested(modelData)
         }
+    }
+
+    NotifActionButton {
+        id: replyButton
+
+        visible: root.canReply
+        text: qsTr("Reply")
+        onClicked: root.replyRequested()
     }
 
     NotifActionButton {

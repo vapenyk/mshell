@@ -15,3 +15,7 @@ function webLink(body) {
     }
     return "";
 }
+
+function conversationAvatar(category, width, height) {
+    return (category === "im" || category === "im.received") && width > 0 && width === height;
+}

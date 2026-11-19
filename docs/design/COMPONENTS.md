@@ -29,7 +29,7 @@ Spec dp values come from each M3 page's **Specs** tab; copy only what we use int
 | ClockPill, StatusPill, MediaPill, KeyboardPill, NotifPill | `modules/bar/pills/` | 10, 11, 12, 09, 08 |
 | TopControls, TileGrid, TileSlot, tiles/*Tile | `modules/controlcenter/` | 01, 05, 07 |
 | MainPage, NetworkPage, BluetoothPage, ModesPage, AudioPage | `modules/controlcenter/pages/` | 01, 06 |
-| NotifCard, NotifGroup, NotifCenter, NotifPopup | `modules/notifications/` | 08, 17 |
+| NotifCard, NotifCardContent, NotifGroup, NotifCenter, NotifPopup | `modules/notifications/` | 08, 17, 22 |
 | MediaCard | `modules/media/` | 11 |
 | CalendarPopup | `modules/calendar/` | 12 |
 | Launcher, AppItem | `modules/launcher/` | 13 |

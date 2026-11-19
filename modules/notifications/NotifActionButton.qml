@@ -12,7 +12,7 @@ Basic.Button {
     id: action
     property bool outlined: false
     readonly property string _browserIcon: outlined ? Quickshell.iconPath("web-browser", true) : ""
-    width: Math.min(implicitWidth, parent.width)
+    width: Math.min(implicitWidth, parent?.width ?? implicitWidth)
     implicitHeight: Sizing.pillHeight
     horizontalPadding: outlined ? Sizing.pillHorizontalPadding : Shape.none
     hoverEnabled: true

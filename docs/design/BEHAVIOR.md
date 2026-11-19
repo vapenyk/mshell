@@ -105,6 +105,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 ## 7. Notifications (freedesktop semantics, not M3)
 - Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.
 - Hovering a popup or editing an inline reply pauses its timeout. Inline reply is available when the sender advertises a reply action.
+- While editing, Esc discards the draft, restores the actions, and releases reply focus. Enter or Send submits a nonblank reply. The card displays any subsequent sender update in place.
 - `replaces_id` updates the existing notification in place (no new card/animation).
 - Click on the card body = default action if the sender provided one, else dismiss. Action buttons call `invoke`.
 - DND on: everything goes to Silent, no popups, **critical still shows**.

@@ -13,40 +13,45 @@ QQL.RowLayout {
     required property string placeholder
     property bool editing: false
     signal submitted(text: string)
+    signal cancelled()
 
     spacing: Sizing.pillGap
 
     onVisibleChanged: {
-        if (!visible)
-            editing = false;
+        if (!visible && editing)
+            _finish();
+    }
+
+    QQ.Keys.onEscapePressed: {
+        root._finish();
+        root.cancelled();
+    }
+
+    function startEditing(): void {
+        editing = true;
+        field.forceActiveFocus(Qt.OtherFocusReason);
+    }
+
+    function _finish(): void {
+        editing = false;
+        field.clear();
     }
 
     function _send(): void {
         if (field.text.trim().length === 0)
             return;
         const text = field.text;
-        field.clear();
-        editing = false;
+        _finish();
         submitted(text);
-    }
-
-    NotifActionButton {
-        visible: !root.editing
-        text: qsTr("Reply")
-        onClicked: {
-            root.editing = true;
-            field.forceActiveFocus(Qt.OtherFocusReason);
-        }
     }
 
     Basic.TextField {
         id: field
 
         QQL.Layout.fillWidth: true
-        visible: root.editing
-        implicitHeight: Sizing.pillHeight
-        leftPadding: Sizing.pillHorizontalPadding
-        rightPadding: Sizing.pillHorizontalPadding
+        implicitHeight: Sizing.notificationReplyHeight
+        leftPadding: Sizing.popupInnerPadding
+        rightPadding: Sizing.popupInnerPadding
         color: Theme.onSurface
         placeholderTextColor: Theme.onSurfaceVariant
         selectionColor: Theme.primary
@@ -57,34 +62,22 @@ QQL.RowLayout {
         selectByMouse: true
         QQ.Accessible.name: qsTr("Reply")
         onAccepted: root._send()
-        QQ.Keys.onEscapePressed: {
-            root.editing = false;
-        }
 
         background: QQ.Rectangle {
-            color: Theme.surfaceContainerHighest
-            radius: Shape.small
-            border.width: Sizing.outlineWidth
-            border.color: field.activeFocus ? Theme.primary : Theme.outline
+            color: Theme.surfaceContainerLowest
+            radius: Shape.full
+            border.width: field.activeFocus ? Sizing.outlineWidth : Shape.none
+            border.color: Theme.primary
         }
     }
 
     Components.IconButton {
-        QQL.Layout.preferredWidth: Sizing.pillHeight
-        QQL.Layout.preferredHeight: Sizing.pillHeight
-        visible: root.editing
+        QQL.Layout.preferredWidth: Sizing.notificationReplyHeight
+        QQL.Layout.preferredHeight: Sizing.notificationReplyHeight
+        standardColor: Theme.primary
         enabled: field.text.trim().length > 0
         iconName: "send"
         text: qsTr("Send reply")
         onClicked: root._send()
-    }
-
-    Components.IconButton {
-        QQL.Layout.preferredWidth: Sizing.pillHeight
-        QQL.Layout.preferredHeight: Sizing.pillHeight
-        visible: root.editing
-        iconName: "close"
-        text: qsTr("Cancel reply")
-        onClicked: root.editing = false
     }
 }

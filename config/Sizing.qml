@@ -16,6 +16,12 @@ Singleton {
     readonly property int notificationPopupWidth: 400
     readonly property int notificationPopupLimit: 3
     readonly property int notificationDotSize: 6
+    readonly property int notificationAvatarSize: 40
+    readonly property int notificationBadgeSize: 18
+    readonly property int notificationThumbnailWidth: 56
+    readonly property int notificationThumbnailHeight: 40
+    readonly property int notificationPreviewMaxHeight: 200
+    readonly property int notificationReplyHeight: 48
     readonly property int tileHeight: 64
     readonly property int tileChipSize: 48
     readonly property int tilePadding: 8
