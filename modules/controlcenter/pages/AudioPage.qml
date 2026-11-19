@@ -71,12 +71,22 @@ QQL.ColumnLayout {
     ConnectionRow {
         QQL.Layout.fillWidth: true
         visible: Audio.sourceAvailable
+        connected: true
         QQ.Accessible.name: Audio.sourceMuted ? qsTr("Unmute %1").arg(text) : qsTr("Mute %1").arg(text)
         text: Audio.deviceName(Audio.input)
         subtitle: Audio.sourceMuted ? qsTr("Microphone muted") : qsTr("Current microphone")
         iconName: Audio.sourceMuted ? "mic_off" : "mic"
         trailingIcon: Audio.sourceMuted ? "mic" : "mic_off"
         onClicked: Audio.toggleSourceMute()
+    }
+
+    Components.ValueSlider {
+        QQL.Layout.fillWidth: true
+        visible: Audio.sourceAvailable
+        accessibleName: qsTr("Microphone input level")
+        value: Audio.sourceVolume
+        icon: Audio.sourceMuted ? "mic_off" : "mic"
+        onMoved: value => Audio.setSourceVolume(value)
     }
 
     SectionLabel {

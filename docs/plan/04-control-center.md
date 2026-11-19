@@ -107,7 +107,7 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 ## 4.12 AudioPage
 - Create: `modules/controlcenter/pages/AudioPage.qml`, `services/Audio.model.js`, and `tests/services/Audio.model.test.js`.
 - Update: `services/Audio.qml` for PipeWire output selection and playback stream controls, and route the mixer action through `TopControls.qml`, `MainPage.qml`, and `ControlCenter.qml`.
-- [x] Show the current output and its volume, the current microphone with mute control when available, and playback stream volumes. The Effects section and spatial audio controls are out of scope.
+- [x] Show the current output and its volume, the current microphone with the same selected styling as the current output, a mute control, and an input level slider when available, and playback stream volumes. The Effects section and spatial audio controls are out of scope.
 - [x] Output device selection + per-app stream volume (mixer button in TopControls opens it)
 - Done when: switching output works
 - Verified output switching, microphone mute, and per-app volume with an isolated PipeWire session in nested Hyprland.

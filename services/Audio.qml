@@ -12,6 +12,7 @@ Singleton {
     readonly property real volume: available ? _sink.audio.volume : 0
     readonly property bool muted: available && _sink.audio.muted
     readonly property bool sourceAvailable: _source?.ready === true && _source.audio !== null
+    readonly property real sourceVolume: sourceAvailable ? _source.audio.volume : 0
     readonly property bool sourceMuted: sourceAvailable && _source.audio.muted
 
     readonly property PwNode output: _sink
@@ -51,6 +52,11 @@ Singleton {
     function toggleMute(): void {
         if (available)
             _sink.audio.muted = !muted;
+    }
+
+    function setSourceVolume(value: real): void {
+        if (sourceAvailable)
+            _source.audio.volume = value;
     }
 
     function toggleSourceMute(): void {
