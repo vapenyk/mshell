@@ -16,7 +16,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 02 | `02-base-components.md` | StateLayer, Icon, Text, Surface, Pill | ✅ |
 | 03 | `03-bar.md` | bar, clock pill, status pill, services | ✅ |
 | 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | ✅ |
-| 05 | `05-notifications.md` | service, popup, center, bell pill | 🟨 5.1–5.2 complete |
+| 05 | `05-notifications.md` | service, popup, center, bell pill | 🟨 5.1–5.3 complete |
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ⬜ |
 | 07 | `07-launcher-osd.md` | launcher, OSD | ⬜ |
 | 08 | `08-lock-powermenu.md` | lock, power menu | ⬜ |

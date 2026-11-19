@@ -16,6 +16,8 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 
 Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. A `Region` input mask restricts clicks to the surface, and `HyprlandFocusGrab.cleared()` handles clicks outside the popup and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
 
+Notification popups use the same overlay and exclusion settings with `WlrKeyboardFocus.None`. The window's input mask combines the visible card regions, while each card owns its hover timer. Verified in nested Hyprland with two outputs. In Quickshell 0.3.2, a 1400 ms `notify-send` timeout arrives as `expireTimeout: 1400`.
+
 Verify `WlrKeyboardFocus.Exclusive` for the other surfaces on first use.
 
 Z-order (low → high): bar, popups, notification popups, OSD, dialogs, lock.
@@ -94,7 +96,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Calendar | ClockPill | same | same |
 | Media card | MediaPill | same | container transform from pill |
 | Keyboard popup | KeyboardPill | same | fade through when swapping |
-| Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade |
+| Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade + slide |
 | Launcher | IPC | Esc, outside, launch | fade + scale / fade |
 | OSD | volume/brightness change | 1.5 s timeout (resets on change) | fade + slide / fade |
 | Power menu | CC power dropdown, IPC | Esc, outside, action | fade through |

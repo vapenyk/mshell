@@ -1,6 +1,7 @@
 import qs.config
 import qs.modules.bar
 import qs.modules.controlcenter
+import qs.modules.notifications
 import qs.services
 
 import Quickshell
@@ -13,11 +14,14 @@ ShellRoot {
         barWindows: bar.instances
     }
 
+    NotifPopup {}
+
     Component.onCompleted: {
         Network;
         Bluetooth;
         Battery;
         Notifs;
+        Compositor.focusedScreen;
         Shape;
         Motion;
     }

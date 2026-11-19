@@ -30,6 +30,7 @@ Singleton {
     readonly property var effectsSlow: ({ spring: 2.2, damping: 0.40, mass: 1 })
 
     readonly property real enterScale: 0.92
+    readonly property int notificationTimeout: 5000
     readonly property int popupSlideDistance: 8
     readonly property int sharedAxisDistance: 30
     readonly property real sharedAxisFadeOutFraction: 0.35

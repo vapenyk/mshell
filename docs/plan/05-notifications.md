@@ -23,11 +23,13 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 - Verified both states and action delivery from a temporary preview in nested Hyprland.
 
 ## 5.3 NotifPopup
-- Create: `modules/notifications/NotifPopup.qml`, `services/Compositor.qml`
-- [ ] `Compositor` (thin, Hyprland only): `focusedScreen` (map `Hyprland.focusedMonitor` to a `ShellScreen` by name) — reused later by launcher/OSD
-- [ ] Layer window on the focused screen, top-right under the bar; stack up to 3; auto-dismiss by urgency (critical never)
-- [ ] In: spatial default from top; out: fade + slide short4
+- Create: `modules/notifications/NotifPopup.qml`, `NotifToast.qml`, `NotifPopup.model.js`, `tests/modules/notifications/NotifPopup.model.test.js`, and `services/Compositor.qml`.
+- Update: `shell.qml` to mount the popup stack, `config/Sizing.qml` and `config/Motion.qml` for popup tokens, and `../design/BEHAVIOR.md` with the verified window settings.
+- [x] `Compositor` (thin, Hyprland only): `focusedScreen` (map `Hyprland.focusedMonitor` to a `ShellScreen` by name) — reused later by launcher/OSD
+- [x] Layer window on the focused screen, top-right under the bar; stack up to 3; auto-dismiss by urgency (critical never)
+- [x] In: spatial default from top; out: fade + slide short4
 - Done when: `notify-send` shows and dismisses correctly; DND suppresses
+- Verified focused-screen placement, sender timeout, hover pause, three-card limit, real click dismissal, replacement, and DND in nested Hyprland.
 
 ## 5.3b Pill + center
 - Create: `modules/notifications/NotifCenter.qml`, `modules/notifications/NotifGroup.qml`, `modules/bar/pills/NotifPill.qml`
