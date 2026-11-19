@@ -40,7 +40,7 @@ services ──►  utils
 - `services/` never import `components/` or `modules/`.
 - A module never imports another module. To affect another module: write to `UiState` or call IPC.
 - `*.model.js` imports nothing from Quickshell/QtQuick. Only other pure JS (`utils/`).
-- `shell.qml` knows module names and nothing else.
+- `shell.qml` composes modules and supplies their public properties, including content components. The host manages placement and gives focus to the content. The supplied component owns its internal actions and focus.
 
 ## Decision table — "where does this go?"
 | I'm writing… | Goes in |

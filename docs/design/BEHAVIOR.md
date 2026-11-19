@@ -29,7 +29,7 @@ Z-order (low → high): bar, popups, notification popups, OSD, dialogs, lock.
 **Rules**
 1. One popup at a time. Opening another **swaps** it (fade-through, no close-then-open gap).
 2. Same pill clicked again → closes.
-3. Popups anchored to a pill open on that pill's screen. Launcher, OSD, dialogs, notification popups use `Compositor.focusedScreen`.
+3. Popups anchored to a pill open on that pill's screen. Launcher, OSD, and notification popups use `Compositor.focusedScreen`. Power confirmations use the dropdown's screen.
 4. Popup opens at the root page every time (no remembered sub-page, no remembered scroll).
 5. While a popup is open, the pill that owns it shows the active container (`secondaryContainer`).
 

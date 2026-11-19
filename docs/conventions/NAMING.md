@@ -46,7 +46,7 @@ One row = one feature. If you add a feature, add its row here first.
 | Launcher | `modules/launcher` | `Apps` | `Fuzzy.js` (utils) | `launcher` | — | 13 |
 | OSD | `modules/osd` | `Audio`, `Brightness` | — | `osd` | — | — |
 | Lock | `modules/lock` | `Time` | — | `lock` | — | 18 |
-| Power menu | `modules/powermenu` | — (execDetached) | — | `powermenu` | — | — |
+| Power menu | `modules/powermenu` | `UiState`, `Power`, `Compositor` | `Power.model.js` | `powermenu` | — | 40 |
 
 ### Relations between features (allowed ways to talk)
 ```
