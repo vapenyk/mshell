@@ -48,9 +48,10 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 
 ## 4.5 Tile
 - Create: `components/Tile.qml`
-- [ ] Props `active, icon, title, subtitle`; signals `toggled`, `settingsRequested`
-- [ ] Left click → `toggled`; right click → `settingsRequested`; icon chip on the left, texts elided
-- [ ] On = `primary`/`onPrimary`, off = `surfaceContainerHigh`; chip shape morph on toggle
+- Update: `config/Sizing.qml` with tile height, chip size, and padding.
+- [x] Props `active, icon, title, subtitle`; signals `toggled`, `settingsRequested`
+- [x] Left click → `toggled`; right click → `settingsRequested`; icon chip on the left, texts elided
+- [x] On = `primary`/`onPrimary`, off = `surfaceContainerHigh`; chip shape morph on toggle
 - Done when: matches shot 07 tile anatomy; used by 4.6
 
 ## 4.6 Tile grid

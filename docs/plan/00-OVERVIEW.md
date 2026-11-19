@@ -15,7 +15,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 01 | `01-foundation.md` | skeleton, config, tokens, clock | ✅ |
 | 02 | `02-base-components.md` | StateLayer, Icon, Text, Surface, Pill | ✅ |
 | 03 | `03-bar.md` | bar, clock pill, status pill, services | ✅ |
-| 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | 🟨 4.1–4.4 complete |
+| 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | 🟨 4.1–4.5 complete |
 | 05 | `05-notifications.md` | service, popup, center, bell pill | ⬜ |
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ⬜ |
 | 07 | `07-launcher-osd.md` | launcher, OSD | ⬜ |
