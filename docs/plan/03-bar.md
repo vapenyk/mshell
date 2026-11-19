@@ -13,11 +13,13 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 ## 3.2 Status services (minimal)
 - Read: `00-OVERVIEW.md` open-question answers (Quickshell 0.3.2, Hyprland); the 0.3.2 docs for `Quickshell.Networking` / `Quickshell.Bluetooth` / `Quickshell.Services.UPower`
 - Create: `services/Network.qml`, `services/Bluetooth.qml`, `services/Battery.qml`
-- [ ] Prefer native Quickshell modules if the version has them; otherwise one `Process` per service (array command)
-- [ ] `Network`: `connected`, `kind` (`wifi`/`ethernet`), `ssid`, `strength`, `enabled`, `toggle()`
-- [ ] `Bluetooth`: `available`, `enabled`, `connectedCount`, `toggle()`
-- [ ] `Battery`: `present`, `percent` (0–100), `charging`, `low` (≤ 15)
-- Done when: values print correctly via a temporary `console.log` (remove after)
+- Create: `services/Network.model.js`, `services/Bluetooth.model.js`, `services/Battery.model.js` and their tests in `tests/services/` for device selection, counting, and charge conversion.
+- Update: `shell.qml` to start each service once.
+- [x] Use the native Networking, Bluetooth, and UPower modules in Quickshell 0.3.2.
+- [x] `Network`: `connected`, `kind` (`wifi`/`ethernet`), `ssid`, `strength` (0–1), `enabled`, `toggle()`. Prefer Ethernet when both connection types are active.
+- [x] `Bluetooth`: `available`, `enabled`, `connectedCount`, `toggle()`
+- [x] `Battery`: `present`, `percent` (0–100), `charging`, `low` (≤ 15)
+- Done when: the services match the system's readings in the nested sandbox and the toggles and live updates work on a private test bus.
 
 ## 3.3 ClockPill
 - Create: `modules/bar/pills/ClockPill.qml`, `modules/bar/pills/ClockPill.model.js`, test

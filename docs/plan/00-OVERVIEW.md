@@ -14,7 +14,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 |---|---|---|---|
 | 01 | `01-foundation.md` | skeleton, config, tokens, clock | ✅ |
 | 02 | `02-base-components.md` | StateLayer, Icon, Text, Surface, Pill | ✅ |
-| 03 | `03-bar.md` | bar, clock pill, status pill, services | 🟨 3.1 complete |
+| 03 | `03-bar.md` | bar, clock pill, status pill, services | 🟨 3.1–3.2 complete |
 | 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | ⬜ |
 | 05 | `05-notifications.md` | service, popup, center, bell pill | ⬜ |
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ⬜ |
@@ -28,7 +28,7 @@ Backlog (no plan yet, don't start): dock, screenshot toolbar, settings window, d
 | Question | Needed by | Answer |
 |---|---|---|
 | Which compositor do you run (Hyprland / Niri / Sway / other)? | 05.3 (focused screen), 06.6 (keyboard layout) | **Hyprland 0.57.2** (Arch). Use `Quickshell.Hyprland`; no compositor abstraction |
-| Quickshell version? Native `Networking` / `Bluetooth` modules available? | 03.2 | **Quickshell 0.3.2.** Native modules: check in 03.2 (`Quickshell.Bluetooth`, `Quickshell.Networking` in the 0.3.2 docs); fall back to `nmcli` if missing |
+| Quickshell version? Native `Networking` / `Bluetooth` modules available? | 03.2 | **Quickshell 0.3.2.** Verified `Quickshell.Networking`, `Quickshell.Bluetooth`, and `Quickshell.Services.UPower` in the nested sandbox. |
 | Are Roboto Flex and Material Symbols Rounded installed? | 01.4 | **Yes.** Both are system fonts and available to Quickshell. Text falls back to Roboto, then system sans-serif. |
 | Brightness backend? Night-light tool? | 04.4 | **brightnessctl.** Night-light tool: not decided (hyprsunset is the usual choice on Hyprland; confirm in 04.4) |
 | Notification daemons already running (mako, dunst, swaync)? They must be stopped | 05 | |
