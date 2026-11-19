@@ -11,6 +11,7 @@ Item {
 
     required property QtObject toast
     signal exited()
+    readonly property bool replying: card.replying && !toast.leaving
 
     property double _startedAt: 0
     property int _remaining: toast.timeout
@@ -20,7 +21,7 @@ Item {
     enabled: !toast.leaving
 
     function _syncTimer(): void {
-        if (hover.hovered || toast.leaving || toast.timeout === 0) {
+        if (hover.hovered || replying || toast.leaving || toast.timeout === 0) {
             if (expiry.running) {
                 _remaining = Math.max(1, _remaining - (Date.now() - _startedAt));
                 expiry.stop();
@@ -31,6 +32,8 @@ Item {
             expiry.start();
         }
     }
+
+    onReplyingChanged: _syncTimer()
 
     Component.onCompleted: {
         enter.start();

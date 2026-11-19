@@ -20,6 +20,7 @@ QQ.Item {
     property bool expanded: false
     property int groupCount: 0
     property bool groupExpanded: false
+    readonly property bool replying: expanded && reply.editing
     property int topRadius: Shape.large
     property int bottomRadius: Shape.large
 
@@ -175,24 +176,23 @@ QQ.Item {
                 elide: root.expanded ? QQ.Text.ElideNone : QQ.Text.ElideRight
             }
 
-            QQ.Flow {
+            NotifActions {
                 QQL.Layout.fillWidth: true
-                visible: root.expanded && (root._link.length > 0 || actionButtons.count > 0)
-                spacing: Sizing.popupGap
-                QQ.Repeater {
-                    id: actionButtons
-                    model: root.expanded ? root._actions.filter(action => action.identifier !== "default") : []
-                    delegate: NotifActionButton {
-                        required property NotificationAction modelData
-                        text: modelData.text
-                        onClicked: root.actionRequested(modelData)
-                    }
-                }
-                NotifActionButton {
-                    visible: root._link.length > 0
-                    outlined: true
-                    text: qsTr("Open link")
-                    onClicked: Qt.openUrlExternally(root._link)
+                visible: root.expanded && hasActions
+                actions: root.expanded ? root._actions : []
+                link: root._link
+                onActionRequested: action => root.actionRequested(action)
+            }
+
+            NotifReply {
+                id: reply
+
+                QQL.Layout.fillWidth: true
+                visible: root.expanded && (root.notification?.hasInlineReply ?? false)
+                placeholder: root.notification?.inlineReplyPlaceholder || qsTr("Type a reply")
+                onSubmitted: text => {
+                    if (root.notification?.hasInlineReply)
+                        root.notification.sendInlineReply(text);
                 }
             }
         }

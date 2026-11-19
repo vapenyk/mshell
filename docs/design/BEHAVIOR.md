@@ -8,7 +8,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 |---|---|---|---|---|---|
 | Bar | Top | none | whole bar | every screen | exclusive zone = bar height |
 | Popup (control center, notification center, calendar, media, keyboard) | Overlay | on demand (only while open) | whole popup | screen of the pill that opened it | closes on outside click via focus grab |
-| Notification popups | Overlay | none (never steal focus) | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
+| Notification popups | Overlay | none on arrival, exclusive only during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
 | Launcher | Overlay | exclusive while open | whole | focused screen | |
 | OSD | Overlay | none | **none** (fully click-through) | focused screen | |
 | Dialog / power menu | Overlay | exclusive while open | whole + scrim | focused screen | |
@@ -16,7 +16,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 
 Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. A `Region` input mask restricts clicks to the surface, and `HyprlandFocusGrab.cleared()` handles clicks outside the popup and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
 
-Notification popups use the same overlay and exclusion settings with `WlrKeyboardFocus.None`. The window's input mask combines the visible card regions, while each card owns its hover timer. Verified in nested Hyprland with two outputs. In Quickshell 0.3.2, a 1400 ms `notify-send` timeout arrives as `expireTimeout: 1400`.
+Notification popups use the same overlay and exclusion settings with `WlrKeyboardFocus.None` on arrival. Opening the inline reply editor temporarily uses `WlrKeyboardFocus.Exclusive`. The window's input mask combines the visible card regions, while each card owns its hover timer. Verified in nested Hyprland with two outputs. In Quickshell 0.3.2, a 1400 ms `notify-send` timeout arrives as `expireTimeout: 1400`.
 
 Verify `WlrKeyboardFocus.Exclusive` for the other surfaces on first use.
 
@@ -104,7 +104,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 
 ## 7. Notifications (freedesktop semantics, not M3)
 - Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.
-- Hovering a popup pauses its timeout.
+- Hovering a popup or editing an inline reply pauses its timeout. Inline reply is available when the sender advertises a reply action.
 - `replaces_id` updates the existing notification in place (no new card/animation).
 - Click on the card body = default action if the sender provided one, else dismiss. Action buttons call `invoke`.
 - DND on: everything goes to Silent, no popups, **critical still shows**.

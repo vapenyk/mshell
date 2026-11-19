@@ -54,6 +54,7 @@ Singleton {
 
     NotificationServer {
         actionsSupported: true
+        inlineReplySupported: true
         persistenceSupported: true
         imageSupported: true
 

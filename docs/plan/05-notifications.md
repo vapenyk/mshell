@@ -41,3 +41,9 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 - [x] IPC `notifs`: `toggleDnd`, `clear`
 - Done when: matches shot 08; bell dot appears and clears; `unused.sh` clean
 - Verified bell and unread state, group expansion, section clearing, empty state, session history, and IPC on the nested session bus.
+
+## Follow-up: inline reply
+- Create: `modules/notifications/NotifReply.qml` and `NotifActions.qml`.
+- Update: enable Quickshell inline replies and show an editor in expanded cards when the sender supplies a reply action. On a toast, request keyboard focus only while replying and pause its timeout.
+- History remains in memory for the lifetime of the notification service. Closing the center keeps it. Reloading or restarting the shell clears it.
+- Verified keyboard entry and D-Bus reply delivery from both the toast and the center in nested Hyprland.

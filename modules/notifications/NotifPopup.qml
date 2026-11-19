@@ -124,7 +124,8 @@ Scope {
             exclusionMode: ExclusionMode.Ignore
             color: Theme.transparent
             WlrLayershell.layer: WlrLayer.Overlay
-            WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+            WlrLayershell.keyboardFocus: column.children.some(item => item.replying === true)
+                ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
             WlrLayershell.namespace: "mshell-notifications"
 
             mask: Region {
