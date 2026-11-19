@@ -23,7 +23,7 @@ QQ.FocusScope {
     clip: true
     focus: true
 
-    // Pages provide a title, their implicit content height, and an optional headerAction Component.
+    // Pages provide a title, their implicit content height, and an optional headerAction or headerContent component.
     function push(page: Component, props: var): void {
         if (depth === 1 && !stack.busy) {
             _previousPageHeight = _pageHeight;
@@ -65,7 +65,7 @@ QQ.FocusScope {
         id: header
 
         width: root.width
-        height: Math.max(Sizing.pillHeight, action.implicitHeight)
+        height: Math.max(Sizing.pillHeight, action.implicitHeight, customHeader.implicitHeight)
         readonly property real sideSpace: Math.min(width / 2, Math.max(
             backButton.visible ? backButton.width + Sizing.pillGap : 0,
             action.visible ? action.width + Sizing.pillGap : 0))
@@ -94,9 +94,18 @@ QQ.FocusScope {
                 rightMargin: header.sideSpace
                 verticalCenter: parent.verticalCenter
             }
+            visible: !customHeader.item
             text: stack.currentItem?.title ?? ""
             role: "titleLarge"
             horizontalAlignment: QQ.Text.AlignHCenter
+        }
+
+        QQ.Loader {
+            id: customHeader
+
+            width: parent.width
+            anchors.verticalCenter: parent.verticalCenter
+            sourceComponent: stack.currentItem?.headerContent ?? null
         }
 
         QQ.Loader {
@@ -104,7 +113,7 @@ QQ.FocusScope {
 
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
-            sourceComponent: stack.currentItem?.headerAction ?? null
+            sourceComponent: customHeader.item ? null : stack.currentItem?.headerAction ?? null
             visible: item !== null
         }
     }

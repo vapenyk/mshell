@@ -112,7 +112,7 @@ QQ.Item {
                     Icon {
                         anchors.centerIn: parent
                         name: root.icon
-                        color: root.active ? Theme.onPrimary : Theme.onSurfaceVariant
+                        color: root.active ? Theme.onPrimaryContainer : Theme.onSurfaceVariant
                         filled: root.active
                     }
                 }

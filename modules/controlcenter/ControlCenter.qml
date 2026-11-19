@@ -19,7 +19,10 @@ Scope {
     readonly property Item requestedAnchor: UiState.openPopup === "controlcenter" ? UiState.popupAnchor : null
     property Item _mountedAnchor: null
 
-    onRequestedAnchorChanged: Qt.callLater(_syncPopup)
+    onRequestedAnchorChanged: {
+        UiState.editMode = false;
+        Qt.callLater(_syncPopup);
+    }
 
     function _syncPopup(): void {
         if (!requestedAnchor) {

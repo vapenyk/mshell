@@ -72,10 +72,15 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: toggling works and reflects external changes; matches shot 01 look
 
 ## 4.8 Reorder (edit mode)
-- Create: nothing new except `TileSlot.qml` if needed
-- [ ] Edit button in the header toggles `UiState.editMode`; in edit mode tiles show move arrows (left/right); drag-and-drop is a later improvement, not this step
-- [ ] Reorder writes `Config.tiles`; persisted; survives restart
-- [ ] Left/right click behaviour disabled in edit mode
+- [x] Remove the “Control center” title from the main page header. Use the layout from [shot 07](../design/reference/07-control-center-tiles-closeup.png): Edit tiles and Settings on the left, Power with a dropdown chevron on the right. Keep page titles on subpages.
+  - Edit tiles is wired in this step.
+  - Settings opens the settings window once it is implemented ([backlog](00-OVERVIEW.md#progress)).
+  - Power opens the [PowerMenu](08-lock-powermenu.md#82-powermenu) once it is implemented in 8.2.
+  - Keep Settings and Power disabled until their destinations are available. Discuss any additional buttons with the user before adding them.
+- Update: `MainPage.qml` and `PageStack.qml` for the root header, `../design/BEHAVIOR.md` for the header rule, `ControlCenter.qml` for edit-mode reset, `TileGrid.qml` and its model and tests for reorder, and `Config.qml` for persistence. Apply the documented `onPrimaryContainer` color to the active chip icon in `Tile.qml`.
+- [x] Edit button in the header toggles `UiState.editMode`; in edit mode tiles show move arrows (left/right); drag-and-drop is a later improvement, not this step
+- [x] Reorder writes `Config.tiles`; persisted; survives restart
+- [x] Left/right click behaviour disabled in edit mode
 - Done when: order changes persist and animate
 
 ## 4.9 ModesPage (first right-click page)

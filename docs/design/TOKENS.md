@@ -20,7 +20,7 @@ Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 | Bar pill (popup open / pressed) | `secondaryContainer` | `onSecondaryContainer` |
 | Tile off | `surfaceContainerHigh` | `onSurface`, subtitle `onSurfaceVariant` |
 | Tile on | `primary` | `onPrimary` |
-| Tile icon chip on | `primaryContainer`-ish darker/lighter step of `primary` | `onPrimary` (see screenshot 01, 07) |
+| Tile icon chip on | `primaryContainer` | `onPrimaryContainer` ([Material 3 color roles](https://m3.material.io/styles/color/the-color-system/)) |
 | Slider active track | `primary` | handle marker `primary` |
 | Slider inactive track | `surfaceContainerHighest` | icon `onSurfaceVariant` |
 | Selected list row | `secondaryContainer` | `onSecondaryContainer` (screenshot 09) |

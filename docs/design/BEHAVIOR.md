@@ -48,7 +48,7 @@ Z-order (low → high): bar, popups, notification popups, OSD, dialogs, lock.
 - Pages are entered from the main page: tile right-click, "mixer" button, list row with chevron. Max depth 2 (main → sub). No deeper trees.
 - Transition: **shared axis X** (see `MOTION.md`). Back = reverse.
 - Header back, `Esc`, `Backspace` (when no text field focused), and mouse back button all pop.
-- Title text = the page's name, `titleLarge`.
+- Titles use the page name and `titleLarge`. The control center root header shows Edit tiles, Settings, and Power actions in place of its title.
 - Edit mode (control center): the edit button toggles it; `Esc` leaves edit mode first, then closes.
 
 ## 4. Keyboard

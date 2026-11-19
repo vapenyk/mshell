@@ -1,10 +1,54 @@
+pragma ComponentBehavior: Bound
+
+import qs.components as Components
 import qs.config
+import qs.services
 import ".."
 
 import QtQuick
 
 Item {
-    readonly property string title: qsTr("Control center")
+    readonly property Component headerContent: Item {
+        implicitHeight: actions.implicitHeight
+
+        Row {
+            id: actions
+
+            spacing: Sizing.pillGap
+
+            Components.IconButton {
+                iconName: "edit"
+                text: qsTr("Edit tiles")
+                toggle: true
+                selected: UiState.editMode
+                onClicked: UiState.editMode = !UiState.editMode
+            }
+
+            Components.IconButton {
+                iconName: "settings"
+                text: qsTr("Settings")
+                enabled: false
+            }
+        }
+
+        Row {
+            anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
+
+            Components.IconButton {
+                iconName: "power_settings_new"
+                text: qsTr("Power")
+                enabled: false
+            }
+
+            Components.Icon {
+                anchors.verticalCenter: parent.verticalCenter
+                name: "expand_more"
+                size: Sizing.smallIconSize
+                opacity: Theme.disabledContentOpacity
+            }
+        }
+    }
 
     implicitHeight: grid.y + grid.implicitHeight
 

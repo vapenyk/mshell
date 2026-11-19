@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 const { loadModel } = require("../../load.js");
 
-const { visibleTiles, columnsFor, spanWidth, move } = loadModel("modules/controlcenter/TileGrid.model.js");
+const { visibleTiles, columnsFor, spanWidth, move, reorderVisible } = loadModel("modules/controlcenter/TileGrid.model.js");
 
 const defs = {
     wifi: { available: true },
@@ -41,4 +41,13 @@ test("moves in either direction without changing the input", () => {
     assert.deepEqual(move(order, 0, 3), order);
     assert.deepEqual(move([], 0, 1), []);
     assert.deepEqual(order, ["wifi", "modes", "mic"]);
+});
+
+test("reordering visible tiles preserves saved positions for unavailable hardware", () => {
+    const order = ["mic", "bluetooth", "wifi", "modes"];
+    const moved = reorderVisible(order, defs, 0, 1);
+
+    assert.deepEqual(moved, ["wifi", "bluetooth", "mic", "modes"]);
+    assert.deepEqual(visibleTiles(moved, defs), ["wifi", "mic", "modes"]);
+    assert.deepEqual(order, ["mic", "bluetooth", "wifi", "modes"]);
 });

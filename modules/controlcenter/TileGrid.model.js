@@ -1,11 +1,11 @@
 .pragma library
 
-function visibleTiles(order, defs) {
+function visibleTiles(order, defs, includeUnavailable = false) {
     const seen = new Set();
     const ids = Array.from(order ?? []).concat(Object.keys(defs));
 
     return ids.filter(id => {
-        if (typeof id !== "string" || seen.has(id) || !Object.prototype.hasOwnProperty.call(defs, id) || !defs[id].available)
+        if (typeof id !== "string" || seen.has(id) || !Object.prototype.hasOwnProperty.call(defs, id) || (!includeUnavailable && !defs[id].available))
             return false;
         seen.add(id);
         return true;
@@ -29,4 +29,10 @@ function move(list, from, to) {
         result.splice(to, 0, item);
     }
     return result;
+}
+
+function reorderVisible(order, defs, from, to) {
+    const reordered = move(visibleTiles(order, defs), from, to);
+    let index = 0;
+    return visibleTiles(order, defs, true).map(id => defs[id].available ? reordered[index++] : id);
 }

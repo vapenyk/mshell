@@ -10,12 +10,18 @@ Singleton {
     readonly property var tiles: settings.tiles
     readonly property string _defaultAccent: "blue"
 
+    function setTiles(order: var): void {
+        settings.tiles = order;
+        settingsFile.writeAdapter();
+    }
+
     FileView {
         id: settingsFile
 
         path: (Quickshell.env("XDG_CONFIG_HOME") || Quickshell.env("HOME") + "/.config") + "/mshell/settings.json"
         printErrors: false
         watchChanges: true
+        blockWrites: true
 
         onFileChanged: reload()
         onLoadFailed: function(error: int): void {
