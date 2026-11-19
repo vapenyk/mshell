@@ -35,8 +35,9 @@ Common rule: no `services` imports. All values from tokens.
 ## 2.5 Pill
 - Read: `../design/reference/INDEX.md` → shots 07, 10, 12 (open those PNGs)
 - Create: `components/Pill.qml`
-- [ ] Slots: `icon`, `text`, optional trailing; `active` (popup open) → `secondaryContainer`
-- [ ] Signals: `clicked`, `rightClicked`; contains `StateLayer`; hover via `HoverHandler`
-- [ ] Height 32; min width 32; icon-only collapses to a circle
-- [ ] `Bar.qml`: replace the temporary time text with a `Pill` showing the clock
+- Update: `modules/bar/Bar.qml` to show the time and date in a left-aligned pill, `config/Sizing.qml` for spacing, and `../design/TOKENS.md` for the pill's horizontal padding.
+- [x] Slots: `icon`, `text`, optional trailing; `active` (popup open) → `secondaryContainer`
+- [x] Signals: `clicked`, `rightClicked`; contains `StateLayer`; hover via `HoverHandler`
+- [x] Height 32; min width 32; icon-only collapses to a circle
+- [x] `Bar.qml`: replace the temporary time text with a `Pill` showing the clock
 - Done when: clock pill matches screenshot 12 (left pill) in structure; hover/press/active states work; unused check clean (all 02 files consumed by Pill/Bar)

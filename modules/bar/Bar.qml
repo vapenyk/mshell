@@ -24,55 +24,20 @@ Variants {
         implicitHeight: Sizing.barHeight
         color: Theme.transparent
 
-        Item {
-            anchors.centerIn: parent
-            implicitWidth: clockContent.implicitWidth + Sizing.pillHeight
-            implicitHeight: Sizing.pillHeight
+        Components.Pill {
+            id: clockPill
 
-            Components.Surface {
-                anchors.fill: parent
-                container: Theme.surfaceContainerHigh
-                radius: Shape.full
+            anchors {
+                left: parent.left
+                leftMargin: Sizing.barSideMargin
+                verticalCenter: parent.verticalCenter
             }
+            text: Format.clock(Time.date, true)
 
-            Components.StateLayer {
-                anchors.fill: parent
-                contentColor: clockLabel.color
-                hovered: clockHover.hovered
-                pressed: clockTap.pressed
-                radius: Shape.full
-            }
-
-            Row {
-                id: clockContent
-
-                anchors.centerIn: parent
-                spacing: Sizing.pillGap
-
-                Components.Icon {
-                    anchors.verticalCenter: parent.verticalCenter
-                    name: "schedule"
-                    size: Sizing.smallIconSize
-                    color: clockLabel.color
-                }
-
-                Components.Text {
-                    id: clockLabel
-
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: Format.clock(Time.date, true)
-                    role: "labelLarge"
-                }
-            }
-
-            HoverHandler {
-                id: clockHover
-            }
-
-            TapHandler {
-                id: clockTap
-
-                gesturePolicy: TapHandler.WithinBounds
+            trailing: Components.Text {
+                text: Format.dateShort(Time.date)
+                role: "labelLarge"
+                color: clockPill.contentColor
             }
         }
     }

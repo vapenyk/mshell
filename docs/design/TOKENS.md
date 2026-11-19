@@ -86,6 +86,7 @@ Popup `surfaceContainer` over wallpaper; cards `surfaceContainerHigh`. A soft sh
 |---|---|
 | Bar window height | 44 (4 margin around pills) |
 | Pill height | 32; min width 32 (icon only) |
+| Pill horizontal padding | 8 (pills with text or trailing content) |
 | Pill gap | 6 |
 | Bar side margin | 8 |
 | Popup gap below bar | 8 |
