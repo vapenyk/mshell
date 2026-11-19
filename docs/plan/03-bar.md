@@ -29,11 +29,13 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Done when: matches shot 12 left side; test passes
 
 ## 3.4 StatusPill
-- Create: `modules/bar/pills/StatusPill.qml`, `modules/bar/pills/StatusPill.model.js`, test
-- [ ] Model: `icons(state)` → ordered list of `{name, filled}` for **active only**: network (kind/strength), bluetooth connected, DND on (later), battery (with percent, charging)
-- [ ] Empty list → pill hidden (width spring to 0 + fade)
-- [ ] Click → `UiState.toggle("controlcenter")`; `active` while that popup is open
-- [ ] Tests: nothing active → `[]`; wifi+bt → 2 icons in order; battery low flag; ethernet vs wifi
+- Read: `../design/MOTION.md` (status pill hide/show), `../design/reference/07-control-center-tiles-closeup.png`
+- Create: `modules/bar/pills/StatusPill.qml`, `modules/bar/pills/StatusPill.model.js`, `tests/modules/bar/pills/StatusPill.model.test.js`
+- Update: `modules/bar/Bar.qml` to load the status pill at the right edge.
+- [x] Model: `icons(state)` returns ordered descriptors for connected Ethernet or Wi-Fi, connected Bluetooth devices, and the battery. Wi-Fi uses signal bars. The battery descriptor carries its percentage and low-charge state, with a distinct charging icon. DND arrives with its service.
+- [x] Empty list → pill hidden (width spring to 0 + fade)
+- [x] Click → `UiState.toggle("controlcenter")`; `active` while that popup is open
+- [x] Tests: nothing active → `[]`; wifi+bt → 2 icons in order; battery low flag; ethernet vs wifi
 - Done when: matches shot 07 (wifi + battery %) ; hides when nothing is active
 
 ## 3.5 Bar layout

@@ -28,5 +28,13 @@ Variants {
             }
             sizeClass: Theme.sizeClass(modelData)
         }
+
+        StatusPill {
+            anchors {
+                right: parent.right
+                rightMargin: Sizing.barSideMargin
+                verticalCenter: parent.verticalCenter
+            }
+        }
     }
 }
