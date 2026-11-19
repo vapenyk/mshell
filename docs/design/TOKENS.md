@@ -31,7 +31,7 @@ Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 | Destructive | `errorContainer` | `onErrorContainer` |
 | Scrim behind dialogs | `scrim` @ 32% | |
 | Notification unread dot | `tertiary` | |
-| Notification reply field | `surfaceContainerLowest` | `onSurface`, placeholder `onSurfaceVariant`, focus outline `primary` |
+| Shared text field | `surfaceContainerLowest` | `onSurface`, placeholder `onSurfaceVariant`, focus outline `primary` |
 
 ## State layers (`State.qml` values live in `Theme.qml`)
 | State | Opacity of content-color overlay |
@@ -65,6 +65,8 @@ Family: Roboto Flex if installed (variable, enables expressive weights), else Ro
 | labelSmall | 11 / 16 | 500 |
 
 Lock-screen clock (screenshot 18) uses a project role `clockHuge`: 120 / 112, weight 500, two stacked lines (HH over MM).
+
+Lock uses an opaque gradient from `surfaceContainer` to `surface` as its fallback. A supplied wallpaper uses the `lockBackgroundBlur` radius and `lockWallpaperScrimOpacity` over the image.
 
 ## Shape (`Shape.qml`) — corner radius scale, dp `verify`
 `none 0 · extraSmall 4 · small 8 · medium 12 · large 16 · largeIncreased 20 · extraLarge 28 · extraLargeIncreased 32 · extraExtraLarge 48 · full 9999`

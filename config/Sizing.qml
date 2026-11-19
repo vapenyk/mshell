@@ -15,6 +15,15 @@ Singleton {
     readonly property int controlCenterWidth: 400
     readonly property int powerMenuWidth: 184
     readonly property int dialogWidth: 360
+    readonly property int lockFieldWidth: 320
+    readonly property int lockFieldHeight: 48
+    readonly property int lockFieldBottomMargin: 48
+    readonly property int lockClockLift: 48
+    readonly property real lockClockCompactScale: 0.5
+    readonly property real lockClockMediumScale: 0.75
+    readonly property int lockBackgroundBlur: 24
+    readonly property int lockBackgroundImageWidth: 768
+    readonly property int lockShakeDistance: 6
     readonly property int notificationPopupWidth: 400
     readonly property int notificationPopupLimit: 3
     readonly property int notificationDotSize: 6

@@ -10,6 +10,8 @@ Singleton {
     readonly property Item popupAnchor: _popup.anchor
     property bool editMode: false
     property bool powerMenuOpen: false
+    property bool lockActive: false
+    signal lockRequested()
 
     property var _popup: ({ name: "", anchor: null, anchored: false })
 
@@ -24,7 +26,14 @@ Singleton {
             powerMenuOpen = false;
     }
 
+    onLockActiveChanged: {
+        if (lockActive)
+            close();
+    }
+
     function openAt(name: string, anchor: Item): void {
+        if (lockActive && name !== "")
+            return;
         _popup = { name: name, anchor: anchor, anchored: anchor !== null };
     }
 

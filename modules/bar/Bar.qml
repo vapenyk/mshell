@@ -2,19 +2,19 @@ pragma ComponentBehavior: Bound
 
 import qs.config
 import qs.services
-import "pills"
 
 import Quickshell
 import QtQuick
 
 Variants {
     model: Quickshell.screens
+    readonly property Component lockContent: BarContent {}
 
     PanelWindow {
         id: barWindow
 
         required property ShellScreen modelData
-        readonly property alias statusAnchor: statusPill
+        readonly property Item statusAnchor: barContent.statusAnchor
 
         screen: modelData
         anchors {
@@ -27,45 +27,11 @@ Variants {
         focusable: false
         color: Theme.transparent
 
-        ClockPill {
-            id: clockPill
+        BarContent {
+            id: barContent
 
-            anchors {
-                left: parent.left
-                leftMargin: Sizing.barSideMargin
-                verticalCenter: parent.verticalCenter
-            }
-            sizeClass: Theme.sizeClass(modelData)
-        }
-
-        StatusPill {
-            id: statusPill
-
-            anchors {
-                right: parent.right
-                rightMargin: Sizing.barSideMargin
-                verticalCenter: parent.verticalCenter
-            }
-        }
-
-        NotifPill {
-            id: notifPill
-
-            anchors {
-                right: statusPill.left
-                rightMargin: Sizing.pillGap
-                verticalCenter: parent.verticalCenter
-            }
-        }
-
-        KeyboardPill {
-            id: keyboardPill
-
-            anchors {
-                right: notifPill.left
-                rightMargin: Sizing.pillGap
-                verticalCenter: parent.verticalCenter
-            }
+            anchors.fill: parent
+            screen: barWindow.modelData
         }
 
         // The open popup's focus grab can leave keyboard focus on the bar.
@@ -79,12 +45,7 @@ Variants {
             enabled: UiState.openPopup !== ""
             acceptedButtons: Qt.AllButtons
             onTapped: point => {
-                const overClock = clockPill.contains(clockPill.mapFromItem(barWindow.contentItem, point.position));
-                const overStatus = statusPill.contains(statusPill.mapFromItem(barWindow.contentItem, point.position));
-                const overNotif = notifPill.contains(notifPill.mapFromItem(barWindow.contentItem, point.position));
-                const overKeyboard = keyboardPill.visible
-                    && keyboardPill.contains(keyboardPill.mapFromItem(barWindow.contentItem, point.position));
-                if (!overClock && !overStatus && !overNotif && !overKeyboard)
+                if (!barContent.containsAction(point.position))
                     UiState.close();
             }
         }

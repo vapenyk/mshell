@@ -102,7 +102,9 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | OSD | volume/brightness change | 1.5 s timeout (resets on change) | fade + slide / fade |
 | Power menu | CC power button, IPC | Esc, outside, button, action | fade through |
 | Power confirmation | Restart or Power off | Esc, outside, Cancel, confirm | |
-| Lock | IPC, idle | successful auth | fade |
+| Lock | Power menu, IPC, future idle trigger | successful PAM auth | fade in |
+
+On the lock surface the bar displays its live indicators. Clicking the bar focuses the password input. The native Wayland session lock keeps the desktop and its popups behind the lock surfaces. The Power menu and IPC share the lock request in `UiState`, which is also the entry point for the future idle trigger.
 
 ## 7. Notifications (freedesktop semantics, not M3)
 - Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.

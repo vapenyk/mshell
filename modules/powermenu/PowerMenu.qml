@@ -22,9 +22,14 @@ Scope {
 
     readonly property Component actions: QQ.Column {
         ActionRow {
+            id: lockAction
+
             text: qsTr("Lock")
             iconName: "lock"
-            enabled: false
+            focus: true
+            QQ.KeyNavigation.up: shutDown
+            QQ.KeyNavigation.down: signOut
+            onClicked: UiState.lockRequested()
         }
 
         ActionRow {
@@ -32,8 +37,7 @@ Scope {
 
             text: qsTr("Sign out")
             iconName: "logout"
-            focus: true
-            QQ.KeyNavigation.up: shutDown
+            QQ.KeyNavigation.up: lockAction
             QQ.KeyNavigation.down: restart
             onClicked: root._select("logout")
         }
@@ -54,7 +58,7 @@ Scope {
             text: qsTr("Power off")
             iconName: "power_settings_new"
             QQ.KeyNavigation.up: restart
-            QQ.KeyNavigation.down: signOut
+            QQ.KeyNavigation.down: lockAction
             onClicked: root._select("poweroff")
         }
     }
@@ -82,12 +86,19 @@ Scope {
             if (UiState.openPopup !== "")
                 root._request = null;
         }
+
+        function onLockActiveChanged(): void {
+            if (UiState.lockActive)
+                root._request = null;
+        }
     }
 
     IpcHandler {
         target: "powermenu"
 
         function toggle(): void {
+            if (UiState.lockActive)
+                return;
             if (root._request) {
                 root._request = null;
             } else if (UiState.powerMenuOpen) {

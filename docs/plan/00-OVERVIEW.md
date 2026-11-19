@@ -19,7 +19,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 05 | `05-notifications.md` | service, popup, center, bell pill | ✅ |
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ✅ Calendar and keyboard · media deferred |
 | 07 | `07-launcher-osd.md` | launcher, OSD | ⬜ |
-| 08 | `08-lock-powermenu.md` | lock, power menu | Power menu ✅ · lock ⬜ |
+| 08 | `08-lock-powermenu.md` | lock, power menu | ✅ |
 | 09 | `09-polish.md` | motion tuning, responsive pass, cleanup | ⬜ |
 
 Backlog (no plan yet, don't start): dock, screenshot toolbar, settings window, desktop widgets.

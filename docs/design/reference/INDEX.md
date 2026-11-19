@@ -93,6 +93,12 @@ Source screenshots supplied by the user on 2026-11-19 in `bebe-20261119T122843Z-
 | 55 | [55-device-calendar-previous-month.png](55-device-calendar-previous-month.png) | October 2026, with blank cells before the first day and no date highlighted. | Navigation to a month outside the current and selected dates. |
 | 56 | [56-device-calendar-next-year-month.png](56-device-calendar-next-year-month.png) | January 2027, with January 31 on the sixth week. | Navigation across the year boundary and a full six-week grid. |
 
+## On-device lock capture (57)
+
+| # | File | Shows | Use for |
+|---|---|---|---|
+| 57 | [57-device-lock-screen.jpg](57-device-lock-screen.jpg) | On-device photo with a top bar, stacked clock and date, and an unlock cue near the bottom. | Lock screen hierarchy. On mshell, lift the clock and date, use the shared password field in place of the unlock cue, and retain the mshell bar. |
+
 ## Which shot for which surface
 Use the first one listed; the rest are fallbacks.
 | Surface | Shots |
@@ -109,7 +115,7 @@ Use the first one listed; the rest are fallbacks.
 | Notification attachment preview | 50 (collapsed), 51 (expanded); 22 for another collapsed example |
 | Keyboard popup | 32 first, then 09. Use the layout rows and omit the title and settings button. |
 | Launcher | 23, then 13 |
-| Lock screen | 18 only |
+| Lock screen | 57 for the on-device layout, then 18 |
 | OSD | 41 (volume), 42 (brightness), 43 (muted) |
 | Power menu | 40, then 01 |
 | Menus (backlog) | 24, 25 |

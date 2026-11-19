@@ -11,17 +11,22 @@
 - Create: `modules/powermenu/PowerMenu.qml`, `services/Power.qml`, `services/Power.model.js`, and `tests/services/Power.model.test.js`.
 - Update: `shell.qml`, `ControlCenter.qml`, `MainPage.qml`, `UiState.qml`, `IconButton.qml`, `Sizing.qml`, the component catalogue, and popup behavior.
 - [x] Anchored menu with Lock, Sign out, Restart, and Power off as in shot 40. Centered confirmation for Restart and Power off with tonal Cancel and a destructive confirm button.
-- [x] Commands via `Quickshell.execDetached` using argument arrays. Prefer `hyprshutdown` for sign-out when available. Keep Lock disabled until the shell's own lock action is connected in 8.3.
+- [x] Commands via `Quickshell.execDetached` using argument arrays. Prefer `hyprshutdown` for sign-out when available. The Lock row invokes the shell's own lock action from 8.3.
 - [x] The Control Center power button and IPC `powermenu toggle` open the same dropdown on the relevant display.
 - Done when: input, confirmation, cancel, and command dispatch work in the nested sandbox with substitute executables.
 - Verified mouse, Escape, outside-click dismissal, IPC from a Control Center subpage, and one command per confirmed action in nested Hyprland.
 - `shell.qml` passes `PowerMenu.actions` to Control Center. The header toggles `UiState.powerMenuOpen` and hosts the dropdown. The loader gives focus to the content, and PowerMenu assigns the initial row. Verified arrow navigation and Enter from Sign out to Restart.
 
 ## 8.3 Lock
-- Read: shot 18; Quickshell `WlSessionLock` docs; check for a PAM service type in your version
-- Create: `modules/lock/Lock.qml`, `modules/lock/LockSurface.qml`
-- [ ] `WlSessionLock` covering all screens; surface: HH over MM huge clock (`clockHuge`), date, lock icon + hint
-- [ ] Authentication via PAM (**verify** the module name in your version); wrong password feedback (shake via spring); never leave the session unlocked on error
-- [ ] IPC `lock`: `lock`
-- [ ] Connect the PowerMenu Lock row to the built-in lock action. Use the same action for the future idle lock trigger.
-- Done when: lock/unlock works on 2 monitors; killing the shell while locked behaves per compositor (test in a VM/second TTY first)
+- Read: on-device photo [57](../design/reference/57-device-lock-screen.jpg), shot 18, [WlSessionLock](https://quickshell.org/docs/v0.3.2/types/Quickshell.Wayland/WlSessionLock/), and [PamContext](https://quickshell.org/docs/v0.3.2/types/Quickshell.Services.Pam/PamContext/).
+- Create: `modules/lock/Lock.qml`, `modules/lock/LockSurface.qml`, `modules/bar/BarContent.qml`, and `components/TextField.qml` extracted from `NotifReply.qml` for use by both reply and password entry. Add photo 57 to the reference index.
+- Update: `shell.qml`, `Bar.qml`, `UiState.qml`, `PowerMenu.qml`, `NotifReply.qml`, lock sizing and motion tokens, and the behavior and component documentation.
+- [x] Use a Wayland session-lock surface on every output. Keep the normal bar visuals and live indicators at the top, with every click in that bar returning focus to the password field.
+- [x] Place the stacked clock and date above center. Put a masked password field near the bottom in place of the lock icon and hint. Reuse the shared field styling and show rejection next to the field with a brief shake.
+- [x] Blur the wallpaper supplied through `Lock.backgroundSource` over an opaque base. Use a dark themed fallback until the future Background service can provide the image. Lock owns the blur and dimming.
+- [x] Authenticate the current user through Quickshell's PAM context using the system authentication profile. Unlock only after successful authentication. Keep the lock active on a rejected password or a PAM error.
+- [x] Preserve the lock request across a Quickshell configuration reload using in-memory `PersistentProperties`.
+- [x] Route IPC `lock lock` and the Power menu action through the shared lock request in `UiState`. Use the same request for the future idle trigger.
+- Done when: verify two outputs, hot-plug, bar focus, wrong and successful credentials with isolated PAM, and compositor behavior after killing the locker in nested Hyprland.
+- Verified two headless outputs, hot-plug, click-to-focus from the bar, isolated PAM failure and success, IPC and Power menu entry, reload, and the compositor's locked fallback after killing Quickshell. Verified the wallpaper blur and the image-free fallback.
+- Quickshell 0.3.2 may log that the old lock object was destroyed during a reload. The nested Wayland trace showed the lock surviving the handover and releasing only after successful PAM authentication. [Source for the reload and unlock paths](https://github.com/quickshell-mirror/quickshell/blob/v0.3.2/src/wayland/session_lock.cpp).

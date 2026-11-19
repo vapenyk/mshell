@@ -4,7 +4,6 @@ import qs.components as Components
 import qs.config
 
 import QtQuick as QQ
-import QtQuick.Controls.Basic as Basic
 import QtQuick.Layouts as QQL
 
 QQL.RowLayout {
@@ -45,30 +44,14 @@ QQL.RowLayout {
         submitted(text);
     }
 
-    Basic.TextField {
+    Components.TextField {
         id: field
 
         QQL.Layout.fillWidth: true
         implicitHeight: Sizing.notificationReplyHeight
-        leftPadding: Sizing.popupInnerPadding
-        rightPadding: Sizing.popupInnerPadding
-        color: Theme.onSurface
-        placeholderTextColor: Theme.onSurfaceVariant
-        selectionColor: Theme.primary
-        selectedTextColor: Theme.onPrimary
         placeholderText: root.placeholder
-        font.family: Typography.family
-        font.pixelSize: Typography.bodyMedium.size
-        selectByMouse: true
         QQ.Accessible.name: qsTr("Reply")
         onAccepted: root._send()
-
-        background: QQ.Rectangle {
-            color: Theme.surfaceContainerLowest
-            radius: Shape.full
-            border.width: field.activeFocus ? Sizing.outlineWidth : Shape.none
-            border.color: Theme.primary
-        }
     }
 
     Components.IconButton {

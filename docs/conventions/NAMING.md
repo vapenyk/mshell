@@ -45,7 +45,7 @@ One row = one feature. If you add a feature, add its row here first.
 | Calendar | `modules/calendar` | `Time` | `Calendar.model.js` | — | — | 12 |
 | Launcher | `modules/launcher` | `Apps` | `Fuzzy.js` (utils) | `launcher` | — | 13 |
 | OSD | `modules/osd` | `Audio`, `Brightness` | — | `osd` | — | — |
-| Lock | `modules/lock` | `Time` | — | `lock` | — | 18 |
+| Lock | `modules/lock` | `Time`, `UiState`, `Quickshell.Services.Pam` | — | `lock` | — | 57, 18 |
 | Power menu | `modules/powermenu` | `UiState`, `Power`, `Compositor` | `Power.model.js` | `powermenu` | — | 40 |
 
 ### Relations between features (allowed ways to talk)
