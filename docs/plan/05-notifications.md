@@ -15,10 +15,12 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 - Verified delivery, replacement, DND routing, actions, and clearing with `notify-send` on the nested session bus.
 
 ## 5.2 NotifCard
-- Create: `modules/notifications/NotifCard.qml`
-- [ ] Collapsed: app icon, `app · time`, title, one-line body, chevron; expanded: full body, action buttons (outlined)
-- [ ] Time via `Format.relative(date, now)` (add to `Format.js` + test)
+- Create: `modules/notifications/NotifCard.qml`. The first production consumer is NotifPopup in 5.3.
+- Update: `utils/Format.js`, its tests, and `config/Sizing.qml` for the outlined action stroke.
+- [x] Collapsed: app icon, `app · time`, title, one-line body, chevron; expanded: full body, action buttons (outlined)
+- [x] Time via `Format.relative(date, now)` (add to `Format.js` + test)
 - Done when: both states match shot 08 / 17 structure
+- Verified both states and action delivery from a temporary preview in nested Hyprland.
 
 ## 5.3 NotifPopup
 - Create: `modules/notifications/NotifPopup.qml`, `services/Compositor.qml`

@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 const { loadModel } = require("../load.js");
 
-const { clock, dateShort } = loadModel("utils/Format.js");
+const { clock, dateShort, relative } = loadModel("utils/Format.js");
 
 test("clock formats 24-hour time with padded hours and minutes", () => {
     assert.equal(clock(new Date(2026, 9, 12, 0, 0), true), "00:00");
@@ -21,4 +21,15 @@ test("dateShort formats the local weekday, day, and month", () => {
     assert.equal(dateShort(new Date(2026, 9, 12)), "Mon 12 Oct");
     assert.equal(dateShort(new Date(2026, 0, 1)), "Thu 1 Jan");
     assert.equal(dateShort(new Date(2026, 11, 31)), "Thu 31 Dec");
+});
+
+test("relative formats elapsed time in minutes, hours, and days", () => {
+    const now = new Date("2026-11-19T12:00:00Z");
+
+    assert.equal(relative(new Date("2026-11-19T11:59:01Z"), now), "now");
+    assert.equal(relative(new Date("2026-11-19T11:59:00Z"), now), "1m");
+    assert.equal(relative(new Date("2026-11-19T11:00:00Z"), now), "1h");
+    assert.equal(relative(new Date("2026-11-18T12:00:00Z"), now), "1d");
+    assert.equal(relative(new Date("2026-11-19T12:01:00Z"), now), "now");
+    assert.equal(relative(new Date(NaN), now), "");
 });

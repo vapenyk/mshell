@@ -17,3 +17,18 @@ function dateShort(date) {
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     return days[date.getDay()] + " " + date.getDate() + " " + months[date.getMonth()];
 }
+
+function relative(date, now) {
+    const elapsed = now.getTime() - date.getTime();
+    if (!Number.isFinite(elapsed))
+        return "";
+
+    const minutes = Math.floor(elapsed / 60000);
+    if (minutes < 1)
+        return "now";
+    if (minutes < 60)
+        return minutes + "m";
+
+    const hours = Math.floor(minutes / 60);
+    return hours < 24 ? hours + "h" : Math.floor(hours / 24) + "d";
+}
