@@ -13,4 +13,7 @@ Singleton {
     readonly property int popupGap: 8
     readonly property int popupInnerPadding: 16
     readonly property int controlCenterWidth: 400
+    readonly property int sliderHeight: 40
+    readonly property int sliderHandleWidth: 4
+    readonly property int sliderHandleGap: 4
 }

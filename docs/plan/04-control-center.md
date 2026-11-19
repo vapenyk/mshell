@@ -24,17 +24,20 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: ControlCenter hosts it with `MainPage` as the root
 
 ## 4.3 ValueSlider
-- Read: `../design/COMPONENTS.md` (ValueSlider), M3 sliders page
-- Create: `components/ValueSlider.qml`, `components/ValueSlider.model.js`, test
-- [ ] Model: `valueFromPos(x, width, min, max, step)`, `posFromValue(...)`, clamp
-- [ ] Look: height 40, full radius, active track `primary`, rest `surfaceContainerHighest`, icon inside at the end, vertical handle bar
-- [ ] Drag follows pointer 1:1; release settles handle with spatial fast; keyboard arrows step
-- [ ] Tests: clamp, step rounding, round-trip pos↔value, zero width
+- Read: `../design/COMPONENTS.md` (ValueSlider), the [M3 sliders page](https://m3.material.io/components/sliders/overview), and shot 01 in `../design/reference/`.
+- Create: `components/ValueSlider.qml`, `components/ValueSlider.model.js`, `tests/components/ValueSlider.model.test.js`, and `tools/SliderPreview.qml`.
+- Update: `config/Sizing.qml` with slider geometry tokens and `config/Theme.qml` with the documented disabled opacity.
+- Verify the slider in a sandbox copy of MainPage using `SliderPreview` from `tools/` as its content. The preview holds its own interactive values.
+- [x] Model: `valueFromPos(x, width, min, max, step)`, `posFromValue(...)`, clamp
+- [x] Look: height 40, full radius, active track `primary`, rest `surfaceContainerHighest`, icon inside at the end, vertical handle bar
+- [x] Drag follows pointer 1:1; release settles handle with spatial fast; keyboard arrows step
+- [x] Tests: clamp, step rounding, round-trip pos↔value, zero width
 - Done when: looks like shot 01 sliders (dark roles); tests pass
 
 ## 4.4 Top controls
 - Read: `00-OVERVIEW.md` open-question answers (brightnessctl)
 - Create: `components/IconButton.qml`, `services/Audio.qml`, `services/Brightness.qml`, `modules/controlcenter/TopControls.qml`
+- Remove `tools/SliderPreview.qml` when TopControls uses ValueSlider.
 - [ ] `Audio`: `volume`, `muted`, `setVolume`, `toggleMute`, source mute (for mic tile); Pipewire + `PwObjectTracker`
 - [ ] `Brightness`: `value` 0..1, `set`, via `brightnessctl` (`Process`, array command; read with `-m` machine-readable output, parse in a tested helper), clamp to a sane minimum; refresh on change by external tools
 - [ ] `IconButton` (standard/tonal/filled, toggle) with StateLayer
