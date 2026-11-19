@@ -44,9 +44,10 @@ Goal: shell starts, settings load, tokens exist, a themed clock shows. Nothing e
 
 ## 1.5 Time + first bar
 - Read: `../conventions/NAMING.md` (feature map: Bar), `../design/TOKENS.md` (Sizing)
-- Create: `services/Time.qml`, `utils/Format.js`, `tests/utils/Format.test.js`, `modules/bar/Bar.qml`
-- [ ] `Time`: `SystemClock`, exposes `date` (updates per minute)
-- [ ] `Format.js`: `clock(date, use24h)`, `dateShort(date)` (e.g. "Mon 12 Oct") — pure, tested
-- [ ] `Bar.qml`: `Variants` over screens, `PanelWindow` top, transparent, height per TOKENS, shows the formatted time with `Theme.onSurface` (temporary plain text; replaced by `ClockPill` in 02/03)
-- [ ] `shell.qml` loads `Bar`
+- Create: `services/Time.qml`, `utils/Format.js`, `tests/utils/Format.test.js`, `modules/bar/Bar.qml`, `config/Sizing.qml` (bar height used by Bar)
+- Update: `config/Theme.qml` with the transparent color used by Bar and `shell.qml` to load Bar.
+- [x] `Time`: `SystemClock`, exposes `date` (updates per minute)
+- [x] `Format.js`: pure, tested `clock(date, use24h)` and `dateShort(date)` (e.g. "Mon 12 Oct")
+- [x] `Bar.qml`: `Variants` over screens, transparent top `PanelWindow` at the height in TOKENS, with the formatted time in `Theme.onSurface`. `ClockPill` replaces the plain text in 02/03.
+- [x] `shell.qml` loads `Bar`
 - Done when: bar window on every screen shows the time; `setAccent` does not break it; tests pass; `sh tools/unused.sh` clean

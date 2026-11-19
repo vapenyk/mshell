@@ -51,6 +51,7 @@ Singleton {
     readonly property color shadow: _scheme.shadow
     readonly property color scrim: _scheme.scrim
     readonly property color surfaceTint: _scheme.surfaceTint
+    readonly property color transparent: "transparent"
 
     readonly property real stateHover: 0.08
     readonly property real stateFocus: 0.10
