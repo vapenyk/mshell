@@ -7,8 +7,9 @@ Common rule: no `services` imports. All values from tokens.
 ## 2.1 StateLayer
 - Read: `../design/TOKENS.md` (State layers), `../design/MOTION.md` (Pill hover/press)
 - Create: `components/StateLayer.qml`
-- [ ] Props: `contentColor`, `hovered`, `pressed`, `focused`, `radius`
-- [ ] Overlay opacity from `Theme.state*`, fade `Motion.short2`
+- Update: `modules/bar/Bar.qml` to use the layer on the temporary clock and `config/Sizing.qml` to expose the pill height.
+- [x] Props: `contentColor`, `hovered`, `pressed`, `focused`, `radius`
+- [x] Overlay opacity from `Theme.state*`, fade `Motion.short2`
 - Done when: temporary use inside `Bar.qml` shows hover/press fade
 
 ## 2.2 Icon
