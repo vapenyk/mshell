@@ -11,6 +11,7 @@ Item {
     id: root
 
     signal settingsRequested(tileId: string)
+    signal mixerRequested()
 
     readonly property Component headerContent: Item {
         implicitHeight: actions.implicitHeight
@@ -58,6 +59,8 @@ Item {
 
     TopControls {
         id: controls
+
+        onMixerRequested: root.mixerRequested()
 
         anchors {
             top: parent.top

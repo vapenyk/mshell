@@ -9,6 +9,8 @@ import QtQuick
 Column {
     id: root
 
+    signal mixerRequested()
+
     spacing: Sizing.popupGap
 
     Timer {
@@ -67,7 +69,7 @@ Column {
             text: qsTr("Mixer")
             iconName: "tune"
             variant: "tonal"
-            enabled: false
+            onClicked: root.mixerRequested()
         }
     }
 }

@@ -73,6 +73,7 @@ Scope {
 
                 width: parent.width
                 initialPage: MainPage {
+                    onMixerRequested: pages.push(audioPage)
                     onSettingsRequested: tileId => {
                         if (tileId === "modes")
                             pages.push(modesPage);
@@ -107,6 +108,12 @@ Scope {
                 id: bluetoothPage
 
                 BluetoothPage {}
+            }
+
+            Component {
+                id: audioPage
+
+                AudioPage {}
             }
         }
     }

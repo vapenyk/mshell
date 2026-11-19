@@ -105,8 +105,11 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Verified the live paired-device list, and exercised connect/disconnect in nested Hyprland against an isolated BlueZ fixture.
 
 ## 4.12 AudioPage
-- Create: `modules/controlcenter/pages/AudioPage.qml`
-- [ ] Output device selection + per-app stream volume (mixer button in TopControls opens it)
+- Create: `modules/controlcenter/pages/AudioPage.qml`, `services/Audio.model.js`, and `tests/services/Audio.model.test.js`.
+- Update: `services/Audio.qml` for PipeWire output selection and playback stream controls, and route the mixer action through `TopControls.qml`, `MainPage.qml`, and `ControlCenter.qml`.
+- [x] Show the current output and its volume, the current microphone with mute control when available, and playback stream volumes. The Effects section and spatial audio controls are out of scope.
+- [x] Output device selection + per-app stream volume (mixer button in TopControls opens it)
 - Done when: switching output works
+- Verified output switching, microphone mute, and per-app volume with an isolated PipeWire session in nested Hyprland.
 
 End-of-step: tests, unused check, matrix, compare with 01/05/06.
