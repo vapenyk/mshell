@@ -4,6 +4,10 @@ import Quickshell
 import QtQml
 
 ShellRoot {
-    // Theme loads the palette and starts Config for the accent IPC.
-    Component.onCompleted: Theme
+    Component.onCompleted: {
+        Theme;
+        Typography;
+        Shape;
+        Motion;
+    }
 }

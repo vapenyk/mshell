@@ -38,7 +38,7 @@ If a spring is overkill (color, opacity) use `NumberAnimation`/`ColorAnimation` 
 
 Durations (ms): `short1 50 · short2 100 · short3 150 · short4 200 · medium1 250 · medium2 300 · medium3 350 · medium4 400 · long1 450 · long2 500`.
 
-QML: `Easing.BezierCurve` with `easing.bezierCurve: [x1,y1,x2,y2,1,1]`.
+QML uses `easing.type: Easing.BezierSpline` with `easing.bezierCurve: [x1,y1,x2,y2,1,1]`.
 
 ## Which motion for which element
 | Element | Motion |
