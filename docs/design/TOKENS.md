@@ -27,6 +27,7 @@ Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 | Filled button | `primary` | `onPrimary` |
 | Tonal button | `secondaryContainer` | `onSecondaryContainer` |
 | Outlined button | transparent, border `outline` | `primary` |
+| Plain tooltip | `inverseSurface` | `inverseOnSurface` |
 | Destructive | `errorContainer` | `onErrorContainer` |
 | Scrim behind dialogs | `scrim` @ 32% | |
 | Notification unread dot | `tertiary` | |

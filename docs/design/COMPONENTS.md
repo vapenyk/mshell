@@ -15,6 +15,7 @@ Check this catalogue before creating a UI component. Look for a shared component
 | Surface | [Surface.qml](../../components/Surface.qml) | Themed container with shape and optional shadow | Color, shape, elevation | 02 |
 | Pill | [Pill.qml](../../components/Pill.qml) | Icon, label, and trailing slot with active state and click signals | Shell component | 02 |
 | Icon button | [IconButton.qml](../../components/IconButton.qml) | Standard, tonal, and filled icon buttons, including toggles | Icon buttons | 04 |
+| Tooltip | [Tooltip.qml](../../components/Tooltip.qml) | Delayed hover label shared by icon buttons and tiles | Tooltips | 04 |
 | Switch / toggle | [ToggleSwitch.qml](../../components/ToggleSwitch.qml) | Labeled on/off switch used by Modes, Wi-Fi, and Bluetooth | Switch | 04 |
 | Slider | [ValueSlider.qml](../../components/ValueSlider.qml) and [model](../../components/ValueSlider.model.js) | Volume, brightness, and input level track with a vertical handle | Sliders | 04 |
 | Tile | [Tile.qml](../../components/Tile.qml) | Icon-only or labeled control center tile with toggle and settings actions | Toggle buttons | 04 |

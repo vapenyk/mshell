@@ -62,9 +62,10 @@ QQ.Item {
             }
         }
 
-        QQC.ToolTip.text: root.title
-        QQC.ToolTip.visible: root.iconOnly && button.hovered
-        QQC.ToolTip.delay: Motion.long2
+        Tooltip {
+            text: root.title
+            requested: button.hovered && !button.down && !settingsArea.pressed
+        }
 
         contentItem: QQ.Item {
             implicitWidth: root.iconOnly ? glyph.implicitWidth : labels.implicitWidth

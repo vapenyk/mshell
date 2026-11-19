@@ -127,4 +127,11 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: switching output works
 - Verified output switching, microphone mute, and per-app volume with an isolated PipeWire session in nested Hyprland.
 
+## Follow-up — tooltips
+
+- Read: [44](../design/reference/44-device-control-center-wifi-tooltip.png), Tooltips in `../design/REFERENCES.md`, and the tooltip motion row.
+- Create: `components/Tooltip.qml` using the existing tooltip in `IconButton.qml`. Use it from `IconButton.qml` and `Tile.qml`.
+- [x] Show one shared style for Control Center hover labels. Place labels above their controls when they fit, otherwise below. Apply the 500 ms hover delay and fade.
+- Verified above the Wi-Fi tile and below the Edit tiles button in nested Hyprland.
+
 End-of-step: tests, unused check, matrix, compare with 01/05/06.

@@ -61,20 +61,8 @@ QQC.AbstractButton {
         }
     }
 
-    QQC.ToolTip {
+    Tooltip {
         text: root.text
-        visible: root.enabled && root.hovered && text.length > 0
-        delay: Motion.long2
-        padding: Sizing.pillHorizontalPadding
-
-        contentItem: Text {
-            text: root.text
-            role: "labelLarge"
-        }
-
-        background: Surface {
-            container: Theme.surfaceContainerHighest
-            radius: Shape.extraSmall
-        }
+        requested: root.enabled && root.hovered && !root.down
     }
 }
