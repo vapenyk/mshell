@@ -5,12 +5,14 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 
 ## 4.1 PopupWindow
 - Read: `../design/MOTION.md` (Popup open/close), `../design/RESPONSIVE.md` (Popup placement)
-- Create: `components/PopupWindow.qml`, `modules/controlcenter/ControlCenter.qml`
-- [ ] Layer-shell popup under an anchor item; `LazyLoader` on `UiState.openPopup === "controlcenter"`
-- [ ] Open: scale .92→1 + fade + 8 dp slide (spatial spring); close: faster
-- [ ] Close on outside click and Escape; only one popup at a time
-- [ ] Surface `surfaceContainer`, radius `extraLarge`, width 400 (compact: screen − 16)
-- [ ] IPC `controlcenter`: `toggle`, `close`
+- Create: `components/PopupWindow.qml`, `components/PopupWindow.model.js`, `tests/components/PopupWindow.model.test.js`, `modules/controlcenter/ControlCenter.qml`
+- Update: `config/Sizing.qml` with the documented popup dimensions, `services/UiState.qml` with the popup anchor, `shell.qml` to connect the bar and control center, and `modules/bar/Bar.qml` and `modules/bar/pills/StatusPill.qml` to route pill and outside clicks.
+- Record the verified layer and focus APIs in `../design/BEHAVIOR.md`.
+- [x] Layer-shell popup under an anchor item. `LazyLoader` follows `UiState.openPopup` and releases the window after its exit animation.
+- [x] Open: scale .92→1 + fade + 8 dp slide (spatial spring); close: faster
+- [x] Close on outside click and Escape; only one popup at a time
+- [x] Surface `surfaceContainer`, radius `extraLarge`, width 400 (compact: screen − 16, capped at 400)
+- [x] IPC `controlcenter`: `toggle`, `close`
 - Done when: StatusPill click opens/closes it, correctly placed on each screen
 
 ## 4.2 PageStack

@@ -10,4 +10,7 @@ Singleton {
     readonly property int pillGap: 6
     readonly property int iconSize: 24
     readonly property int smallIconSize: 20
+    readonly property int popupGap: 8
+    readonly property int popupInnerPadding: 16
+    readonly property int controlCenterWidth: 400
 }

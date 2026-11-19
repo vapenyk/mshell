@@ -50,8 +50,8 @@ Item {
         id: pill
 
         anchors.right: parent.right
-        active: UiState.openPopup === "controlcenter"
-        onClicked: UiState.toggle("controlcenter")
+        active: UiState.openPopup === "controlcenter" && UiState.popupAnchor === root
+        onClicked: UiState.toggleAt("controlcenter", root)
 
         trailing: Row {
             spacing: Sizing.pillGap

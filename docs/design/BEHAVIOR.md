@@ -14,7 +14,9 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Dialog / power menu | Overlay | exclusive while open | whole + scrim | focused screen | |
 | Lock | session lock | exclusive | whole | every screen | nothing else is visible |
 
-Quickshell hints (**verify**): `WlrLayershell.layer`, `WlrLayershell.keyboardFocus` (`None` / `OnDemand` / `Exclusive`), `exclusiveZone`, window `mask: Region {}` for click-through, `HyprlandFocusGrab { windows: [...]; onCleared: UiState.close() }` for outside-click dismissal.
+Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. A `Region` input mask restricts clicks to the surface, and `HyprlandFocusGrab.cleared()` handles clicks outside the popup and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
+
+Verify `WlrKeyboardFocus.Exclusive` for the other surfaces on first use.
 
 Z-order (low → high): bar, popups, notification popups, OSD, dialogs, lock.
 

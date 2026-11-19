@@ -1,15 +1,20 @@
 pragma ComponentBehavior: Bound
 
 import qs.config
+import qs.services
 import "pills"
 
 import Quickshell
+import QtQuick
 
 Variants {
     model: Quickshell.screens
 
     PanelWindow {
+        id: barWindow
+
         required property ShellScreen modelData
+        readonly property alias statusAnchor: statusPill
 
         screen: modelData
         anchors {
@@ -23,6 +28,8 @@ Variants {
         color: Theme.transparent
 
         ClockPill {
+            id: clockPill
+
             anchors {
                 left: parent.left
                 leftMargin: Sizing.barSideMargin
@@ -32,10 +39,23 @@ Variants {
         }
 
         StatusPill {
+            id: statusPill
+
             anchors {
                 right: parent.right
                 rightMargin: Sizing.barSideMargin
                 verticalCenter: parent.verticalCenter
+            }
+        }
+
+        TapHandler {
+            enabled: UiState.openPopup !== ""
+            acceptedButtons: Qt.AllButtons
+            onTapped: point => {
+                const overClock = clockPill.contains(clockPill.mapFromItem(barWindow.contentItem, point.position));
+                const overStatus = statusPill.contains(statusPill.mapFromItem(barWindow.contentItem, point.position));
+                if (!overClock && !overStatus)
+                    UiState.close();
             }
         }
     }
