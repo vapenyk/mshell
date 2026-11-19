@@ -35,13 +35,15 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: looks like shot 01 sliders (dark roles); tests pass
 
 ## 4.4 Top controls
-- Read: `00-OVERVIEW.md` open-question answers (brightnessctl)
-- Create: `components/IconButton.qml`, `services/Audio.qml`, `services/Brightness.qml`, `modules/controlcenter/TopControls.qml`
+- Read: `00-OVERVIEW.md` open-question answers, `../design/BEHAVIOR.md` (Keyboard and Pointer), and shot 01.
+- Create: `components/IconButton.qml`, `services/Audio.qml`, `services/Brightness.qml`, `services/Brightness.model.js`, `services/NightLight.qml`, `services/NightLight.model.js`, `tests/services/Brightness.model.test.js`, `tests/services/NightLight.model.test.js`, and `modules/controlcenter/TopControls.qml`.
+- Update: `modules/controlcenter/pages/MainPage.qml` to host TopControls, and `components/ValueSlider.qml` to step on mouse-wheel input.
 - Remove `tools/SliderPreview.qml` when TopControls uses ValueSlider.
-- [ ] `Audio`: `volume`, `muted`, `setVolume`, `toggleMute`, source mute (for mic tile); Pipewire + `PwObjectTracker`
-- [ ] `Brightness`: `value` 0..1, `set`, via `brightnessctl` (`Process`, array command; read with `-m` machine-readable output, parse in a tested helper), clamp to a sane minimum; refresh on change by external tools
-- [ ] `IconButton` (standard/tonal/filled, toggle) with StateLayer
-- [ ] Two rows: `ValueSlider` + round `IconButton` (night mode, mixer). Not part of the tile grid
+- Use `hyprsunset` for night light. Start it on demand if the session has no running instance. Enable the mixer button when AudioPage is added in 4.12.
+- [x] `Audio`: `volume`, `muted`, `setVolume`, `toggleMute`, and source mute (for the mic tile) via PipeWire and `PwObjectTracker`.
+- [x] `Brightness`: `value` 0..1 and `set` via `brightnessctl` (array commands, machine-readable output, tested parser). Clamp writes to at least 5% and refresh the visible slider when external tools make changes.
+- [x] `IconButton` (standard/tonal/filled, toggle) with StateLayer.
+- [x] Two fixed rows with a `ValueSlider` and a round `IconButton` for night light and mixer.
 - Done when: moving sliders changes real volume/brightness; external changes reflect back
 
 ## 4.5 Tile

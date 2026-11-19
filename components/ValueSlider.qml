@@ -112,6 +112,13 @@ QQ.Item {
         anchors.fill: parent
         hoverEnabled: true
         preventStealing: true
+        scrollGestureEnabled: false
+        onWheel: event => {
+            if (event.angleDelta.y !== 0)
+                root._step(Math.sign(event.angleDelta.y));
+            else
+                event.accepted = false;
+        }
         onPressed: mouse => {
             settle.stop();
             root.forceActiveFocus(Qt.MouseFocusReason);
