@@ -91,9 +91,11 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: matches shot 06 structure; back button works
 
 ## 4.10 NetworkPage
-- Create: `modules/controlcenter/pages/NetworkPage.qml` (+ service additions: network list, connect)
-- [ ] List of networks, connect/disconnect, switch for Wi-Fi
+- Create: `modules/controlcenter/pages/NetworkPage.qml` and `components/ToggleSwitch.qml`, shared with ModesPage.
+- Update: `ControlCenter.qml` for navigation, `ModesPage.qml` to use the shared switch, and `services/Network.qml` and its model and tests for scanning and connection actions.
+- [x] List of networks, connect/disconnect, switch for Wi-Fi
 - Done when: can connect to a known network
+- Verified page navigation and live scanning in nested Hyprland. Connection and disconnection commands were tested with fixtures. The active host Wi-Fi connection was left in place.
 
 ## 4.11 BluetoothPage
 - Create: `modules/controlcenter/pages/BluetoothPage.qml` (+ service additions: devices)

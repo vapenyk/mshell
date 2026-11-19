@@ -76,6 +76,8 @@ Scope {
                     onSettingsRequested: tileId => {
                         if (tileId === "modes")
                             pages.push(modesPage);
+                        else if (tileId === "wifi")
+                            pages.push(networkPage);
                     }
                 }
 
@@ -91,6 +93,12 @@ Scope {
                 id: modesPage
 
                 ModesPage {}
+            }
+
+            Component {
+                id: networkPage
+
+                NetworkPage {}
             }
         }
     }
