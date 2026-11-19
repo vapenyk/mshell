@@ -11,7 +11,8 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Notification popups | Overlay | none on arrival, exclusive only during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
 | Launcher | Overlay | exclusive while open | whole | focused screen | |
 | OSD | Overlay | none | **none** (fully click-through) | focused screen | |
-| Dialog / power menu | Overlay | exclusive while open | whole + scrim | focused screen | |
+| Power dropdown | Inside Control Center | menu focus while open | dropdown and outside dismissal within Control Center | screen of the Control Center | anchored under the Power button |
+| Confirmation dialog | Overlay | exclusive while open | whole + scrim | screen where the action was chosen | |
 | Lock | session lock | exclusive | whole | every screen | nothing else is visible |
 
 Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. A `Region` input mask restricts clicks to the surface, and `HyprlandFocusGrab.cleared()` handles clicks outside the popup and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
@@ -83,7 +84,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Left click | primary action (toggle, open, select) |
 | Right click | secondary: tile → settings page; pill → none unless defined in its step |
 | Middle click | none (don't invent) |
-| Hover | state layer only; tooltip after 500 ms where an icon has no label |
+| Hover | state layer and a tooltip after 500 ms on Control Center tiles and icon buttons with a tooltip label |
 | Scroll over a `ValueSlider` | changes value by one step; over a list → scrolls |
 | Drag | slider handle; (later) tile reorder |
 | Pressed + move off the target | cancels the click (standard) |
@@ -99,7 +100,8 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade + slide |
 | Launcher | IPC | Esc, outside, launch | fade + scale / fade |
 | OSD | volume/brightness change | 1.5 s timeout (resets on change) | fade + slide / fade |
-| Power menu | CC power dropdown, IPC | Esc, outside, action | fade through |
+| Power menu | CC power button, IPC | Esc, outside, button, action | fade through |
+| Power confirmation | Restart or Power off | Esc, outside, Cancel, confirm | |
 | Lock | IPC, idle | successful auth | fade |
 
 ## 7. Notifications (freedesktop semantics, not M3)

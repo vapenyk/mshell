@@ -9,12 +9,19 @@ Singleton {
     readonly property string openPopup: _popup.name
     readonly property Item popupAnchor: _popup.anchor
     property bool editMode: false
+    property bool powerMenuOpen: false
 
     property var _popup: ({ name: "", anchor: null, anchored: false })
 
     onPopupAnchorChanged: {
+        powerMenuOpen = false;
         if (!popupAnchor && _popup.anchored)
             close();
+    }
+
+    onOpenPopupChanged: {
+        if (openPopup !== "controlcenter")
+            powerMenuOpen = false;
     }
 
     function openAt(name: string, anchor: Item): void {

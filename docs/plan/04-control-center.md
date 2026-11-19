@@ -85,7 +85,7 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
   - Edit tiles is wired in this step.
   - Settings opens the settings window once it is implemented ([backlog](00-OVERVIEW.md#progress)).
   - Power opens the [PowerMenu](08-lock-powermenu.md#82-powermenu) once it is implemented in 8.2.
-  - Keep Settings and Power disabled until their destinations are available. Discuss any additional buttons with the user before adding them.
+  - Keep Settings disabled until its destination is available. Discuss any additional buttons with the user before adding them.
 - Read: shot [20](../design/reference/20-control-center-edit-tiles.webp) for the edit page header and tile layout. This step uses the reorder controls specified below.
 - Update: `MainPage.qml` and `PageStack.qml` for the root header, `../design/BEHAVIOR.md` for the header rule, `ControlCenter.qml` for edit-mode reset, `TileGrid.qml` and its model and tests for reorder, and `Config.qml` for persistence. Apply the documented `onPrimaryContainer` color to the active chip icon in `Tile.qml`.
 - [x] Edit button in the header toggles `UiState.editMode`; in edit mode tiles show move arrows (left/right); drag-and-drop is a later improvement, not this step

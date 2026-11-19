@@ -50,6 +50,7 @@ Singleton {
     readonly property color inversePrimary: _scheme.inversePrimary
     readonly property color shadow: _scheme.shadow
     readonly property color scrim: _scheme.scrim
+    readonly property real dialogScrimOpacity: 0.32
     readonly property color surfaceTint: _scheme.surfaceTint
     readonly property color transparent: "transparent"
 

@@ -4,6 +4,7 @@ import qs.modules.calendar
 import qs.modules.controlcenter
 import qs.modules.keyboard
 import qs.modules.notifications
+import qs.modules.powermenu
 import qs.services
 
 import Quickshell
@@ -13,6 +14,13 @@ ShellRoot {
     Bar { id: bar }
 
     ControlCenter {
+        barWindows: bar.instances
+        powerActions: powerMenu.actions
+    }
+
+    PowerMenu {
+        id: powerMenu
+
         barWindows: bar.instances
     }
 
@@ -27,6 +35,7 @@ ShellRoot {
         Bluetooth;
         Battery;
         Notifs;
+        Power;
         Compositor.focusedScreen;
         Shape;
         Motion;

@@ -13,6 +13,8 @@ Singleton {
     readonly property int popupGap: 8
     readonly property int popupInnerPadding: 16
     readonly property int controlCenterWidth: 400
+    readonly property int powerMenuWidth: 184
+    readonly property int dialogWidth: 360
     readonly property int notificationPopupWidth: 400
     readonly property int notificationPopupLimit: 3
     readonly property int notificationDotSize: 6

@@ -15,6 +15,7 @@ Scope {
     id: root
 
     required property list<QtObject> barWindows
+    required property Component powerActions
 
     readonly property Item requestedAnchor: UiState.openPopup === "controlcenter" ? UiState.popupAnchor : null
     property Item _mountedAnchor: null
@@ -73,6 +74,7 @@ Scope {
 
                 width: parent.width
                 initialPage: MainPage {
+                    powerActions: root.powerActions
                     onMixerRequested: pages.push(audioPage)
                     onSettingsRequested: tileId => {
                         if (tileId === "modes")
@@ -88,6 +90,15 @@ Scope {
                     if (UiState.editMode) {
                         UiState.editMode = false;
                         event.accepted = true;
+                    }
+                }
+
+                Connections {
+                    target: UiState
+
+                    function onPowerMenuOpenChanged(): void {
+                        if (UiState.powerMenuOpen)
+                            pages.pop();
                     }
                 }
             }

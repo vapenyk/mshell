@@ -9,10 +9,12 @@ QQC.AbstractButton {
     id: root
 
     required property string iconName
+    property string trailingIconName: ""
     property string variant: "standard"
     property QQ.color standardColor: Theme.onSurfaceVariant
     property bool toggle: false
     property bool selected: false
+    property bool tooltipEnabled: true
 
     readonly property bool _filled: selected || variant === "filled"
     readonly property bool _tonal: variant === "tonal" && !_filled
@@ -23,8 +25,8 @@ QQC.AbstractButton {
                                               : _filled ? Theme.onPrimary
                                               : _tonal ? Theme.onSecondaryContainer : standardColor
 
-    implicitWidth: Sizing.sliderHeight
-    implicitHeight: implicitWidth
+    implicitWidth: implicitHeight + (trailingIconName.length > 0 ? Sizing.smallIconSize + Sizing.pillGap : 0)
+    implicitHeight: Sizing.sliderHeight
     padding: 0
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
@@ -51,18 +53,29 @@ QQC.AbstractButton {
     }
 
     contentItem: QQ.Item {
-        Icon {
+        QQ.Row {
             anchors.centerIn: parent
-            name: root.iconName
-            size: Sizing.smallIconSize
-            color: root._contentColor
-            filled: root.selected
             opacity: root.enabled ? 1 : Theme.disabledContentOpacity
+            spacing: Sizing.pillGap
+
+            Icon {
+                name: root.iconName
+                size: Sizing.smallIconSize
+                color: root._contentColor
+                filled: root.selected
+            }
+
+            Icon {
+                visible: root.trailingIconName.length > 0
+                name: root.trailingIconName
+                size: Sizing.smallIconSize
+                color: root._contentColor
+            }
         }
     }
 
     Tooltip {
         text: root.text
-        requested: root.enabled && root.hovered && !root.down
+        requested: root.tooltipEnabled && root.enabled && root.hovered && !root.down
     }
 }
