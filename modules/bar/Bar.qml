@@ -18,6 +18,8 @@ Variants {
             right: true
         }
         implicitHeight: Sizing.barHeight
+        exclusiveZone: Sizing.barHeight
+        focusable: false
         color: Theme.transparent
 
         ClockPill {

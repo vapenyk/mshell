@@ -40,7 +40,7 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 
 ## 3.5 Bar layout
 - Modify: `modules/bar/Bar.qml`
-- [ ] Left: `ClockPill`. Right: `StatusPill` (other pills added by later steps in the order from the Bar anatomy)
-- [ ] Margins, gaps, height from TOKENS; transparent window, exclusive zone = bar height
-- [ ] Compact class: clock without date
-- Done when: resize/scale matrix OK; `unused.sh` clean; tests pass
+- [x] Left: `ClockPill`. Right: `StatusPill` (other pills added by later steps in the order from the Bar anatomy)
+- [x] Margins, gaps, and height use the documented tokens. The transparent window reserves its full height at the top and leaves keyboard focus with the current window.
+- [x] Compact class: clock without date
+- Done when: the resize and scale checks cover all five classes and the 599/600 boundary, monitor hot-plug preserves one bar per output, `unused.sh` is clean, and tests pass.
