@@ -27,8 +27,9 @@ Common rule: no `services` imports. All values from tokens.
 
 ## 2.4 Surface
 - Create: `components/Surface.qml`
-- [ ] Props: `container` (color role), `radius`, `shadow` (bool)
-- [ ] Color change animated with effects spring/short easing
+- Update: `config/Theme.qml` with the popup shadow tokens and `modules/bar/Bar.qml` to use Surface as the clock pill background.
+- [x] Props: `container` (color role), `radius`, `shadow` (bool)
+- [x] Color change animated with short easing
 - Done when: used as background of the pill
 
 ## 2.5 Pill

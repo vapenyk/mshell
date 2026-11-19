@@ -29,6 +29,12 @@ Variants {
             implicitWidth: clockContent.implicitWidth + Sizing.pillHeight
             implicitHeight: Sizing.pillHeight
 
+            Components.Surface {
+                anchors.fill: parent
+                container: Theme.surfaceContainerHigh
+                radius: Shape.full
+            }
+
             Components.StateLayer {
                 anchors.fill: parent
                 contentColor: clockLabel.color

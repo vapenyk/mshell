@@ -57,6 +57,7 @@ Singleton {
     readonly property real stateFocus: 0.10
     readonly property real statePressed: 0.10
     readonly property real stateDragged: 0.16
+    readonly property var popupShadow: ({ opacity: 0.24, blur: 24, offsetY: 8 })
 
     function sizeClass(screen: ShellScreen): string {
         return Model.sizeClass(screen.width);
