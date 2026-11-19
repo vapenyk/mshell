@@ -26,7 +26,7 @@ Variants {
 
         Item {
             anchors.centerIn: parent
-            implicitWidth: clockLabel.implicitWidth + Sizing.pillHeight
+            implicitWidth: clockContent.implicitWidth + Sizing.pillHeight
             implicitHeight: Sizing.pillHeight
 
             StateLayer {
@@ -37,15 +37,29 @@ Variants {
                 radius: Shape.full
             }
 
-            Text {
-                id: clockLabel
+            Row {
+                id: clockContent
 
                 anchors.centerIn: parent
-                text: Format.clock(Time.date, true)
-                color: Theme.onSurface
-                font.family: Typography.family
-                font.pixelSize: Typography.labelLarge.size
-                font.weight: Typography.labelLarge.weight
+                spacing: Sizing.pillGap
+
+                Icon {
+                    anchors.verticalCenter: parent.verticalCenter
+                    name: "schedule"
+                    size: Sizing.smallIconSize
+                    color: clockLabel.color
+                }
+
+                Text {
+                    id: clockLabel
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: Format.clock(Time.date, true)
+                    color: Theme.onSurface
+                    font.family: Typography.family
+                    font.pixelSize: Typography.labelLarge.size
+                    font.weight: Typography.labelLarge.weight
+                }
             }
 
             HoverHandler {

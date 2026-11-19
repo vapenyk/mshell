@@ -14,8 +14,9 @@ Common rule: no `services` imports. All values from tokens.
 
 ## 2.2 Icon
 - Create: `components/Icon.qml`
-- [ ] Props: `name`, `size` (default 20/24), `color`, `filled` (animates FILL)
-- [ ] Uses Material Symbols Rounded (variable font axes)
+- Update: `modules/bar/Bar.qml` to use a clock icon and `config/Sizing.qml` for the documented icon sizes and pill gap.
+- [x] Props: `name`, `size` (24 by default, 20 in the clock), `color`, `filled` (animates FILL)
+- [x] Uses Material Symbols Rounded (variable font axes)
 - Done when: `wifi`, `bluetooth_connected`, `do_not_disturb_on` render, filled toggle animates
 
 ## 2.3 Text
