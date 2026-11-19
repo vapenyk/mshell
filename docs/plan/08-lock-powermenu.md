@@ -7,6 +7,7 @@
 - Done when: used by 8.2
 
 ## 8.2 PowerMenu
+- On-device reference: [40](../design/reference/40-device-power-dropdown.png) for the dropdown anchor and action grouping.
 - Create: `modules/powermenu/PowerMenu.qml`
 - [ ] Dialog with four actions: lock, log out, reboot, shut down (tonal buttons, destructive ones `errorContainer`); confirm for reboot/shut down
 - [ ] Commands via `Quickshell.execDetached` (array)

@@ -7,6 +7,7 @@ Goal: shots 10, 11, 12, 09.
 - Done when: values follow a real player
 
 ## 6.2 MediaPill
+- Read: shot [21](../design/reference/21-desktop-bar-widgets-dock.webp) for the collapsed player and its placement in the bar.
 - Read: shot 10
 - Create: `modules/bar/pills/MediaPill.qml`
 - [ ] Visible only when a player exists; pause/play button + title elided (max width by size class); click toggles `UiState` popup `media`
@@ -29,6 +30,7 @@ Goal: shots 10, 11, 12, 09.
 - Done when: matches shot 11; seek works
 
 ## 6.5 Calendar
+- On-device reference: [29](../design/reference/29-device-clock-calendar-closed.png), [30](../design/reference/30-device-calendar-open.png) for closed and open states.
 - Read: shot 12
 - Create: `modules/calendar/CalendarPopup.qml`, `modules/calendar/Calendar.model.js`, test
 - [ ] Model: `month(year, month, weekStart)` → weeks of day cells with `inMonth`, `isToday(now)`; navigation helpers; `now` passed in
@@ -37,6 +39,7 @@ Goal: shots 10, 11, 12, 09.
 - Done when: matches shot 12; tests for leap year, month starting on Mon/Sun, 6-week months
 
 ## 6.6 Keyboard layout
+- On-device reference: [32](../design/reference/32-device-keyboard-layouts.png) for language codes, names, and selected row styling.
 - Read: shot 09; Hyprland: layout comes from the keyboard device (`hyprctl devices -j`) and the `activelayout` raw event; switch with `hyprctl switchxkblayout <device> next|<id>`
 - Create: `services/Keyboard.qml`, `modules/bar/pills/KeyboardPill.qml`, `components/ListItem.qml`
 - [ ] Service: `layouts`, `current`, `switchTo(i)` (Hyprland only); parsing of `hyprctl` JSON goes in a tested model

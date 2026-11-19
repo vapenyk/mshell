@@ -22,6 +22,8 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Done when: the services match the system's readings in the nested sandbox and the toggles and live updates work on a private test bus.
 
 ## 3.3 ClockPill
+- On-device reference: [29](../design/reference/29-device-clock-calendar-closed.png), [30](../design/reference/30-device-calendar-open.png) for the idle clock and active clock with calendar.
+- Visual reference: shots [21](../design/reference/21-desktop-bar-widgets-dock.webp) and [26](../design/reference/26-settings-window-dark.webp) for clock and date placement.
 - Create: `modules/bar/pills/ClockPill.qml`, `modules/bar/pills/ClockPill.model.js`, `tests/modules/bar/pills/ClockPill.model.test.js`
 - Update: `modules/bar/Bar.qml` to use ClockPill, `config/Theme.qml` to handle a detached screen during teardown, and `tests/load.js` to load the model's relative JavaScript import.
 - [x] Model: `label(date, sizeClass, use24h)` shows time only on compact screens and time plus the short date on larger screens.
@@ -29,6 +31,8 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Done when: matches shot 12 left side; test passes
 
 ## 3.4 StatusPill
+- On-device reference: [28](../design/reference/28-device-control-center.png), [44](../design/reference/44-device-control-center-wifi-tooltip.png) for Wi-Fi and Bluetooth shown together.
+- Visual reference: shot [21](../design/reference/21-desktop-bar-widgets-dock.webp) for placement and shots [22](../design/reference/22-notification-center-final.webp) and [25](../design/reference/25-menu-overflow.webp) for the charging indicator.
 - Read: `../design/MOTION.md` (status pill hide/show), `../design/reference/07-control-center-tiles-closeup.png`
 - Create: `modules/bar/pills/StatusPill.qml`, `modules/bar/pills/StatusPill.model.js`, `tests/modules/bar/pills/StatusPill.model.test.js`
 - Update: `modules/bar/Bar.qml` to load the status pill at the right edge.
@@ -41,6 +45,7 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Verified the DND indicator with the live service in nested Hyprland. A device fixture in the same sandbox also verified Wi-Fi, Ethernet, and Bluetooth together and the removal of each network icon independently.
 
 ## 3.5 Bar layout
+- Visual reference: shot [21](../design/reference/21-desktop-bar-widgets-dock.webp) for spacing and order of the bar items.
 - Modify: `modules/bar/Bar.qml`
 - [x] Left: `ClockPill`. Right: `StatusPill` (other pills added by later steps in the order from the Bar anatomy)
 - [x] Margins, gaps, and height use the documented tokens. The transparent window reserves its full height at the top and leaves keyboard focus with the current window.

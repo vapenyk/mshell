@@ -26,6 +26,7 @@ Read this file, then ONLY the files your current task points to. Do not read all
 | Anti-bloat rules | `docs/conventions/LEAN.md` |
 
 ## Hard rules
+- Before adding a UI component, check [the component catalogue](docs/design/COMPONENTS.md) for a reusable match. Update the catalogue when a component is added, moved, or removed.
 - Create only files listed in the current plan step. Need another file? Add it to the plan first.
 - Every file must have a consumer by the end of its step. No speculative code.
 - Logic that is not UI goes in `Name.model.js` with a test. QML only binds.

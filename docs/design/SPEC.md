@@ -31,7 +31,7 @@ Visual and behavioural reference: `reference/` (screenshots of Googlebook OS, us
   - Below: tile grid. The set of tiles and their sizes are defined in code (`TileRegistry`). The user can change **order only**. Layout is automatic (`Flow`).
   - Tile **left click** toggles the service. Tile **right click** opens that tile's settings page inside the same popup (`PageStack`, back button in the header).
   - Tiles whose hardware is missing are not shown.
-- **Bar:** pills along the top, not a solid strip. Status icons (network, bluetooth, DND, battery) show **only when active/relevant** (connected, on, charging...). Nothing active → status pill hidden. Media pill appears only while a player exists.
+- **Bar:** pills along the top, not a solid strip. Status icons (Wi-Fi, Ethernet, Bluetooth, DND, battery) show **only when active/relevant** (connected, on, charging...). Wi-Fi and Ethernet each have their own icon and can both appear at once. Bluetooth appears when at least one Bluetooth device is connected, so all three connection icons can appear together. Nothing active → status pill hidden. Media pill appears only while a player exists.
 - **Popups** open under their pill, close on outside click or Escape, one open at a time (`UiState`).
 - **Notifications:** popup card on arrival; center groups by app, sections Alerting/Silent, "Clear all", DND respected.
 

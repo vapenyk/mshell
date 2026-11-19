@@ -32,6 +32,7 @@
 |---|---|
 | Buttons | https://m3.material.io/components/buttons/overview |
 | Icon buttons | https://m3.material.io/components/icon-buttons/overview |
+| Text fields | https://m3.material.io/components/text-fields/overview |
 | Button groups / segmented | https://m3.material.io/components/button-groups/overview |
 | Sliders | https://m3.material.io/components/sliders/overview |
 | Progress indicators (wavy) | https://m3.material.io/components/progress-indicators/overview |

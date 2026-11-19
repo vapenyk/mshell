@@ -24,6 +24,8 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 
 Backlog (no plan yet, don't start): dock, screenshot toolbar, settings window, desktop widgets.
 
+Backlog references: dock and desktop widgets [21](../design/reference/21-desktop-bar-widgets-dock.webp), menus [24](../design/reference/24-menu-context.webp) and [25](../design/reference/25-menu-overflow.webp), settings window [26](../design/reference/26-settings-window-dark.webp), window chrome and snackbars [27](../design/reference/27-app-windows-snackbar-fab.webp).
+
 ## Open questions (answer before the step that needs them)
 | Question | Needed by | Answer |
 |---|---|---|
