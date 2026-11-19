@@ -32,9 +32,12 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 - Verified focused-screen placement, sender timeout, hover pause, three-card limit, real click dismissal, replacement, and DND in nested Hyprland.
 
 ## 5.3b Pill + center
-- Create: `modules/notifications/NotifCenter.qml`, `modules/notifications/NotifGroup.qml`, `modules/bar/pills/NotifPill.qml`
-- [ ] `NotifCenter` popup: sections ("Silent" with ✕ to clear the section), grouped cards with counter, bottom row: history, wide **Clear all**, settings (opens nothing yet → omit button until it has an action)
-- [ ] Empty state designed
-- [ ] `NotifPill`: bell icon, dot when unread, click toggles `UiState` popup `notifications`; added to the bar before `StatusPill`
-- [ ] IPC `notifs`: `toggleDnd`, `clear`
+- Create: `modules/notifications/NotifCenter.qml`, `modules/notifications/NotifGroup.qml`, `modules/notifications/NotifHistory.qml`, `modules/bar/pills/NotifPill.qml`
+- Update: `shell.qml`, `Bar.qml`, `Notifs.qml`, `NotifCard.qml`, and `NotifPopup.qml` to connect the center, unread state, grouping, and IPC. Add the unread indicator size in `config/Sizing.qml`.
+- History shows notifications cleared or closed during the current session.
+- [x] `NotifCenter` popup: sections ("Silent" with ✕ to clear the section), grouped cards with counter, bottom row: history, wide **Clear all**, settings (opens nothing yet → omit button until it has an action)
+- [x] Empty state designed
+- [x] `NotifPill`: bell icon, dot when unread, click toggles `UiState` popup `notifications`; added to the bar before `StatusPill`
+- [x] IPC `notifs`: `toggleDnd`, `clear`
 - Done when: matches shot 08; bell dot appears and clears; `unused.sh` clean
+- Verified bell and unread state, group expansion, section clearing, empty state, session history, and IPC on the nested session bus.

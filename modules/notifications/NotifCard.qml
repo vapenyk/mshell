@@ -15,14 +15,17 @@ import QtQuick.Layouts as QQL
 
 QQ.Item {
     id: root
-
     required property Notification notification
     required property date arrivedAt
     property bool expanded: false
+    property int groupCount: 0
+    property bool groupExpanded: false
+    property int topRadius: Shape.large
+    property int bottomRadius: Shape.large
 
+    signal groupToggleRequested()
     signal dismissRequested()
     signal actionRequested(action: NotificationAction)
-
     readonly property var _actions: Array.from(notification?.actions ?? [])
     readonly property NotificationAction _defaultAction: _actions.find(action => action.identifier === "default") ?? null
     readonly property string _body: notification?.body ?? ""
@@ -31,11 +34,14 @@ QQ.Item {
     readonly property string _app: notification?.appName || qsTr("Notification")
     readonly property string _appIcon: notification?.appIcon || notification?.desktopEntry || ""
 
-    implicitHeight: content.implicitHeight + 2 * Sizing.popupInnerPadding
+    onGroupExpandedChanged: {
+        if (!groupExpanded && groupCount > 1)
+            expanded = false;
+    }
 
+    implicitHeight: content.implicitHeight + 2 * Sizing.popupInnerPadding
     Basic.AbstractButton {
         id: bodyButton
-
         anchors.fill: parent
         hoverEnabled: true
         focusPolicy: Qt.StrongFocus
@@ -52,11 +58,17 @@ QQ.Item {
 
         background: Components.Surface {
             container: Theme.surfaceContainerHigh
-            radius: Shape.large
+            topLeftRadius: root.topRadius
+            topRightRadius: root.topRadius
+            bottomLeftRadius: root.bottomRadius
+            bottomRightRadius: root.bottomRadius
 
             Components.StateLayer {
                 anchors.fill: parent
-                radius: parent.radius
+                topLeftRadius: root.topRadius
+                topRightRadius: root.topRadius
+                bottomLeftRadius: root.bottomRadius
+                bottomRightRadius: root.bottomRadius
                 contentColor: Theme.onSurface
                 hovered: bodyButton.hovered
                 pressed: bodyButton.down
@@ -67,13 +79,11 @@ QQ.Item {
 
     QQL.RowLayout {
         id: content
-
         anchors {
             fill: parent
             margins: Sizing.popupInnerPadding
         }
         spacing: Sizing.popupGap
-
         QQ.Item {
             QQL.Layout.alignment: Qt.AlignTop
             QQL.Layout.minimumWidth: implicitWidth
@@ -83,7 +93,6 @@ QQ.Item {
 
             QQ.Image {
                 id: appImage
-
                 anchors.fill: parent
                 fillMode: QQ.Image.PreserveAspectFit
                 source: root._appIcon.startsWith("/") ? "file://" + root._appIcon
@@ -112,9 +121,27 @@ QQ.Item {
                     color: Theme.onSurfaceVariant
                     text: root._age ? qsTr("%1 · %2").arg(root._app).arg(root._age) : root._app
                 }
+                Components.Pill {
+                    visible: root.groupCount > 1
+                    text: root.groupCount.toString()
+                    idleContainer: Theme.surfaceContainerHighest
+                    trailing: Components.Icon {
+                        name: root.groupExpanded ? "expand_less" : "expand_more"
+                        size: Sizing.smallIconSize
+                        color: Theme.onSurfaceVariant
+                    }
+                    activeFocusOnTab: visible
+                    QQ.Accessible.role: QQ.Accessible.Button
+                    QQ.Accessible.name: root.groupExpanded ? qsTr("Collapse group") : qsTr("Expand group")
+                    QQ.Accessible.onPressAction: root.groupToggleRequested()
+                    QQ.Keys.onReturnPressed: root.groupToggleRequested()
+                    QQ.Keys.onSpacePressed: root.groupToggleRequested()
+                    onClicked: root.groupToggleRequested()
+                }
                 Components.IconButton {
                     QQL.Layout.preferredWidth: Sizing.pillHeight
                     QQL.Layout.preferredHeight: Sizing.pillHeight
+                    visible: root.groupCount <= 1 || root.groupExpanded
                     text: root.expanded ? qsTr("Collapse notification") : qsTr("Expand notification")
                     iconName: root.expanded ? "expand_less" : "expand_more"
                     onClicked: root.expanded = !root.expanded

@@ -48,13 +48,24 @@ Variants {
             }
         }
 
+        NotifPill {
+            id: notifPill
+
+            anchors {
+                right: statusPill.left
+                rightMargin: Sizing.pillGap
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
         TapHandler {
             enabled: UiState.openPopup !== ""
             acceptedButtons: Qt.AllButtons
             onTapped: point => {
                 const overClock = clockPill.contains(clockPill.mapFromItem(barWindow.contentItem, point.position));
                 const overStatus = statusPill.contains(statusPill.mapFromItem(barWindow.contentItem, point.position));
-                if (!overClock && !overStatus)
+                const overNotif = notifPill.contains(notifPill.mapFromItem(barWindow.contentItem, point.position));
+                if (!overClock && !overStatus && !overNotif)
                     UiState.close();
             }
         }

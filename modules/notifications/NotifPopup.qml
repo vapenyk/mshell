@@ -17,7 +17,7 @@ Scope {
     property var _pending: null
 
     function _show(entry: QtObject, screen: ShellScreen): void {
-        if (!screen || !Quickshell.screens.includes(screen) || !Notifs.notifications.includes(entry))
+        if (UiState.openPopup === "notifications" || !screen || !Quickshell.screens.includes(screen) || !Notifs.notifications.includes(entry))
             return;
         if (_popups.length < Sizing.notificationPopupLimit) {
             const toast = toastComponent.createObject(root, {
@@ -58,6 +58,18 @@ Scope {
         function onNotificationsChanged(): void {
             for (const toast of Array.from(root._popups)) {
                 if (!Notifs.notifications.includes(toast.entry))
+                    toast.leaving = true;
+            }
+        }
+    }
+
+    Connections {
+        target: UiState
+
+        function onOpenPopupChanged(): void {
+            if (UiState.openPopup === "notifications") {
+                root._pending = null;
+                for (const toast of root._popups)
                     toast.leaving = true;
             }
         }

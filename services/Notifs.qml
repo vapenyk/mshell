@@ -4,6 +4,7 @@ pragma ComponentBehavior: Bound
 import "../utils/Grouping.js" as Grouping
 
 import Quickshell
+import Quickshell.Io
 import Quickshell.Services.Notifications
 import QtQml
 
@@ -11,6 +12,9 @@ Singleton {
     id: root
 
     readonly property list<Entry> notifications: _entries
+    readonly property bool unread: _entries.some(entry => entry.unread)
+    readonly property var history: _history
+    property var _history: []
     readonly property var sections: Grouping.sections(notifications)
     property list<Entry> _entries: []
 
@@ -26,11 +30,24 @@ Singleton {
             dismiss(entry);
     }
 
+    function clearSilent(): void {
+        for (const entry of Array.from(_entries).filter(item => item.silent))
+            dismiss(entry);
+    }
+
     function invoke(action: NotificationAction): void {
         action?.invoke();
     }
 
     function _remove(entry: Entry): void {
+        if (!entry.notification.transient) {
+            _history = [{
+                appName: entry.appName,
+                summary: entry.notification.summary,
+                body: entry.notification.body,
+                arrivedAt: entry.arrivedAt
+            }, ..._history];
+        }
         _entries = _entries.filter(item => item !== entry);
         entry.destroy();
     }
@@ -47,11 +64,35 @@ Singleton {
             notification.tracked = true;
             const entry = entryComponent.createObject(root, {
                 notification,
-                arrivedDuringDnd: Modes.dndOn
+                arrivedDuringDnd: Modes.dndOn,
+                unread: !notification.lastGeneration && UiState.openPopup !== "notifications"
             });
             root._entries = [...root._entries, entry];
             if (!notification.lastGeneration && entry.routing.popup)
                 root.popupRequested(entry);
+        }
+    }
+
+    Connections {
+        target: UiState
+
+        function onOpenPopupChanged(): void {
+            if (UiState.openPopup === "notifications") {
+                for (const entry of root._entries)
+                    entry.unread = false;
+            }
+        }
+    }
+
+    IpcHandler {
+        target: "notifs"
+
+        function toggleDnd(): void {
+            Modes.toggleDnd();
+        }
+
+        function clear(): void {
+            root.clearAll();
         }
     }
 
@@ -66,6 +107,7 @@ Singleton {
 
         required property Notification notification
         required property bool arrivedDuringDnd
+        required property bool unread
         readonly property date arrivedAt: new Date()
         readonly property string appName: notification.appName
         readonly property string desktopEntry: notification.desktopEntry

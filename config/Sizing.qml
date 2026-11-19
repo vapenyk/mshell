@@ -15,6 +15,7 @@ Singleton {
     readonly property int controlCenterWidth: 400
     readonly property int notificationPopupWidth: 400
     readonly property int notificationPopupLimit: 3
+    readonly property int notificationDotSize: 6
     readonly property int tileHeight: 64
     readonly property int tileChipSize: 48
     readonly property int tilePadding: 8

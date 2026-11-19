@@ -16,6 +16,8 @@ ShellRoot {
 
     NotifPopup {}
 
+    NotifCenter { barWindows: bar.instances }
+
     Component.onCompleted: {
         Network;
         Bluetooth;
