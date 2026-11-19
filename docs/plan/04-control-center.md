@@ -16,9 +16,11 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: StatusPill click opens/closes it, correctly placed on each screen
 
 ## 4.2 PageStack
-- Create: `components/PageStack.qml`
-- [ ] Header: back button (only when depth > 1), centered title, trailing action; pages pushed/popped with slide+fade
-- [ ] `push(component, props)`, `pop()`, `depth`
+- Read: `../design/MOTION.md` (shared axis)
+- Create: `components/PageStack.qml`, `modules/controlcenter/pages/MainPage.qml` (root page for the upcoming controls and tiles)
+- Update: `modules/controlcenter/ControlCenter.qml` to host the page stack.
+- [x] Header: back button (only when depth > 1), centered title, trailing action; pages pushed/popped with slide+fade
+- [x] `push(component, props)`, `pop()`, `depth`
 - Done when: ControlCenter hosts it with `MainPage` as the root
 
 ## 4.3 ValueSlider

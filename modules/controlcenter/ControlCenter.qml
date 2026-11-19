@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import qs.components as Components
 import qs.config
 import qs.services
+import "pages"
 
 import Quickshell
 import Quickshell.Hyprland
@@ -63,9 +64,16 @@ Scope {
             onDismissRequested: Qt.callLater(root._dismissPopup, popup)
             onExited: Qt.callLater(root._unmountPopup)
 
-            Components.Text {
-                text: qsTr("Control center")
-                role: "titleMedium"
+            Components.PageStack {
+                width: parent.width
+                initialPage: MainPage {}
+
+                onRootEscapePressed: event => {
+                    if (UiState.editMode) {
+                        UiState.editMode = false;
+                        event.accepted = true;
+                    }
+                }
             }
         }
     }
