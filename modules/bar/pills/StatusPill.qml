@@ -50,6 +50,7 @@ Item {
         id: pill
 
         anchors.right: parent.right
+        idleContainer: Theme.transparent
         active: UiState.openPopup === "controlcenter" && UiState.popupAnchor === root
         onClicked: UiState.toggleAt("controlcenter", root)
 

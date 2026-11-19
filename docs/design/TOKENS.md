@@ -16,7 +16,7 @@ Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 |---|---|---|
 | Popup / panel background | `surfaceContainer` | `onSurface` |
 | Card inside popup | `surfaceContainerHigh` | `onSurface` |
-| Bar pill (idle) | `surfaceContainerHigh` | `onSurface` |
+| Bar pill (idle) | `transparent` | `onSurface` |
 | Bar pill (popup open / pressed) | `secondaryContainer` | `onSecondaryContainer` |
 | Tile off | `surfaceContainerHigh` | `onSurface`, subtitle `onSurfaceVariant` |
 | Tile on | `primary` | `onPrimary` |

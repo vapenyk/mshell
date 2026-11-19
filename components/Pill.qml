@@ -10,6 +10,7 @@ QQ.Item {
     property string text: ""
     property Component trailing
     property bool active: false
+    property QQ.color idleContainer: Theme.surfaceContainerHigh
     readonly property QQ.color contentColor: _highlighted ? Theme.onSecondaryContainer : Theme.onSurface
     readonly property bool _pressed: leftTap.pressed || rightTap.pressed
     readonly property bool _highlighted: active || _pressed
@@ -24,7 +25,7 @@ QQ.Item {
 
     Surface {
         anchors.fill: parent
-        container: root._highlighted ? Theme.secondaryContainer : Theme.surfaceContainerHigh
+        container: root._highlighted ? Theme.secondaryContainer : root.idleContainer
         radius: Shape.full
     }
 
