@@ -21,7 +21,8 @@ Common rule: no `services` imports. All values from tokens.
 
 ## 2.3 Text
 - Create: `components/Text.qml`
-- [ ] `role: string` selects from `Typography` (default `bodyMedium`); `color` default `Theme.onSurface`; elide right by default
+- Update: `modules/bar/Bar.qml` to use the `labelLarge` role for the clock.
+- [x] `role: string` selects from `Typography` (default `bodyMedium`), `color` defaults to `Theme.onSurface`, and text elides on the right by default.
 - Done when: all roles render with correct size/weight
 
 ## 2.4 Surface

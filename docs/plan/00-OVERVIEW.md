@@ -13,7 +13,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | # | File | What | Status |
 |---|---|---|---|
 | 01 | `01-foundation.md` | skeleton, config, tokens, clock | ✅ |
-| 02 | `02-base-components.md` | StateLayer, Icon, Text, Surface, Pill | 🟨 2.1–2.2 complete |
+| 02 | `02-base-components.md` | StateLayer, Icon, Text, Surface, Pill | 🟨 2.1–2.3 complete |
 | 03 | `03-bar.md` | bar, clock pill, status pill, services | ⬜ |
 | 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | ⬜ |
 | 05 | `05-notifications.md` | service, popup, center, bell pill | ⬜ |

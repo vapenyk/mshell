@@ -1,6 +1,6 @@
 pragma ComponentBehavior: Bound
 
-import qs.components
+import qs.components as Components
 import qs.config
 import qs.services
 import "../../utils/Format.js" as Format
@@ -29,7 +29,7 @@ Variants {
             implicitWidth: clockContent.implicitWidth + Sizing.pillHeight
             implicitHeight: Sizing.pillHeight
 
-            StateLayer {
+            Components.StateLayer {
                 anchors.fill: parent
                 contentColor: clockLabel.color
                 hovered: clockHover.hovered
@@ -43,22 +43,19 @@ Variants {
                 anchors.centerIn: parent
                 spacing: Sizing.pillGap
 
-                Icon {
+                Components.Icon {
                     anchors.verticalCenter: parent.verticalCenter
                     name: "schedule"
                     size: Sizing.smallIconSize
                     color: clockLabel.color
                 }
 
-                Text {
+                Components.Text {
                     id: clockLabel
 
                     anchors.verticalCenter: parent.verticalCenter
                     text: Format.clock(Time.date, true)
-                    color: Theme.onSurface
-                    font.family: Typography.family
-                    font.pixelSize: Typography.labelLarge.size
-                    font.weight: Typography.labelLarge.weight
+                    role: "labelLarge"
                 }
             }
 
