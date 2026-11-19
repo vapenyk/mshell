@@ -14,10 +14,11 @@ Goal: shell starts, settings load, tokens exist, a themed clock shows. Nothing e
 ## 1.2 Config
 - Read: `../design/SPEC.md` (behaviour rules → Accent), `../conventions/NAMING.md` (IPC)
 - Create: `config/Config.qml`
-- [ ] Singleton; `FileView` + `JsonAdapter` on `~/.config/mshell/settings.json` with `accent: "blue"`, `tiles: []`
-- [ ] Missing file → create with defaults (`onLoadFailed` / FileNotFound)
-- [ ] `IpcHandler { target: "config"; function setAccent(name: string): void }` writes the value
-- [ ] Watch the file so manual edits apply live
+- Update: `shell.qml` to initialize Config at startup so its IPC handler is available.
+- [x] Singleton; `FileView` + `JsonAdapter` on `~/.config/mshell/settings.json` with `accent: "blue"`, `tiles: []`. Honor `XDG_CONFIG_HOME` for the development sandbox.
+- [x] Missing file → create with defaults (`onLoadFailed` / FileNotFound)
+- [x] `IpcHandler { target: "config"; function setAccent(name: string): void }` writes the value
+- [x] Watch the file so manual edits apply live
 - Done when: `qs -c mshell ipc call config setAccent green` changes the file and `Config.accent`
 
 ## 1.3 Theme

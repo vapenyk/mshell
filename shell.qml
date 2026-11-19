@@ -1,3 +1,9 @@
-import Quickshell
+import qs.config
 
-ShellRoot {}
+import Quickshell
+import QtQml
+
+ShellRoot {
+    // Initialize the singleton so its IPC handler is available at startup.
+    Component.onCompleted: Config
+}
