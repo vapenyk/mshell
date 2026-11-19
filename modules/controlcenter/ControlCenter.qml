@@ -68,8 +68,15 @@ Scope {
             onExited: Qt.callLater(root._unmountPopup)
 
             Components.PageStack {
+                id: pages
+
                 width: parent.width
-                initialPage: MainPage {}
+                initialPage: MainPage {
+                    onSettingsRequested: tileId => {
+                        if (tileId === "modes")
+                            pages.push(modesPage);
+                    }
+                }
 
                 onRootEscapePressed: event => {
                     if (UiState.editMode) {
@@ -77,6 +84,12 @@ Scope {
                         event.accepted = true;
                     }
                 }
+            }
+
+            Component {
+                id: modesPage
+
+                ModesPage {}
             }
         }
     }

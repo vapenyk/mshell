@@ -17,6 +17,11 @@ Singleton {
     readonly property int tileChipSize: 48
     readonly property int tilePadding: 8
     readonly property int tileGridGap: 8
+    readonly property int switchWidth: 52
+    readonly property int switchHeight: 32
+    readonly property int switchOutlineWidth: 2
+    readonly property int switchThumbOffSize: 16
+    readonly property int switchThumbOnSize: 24
     readonly property int sliderHeight: 40
     readonly property int sliderHandleWidth: 4
     readonly property int sliderHandleGap: 4

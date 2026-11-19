@@ -12,6 +12,8 @@ import QtQuick
 Item {
     id: root
 
+    signal settingsRequested(tileId: string)
+
     readonly property var _order: Model.visibleTiles(Config.tiles, registry.definitions)
     readonly property int _columns: Model.columnsFor(width + 2 * Sizing.popupInnerPadding)
     readonly property int _cellWidth: Math.max(0, Math.floor((width - (_columns - 1) * slots.spacing) / _columns))
@@ -74,6 +76,15 @@ Item {
                 height: Sizing.tileHeight
                 enabled: !UiState.editMode
                 sourceComponent: registry.definitions[tileSlot.modelData].comp
+            }
+
+            Connections {
+                target: tile.item
+
+                function onSettingsRequested(): void {
+                    if (!UiState.editMode)
+                        root.settingsRequested(tileSlot.modelData);
+                }
             }
 
             Row {

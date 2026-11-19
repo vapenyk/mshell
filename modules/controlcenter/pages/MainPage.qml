@@ -8,6 +8,10 @@ import ".."
 import QtQuick
 
 Item {
+    id: root
+
+    signal settingsRequested(tileId: string)
+
     readonly property Component headerContent: Item {
         implicitHeight: actions.implicitHeight
 
@@ -65,6 +69,8 @@ Item {
 
     TileGrid {
         id: grid
+
+        onSettingsRequested: tileId => root.settingsRequested(tileId)
 
         anchors {
             top: controls.bottom

@@ -86,7 +86,8 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 ## 4.9 ModesPage (first right-click page)
 - Read: shot 06
 - Create: `modules/controlcenter/pages/ModesPage.qml`
-- [ ] Header "Modes", list card "Do Not Disturb / Off|On" with switch; right-click on ModesTile pushes it
+- Update: `TileGrid.qml`, `MainPage.qml`, and `ControlCenter.qml` to route tile settings requests. Add switch sizing tokens in `config/Sizing.qml`.
+- [x] Header "Modes", list card "Do Not Disturb / Off|On" with switch; right-click on ModesTile pushes it
 - Done when: matches shot 06 structure; back button works
 
 ## 4.10 NetworkPage
