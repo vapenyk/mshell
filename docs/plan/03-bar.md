@@ -22,9 +22,10 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Done when: the services match the system's readings in the nested sandbox and the toggles and live updates work on a private test bus.
 
 ## 3.3 ClockPill
-- Create: `modules/bar/pills/ClockPill.qml`, `modules/bar/pills/ClockPill.model.js`, test
-- [ ] Model: `label(date, sizeClass, use24h)` → compact: time only; otherwise "13:15 Mon 12 Oct"
-- [ ] Click → `UiState.toggle("calendar")` (popup arrives in 06; no-op until then)
+- Create: `modules/bar/pills/ClockPill.qml`, `modules/bar/pills/ClockPill.model.js`, `tests/modules/bar/pills/ClockPill.model.test.js`
+- Update: `modules/bar/Bar.qml` to use ClockPill, `config/Theme.qml` to handle a detached screen during teardown, and `tests/load.js` to load the model's relative JavaScript import.
+- [x] Model: `label(date, sizeClass, use24h)` shows time only on compact screens and time plus the short date on larger screens.
+- [x] Click toggles `UiState.toggle("calendar")`. The calendar popup arrives in 06.
 - Done when: matches shot 12 left side; test passes
 
 ## 3.4 StatusPill

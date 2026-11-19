@@ -60,7 +60,7 @@ Singleton {
     readonly property var popupShadow: ({ opacity: 0.24, blur: 24, offsetY: 8 })
 
     function sizeClass(screen: ShellScreen): string {
-        return Model.sizeClass(screen.width);
+        return Model.sizeClass(screen?.width ?? 0);
     }
 
     // QML treats direct bindings whose names start with on and a capital as signal handlers.
