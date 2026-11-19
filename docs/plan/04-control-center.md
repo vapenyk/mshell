@@ -66,8 +66,9 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 
 ## 4.7 First tiles
 - Create: `modules/controlcenter/tiles/WifiTile.qml`, `BluetoothTile.qml`, `ModesTile.qml`, `MicTile.qml`, `services/Modes.qml`
-- [ ] Each: bind to its service, `onToggled` → service action, `onSettingsRequested` → push page (pages come in 4.9–4.12; until then, no-op)
-- [ ] `Modes`: `dndOn`, `toggleDnd()` (the notification service honours it in step 05)
+- Update: `TileRegistry.qml` to use live tiles and hide unavailable hardware. Update `services/Network.qml`, `services/Network.model.js`, and its model tests so the Wi-Fi tile can identify its adapter and SSID independently of the preferred connection.
+- [x] Each: bind to its service, `onToggled` → service action, `onSettingsRequested` → push page (pages come in 4.9–4.12; until then, no-op)
+- [x] `Modes`: `dndOn`, `toggleDnd()` (the notification service honours it in step 05)
 - Done when: toggling works and reflects external changes; matches shot 01 look
 
 ## 4.8 Reorder (edit mode)

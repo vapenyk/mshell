@@ -1,9 +1,11 @@
 .pragma library
 
+function deviceOfType(devices, type, connectedOnly = false) {
+    return devices.find(device => device.type === type && (!connectedOnly || device.connected)) ?? null;
+}
+
 function connectedDevice(devices, wiredType, wifiType) {
-    return devices.find(device => device.connected && device.type === wiredType)
-        ?? devices.find(device => device.connected && device.type === wifiType)
-        ?? null;
+    return deviceOfType(devices, wiredType, true) ?? deviceOfType(devices, wifiType, true);
 }
 
 function connectedNetwork(networks) {

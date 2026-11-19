@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 const { loadModel } = require("../load.js");
 
-const { connectedDevice, connectedNetwork } = loadModel("services/Network.model.js");
+const { deviceOfType, connectedDevice, connectedNetwork } = loadModel("services/Network.model.js");
 
 const wiredType = 1;
 const wifiType = 2;
@@ -28,4 +28,15 @@ test("connectedNetwork selects the connected Wi-Fi network rather than a stronge
     const other = { connected: false, signalStrength: 0.94 };
     assert.equal(connectedNetwork([other, current]), current);
     assert.equal(connectedNetwork([other]), null);
+});
+
+test("Wi-Fi availability includes disconnected adapters and connection lookup ignores Ethernet", () => {
+    const wired = { type: wiredType, connected: true };
+    const disconnected = { type: wifiType, connected: false };
+    const connected = { type: wifiType, connected: true };
+
+    assert.equal(deviceOfType([wired, disconnected], wifiType), disconnected);
+    assert.equal(deviceOfType([wired, disconnected], wifiType, true), null);
+    assert.equal(deviceOfType([wired, disconnected, connected], wifiType, true), connected);
+    assert.equal(deviceOfType([wired], wifiType), null);
 });
