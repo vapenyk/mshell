@@ -17,6 +17,7 @@ ShellRoot {
         Network;
         Bluetooth;
         Battery;
+        Notifs;
         Shape;
         Motion;
     }

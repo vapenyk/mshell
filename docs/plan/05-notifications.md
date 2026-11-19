@@ -6,11 +6,13 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 
 ## 5.1 Notifs service + grouping
 - Create: `services/Notifs.qml`, `utils/Grouping.js`, `tests/utils/Grouping.test.js`
-- [ ] `NotificationServer`; keep notifications as objects in a list (inline component, `ComponentBehavior: Bound`); `dismiss`, `clearAll`, `invoke(action)`
-- [ ] `Grouping.js`: `groupByApp(list)` (newest group first, newest item first), `sections(list)` → Alerting (normal/critical) and Silent (low urgency or arrived during DND), counts
-- [ ] DND: when `Modes.dndOn`, new notifications go to Silent and produce no popup
-- [ ] Tests: grouping order, sections, DND routing, empty
+- Update: `shell.qml` to start the notification service with the shell.
+- [x] `NotificationServer`; keep notifications as objects in a list (inline component, `ComponentBehavior: Bound`); `dismiss`, `clearAll`, `invoke(action)`
+- [x] `Grouping.js`: `groupByApp(list)` (newest group first, newest item first), `sections(list)` → Alerting (normal/critical) and Silent (low urgency or arrived during DND), counts
+- [x] DND: when `Modes.dndOn`, new notifications go to Silent. Critical notifications still request a popup.
+- [x] Tests: grouping order, sections, DND routing, empty
 - Done when: `notify-send` produces entries in the service; tests pass
+- Verified delivery, replacement, DND routing, actions, and clearing with `notify-send` on the nested session bus.
 
 ## 5.2 NotifCard
 - Create: `modules/notifications/NotifCard.qml`
