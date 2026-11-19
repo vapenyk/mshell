@@ -36,7 +36,7 @@ Media steps 6.1–6.4 are deferred until MPRIS is wanted. The calendar and keybo
 - Read: shot 12
 - Create: `modules/calendar/CalendarPopup.qml`, `modules/calendar/Calendar.model.js`, `tests/modules/Calendar.model.test.js`, and `components/AnchoredPopup.qml` for the calendar and the layout picker in 6.6.
 - Update: `shell.qml`, `ClockPill.qml`, `config/Sizing.qml`, and the component catalogue.
-- [x] Model: `month(year, month, weekStart)` → six weeks of day cells with `inMonth`, `isToday(day, now)`, and month navigation
+- [x] Model: `month(year, month, weekStart)` → six weeks of day cells with `inMonth`, local date comparison, and month navigation
 - [x] Popup: localized month title, previous and next, localized week start, and a grid with today highlighted in `primary`.
 - [x] Opens from `ClockPill` (`UiState` popup `calendar`)
 - Done when: matches shot 12; tests for leap year, month starting on Mon/Sun, 6-week months
@@ -45,10 +45,12 @@ Media steps 6.1–6.4 are deferred until MPRIS is wanted. The calendar and keybo
 ### 6.5 follow-up — date selection and year picker
 
 - Read the [on-device calendar captures](../design/reference/INDEX.md#on-device-calendar-captures-5256) and the [M3 calendar reference](../design/REFERENCES.md). Use mshell's color and typography tokens.
-- [ ] Start on the current month with today's date filled, as in [52](../design/reference/52-device-calendar-today.png). Selecting another day fills that date and leaves today outlined whenever both dates are visible, as in [53](../design/reference/53-device-calendar-day-selected.png).
-- [ ] Make the month and year label open a scrollable three-column year picker in the same panel. On entry, show the displayed year and highlight it. The chevron indicates the open state. Choosing a year returns to the month grid for that year. See [54](../design/reference/54-device-calendar-year-picker.png).
-- [ ] Verify previous and next month navigation in a month without either date in view ([55](../design/reference/55-device-calendar-previous-month.png)) and across December and January ([56](../design/reference/56-device-calendar-next-year-month.png)). Keep the panel height stable and use blank cells outside the displayed month.
-- Update `CalendarPopup.qml` for the day and year views and `Calendar.model.js` with tests for date selection and year navigation.
+- [x] Start on the current month with today's date filled, as in [52](../design/reference/52-device-calendar-today.png). Selecting another day fills that date and leaves today outlined whenever both dates are visible, as in [53](../design/reference/53-device-calendar-day-selected.png).
+- [x] Make the month and year label open a scrollable three-column year picker in the same panel. On entry, show the displayed year and highlight it. The chevron indicates the open state. Choosing a year returns to the month grid for that year, keeping the displayed month. See [54](../design/reference/54-device-calendar-year-picker.png).
+- [x] Verify previous and next month navigation in a month without either date in view ([55](../design/reference/55-device-calendar-previous-month.png)) and across December and January ([56](../design/reference/56-device-calendar-next-year-month.png)). Keep the panel height stable and use blank cells outside the displayed month.
+- Create `modules/calendar/CalendarMonthGrid.qml` and `modules/calendar/CalendarYearGrid.qml` for the two body views used by `CalendarPopup.qml`.
+- Update `CalendarPopup.qml`, `Calendar.model.js`, its tests, and the component catalogue.
+- Verified day and year selection by mouse and keyboard, wheel scrolling, the six-week January 2027 grid with a Sunday week start, stable panel height, Escape, and reset to today when reopened in nested Hyprland.
 
 ## 6.6 Keyboard layout
 - On-device reference: [32](../design/reference/32-device-keyboard-layouts.png) for language codes, names, and selected row styling. Omit the title and settings button.

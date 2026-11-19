@@ -10,7 +10,7 @@ import QtQuick.Controls as QQC
 import QtQuick.Layouts as QQL
 
 Components.AnchoredPopup {
-    id: root
+    id: popup
 
     requestedAnchor: UiState.openPopup === "calendar" ? UiState.popupAnchor : null
     preferredWidth: Sizing.calendarWidth
@@ -21,111 +21,126 @@ Components.AnchoredPopup {
         id: calendar
 
         readonly property var locale: Qt.locale()
-        property date month: Model.shiftMonth(Time.date, 0)
-        readonly property int columns: 7
-        readonly property bool currentMonth: Model.isToday(month, Model.shiftMonth(Time.date, 0))
-        readonly property real cellWidth: width / columns
+        readonly property date today: Time.date
+        property date month: Model.shiftMonth(today, 0)
+        property date selectedDate: today
+        property bool choosingYear: false
 
         spacing: Sizing.popupGap
+
+        QQ.Connections {
+            target: popup
+
+            function onRequestedAnchorChanged(): void {
+                if (!popup.requestedAnchor)
+                    return;
+                calendar.selectedDate = Qt.binding(() => calendar.today);
+                calendar.month = Qt.binding(() => Model.shiftMonth(calendar.today, 0));
+                calendar.choosingYear = false;
+                monthButton.forceActiveFocus(Qt.OtherFocusReason);
+            }
+        }
 
         QQL.RowLayout {
             width: parent.width
             spacing: Sizing.pillGap
 
-            Components.Text {
-                QQL.Layout.fillWidth: true
+            QQC.AbstractButton {
+                id: monthButton
+
+                QQL.Layout.minimumWidth: Sizing.sliderHeight
+                implicitWidth: implicitContentWidth + leftPadding + rightPadding
+                implicitHeight: previousMonth.implicitHeight
+                leftPadding: Sizing.pillHorizontalPadding
+                rightPadding: Sizing.pillHorizontalPadding
+                focus: true
+                hoverEnabled: true
                 text: qsTr("%1 %2").arg(calendar.locale.standaloneMonthName(calendar.month.getMonth()))
                                     .arg(calendar.month.getFullYear())
-                role: "titleMedium"
+                QQ.Accessible.checkable: true
+                QQ.Accessible.checked: calendar.choosingYear
+                QQ.Accessible.description: qsTr("Choose year")
+                QQ.Keys.onReturnPressed: click()
+                QQ.Keys.onEnterPressed: click()
+                onClicked: calendar.choosingYear = !calendar.choosingYear
+
+                background: Components.StateLayer {
+                    radius: Shape.full
+                    contentColor: Theme.onSurface
+                    hovered: monthButton.hovered
+                    pressed: monthButton.down
+                    focused: monthButton.visualFocus
+                }
+
+                contentItem: QQL.RowLayout {
+                    spacing: Sizing.pillGap
+
+                    Components.Text {
+                        QQL.Layout.fillWidth: true
+                        text: monthButton.text
+                        role: "titleMedium"
+                    }
+
+                    Components.Icon {
+                        name: calendar.choosingYear ? "expand_less" : "expand_more"
+                        size: Sizing.smallIconSize
+                        color: Theme.onSurfaceVariant
+                    }
+                }
             }
 
+            QQ.Item { QQL.Layout.fillWidth: true }
+
             Components.IconButton {
+                id: previousMonth
+
+                visible: !calendar.choosingYear
+                enabled: calendar.month.getFullYear() > Model.firstYear || calendar.month.getMonth() > 0
                 iconName: "chevron_left"
                 text: qsTr("Previous month")
-                focus: true
                 onClicked: calendar.month = Model.shiftMonth(calendar.month, -1)
             }
 
             Components.IconButton {
+                visible: !calendar.choosingYear
+                enabled: calendar.month.getFullYear() < Model.lastYear || calendar.month.getMonth() < 11
                 iconName: "chevron_right"
                 text: qsTr("Next month")
                 onClicked: calendar.month = Model.shiftMonth(calendar.month, 1)
             }
         }
 
-        QQ.Row {
-            QQ.Repeater {
-                model: calendar.columns
-
-                Components.Text {
-                    required property int index
-
-                    width: calendar.cellWidth
-                    height: Sizing.pillHeight
-                    text: calendar.locale.standaloneDayName((calendar.locale.firstDayOfWeek + index - 1)
-                                                           % calendar.columns + 1, QQ.Locale.NarrowFormat)
-                    horizontalAlignment: QQ.Text.AlignHCenter
-                    verticalAlignment: QQ.Text.AlignVCenter
-                    role: "labelLarge"
-                    color: Theme.onSurfaceVariant
-                }
+        QQ.Loader {
+            width: parent.width
+            height: Sizing.pillHeight + Sizing.popupGap + Model.weeksPerMonth * Sizing.calendarDayHeight
+            sourceComponent: calendar.choosingYear ? yearPicker : monthGrid
+            onLoaded: {
+                if (calendar.choosingYear)
+                    item.forceActiveFocus(Qt.TabFocusReason);
             }
         }
 
-        QQ.Grid {
-            columns: calendar.columns
+        QQ.Component {
+            id: monthGrid
 
-            QQ.Repeater {
-                id: days
+            CalendarMonthGrid {
+                locale: calendar.locale
+                month: calendar.month
+                today: calendar.today
+                selectedDate: calendar.selectedDate
+                onDateChosen: day => calendar.selectedDate = day
+            }
+        }
 
-                model: Model.daysForMonth(calendar.month.getFullYear(), calendar.month.getMonth(),
-                                          calendar.locale.firstDayOfWeek % calendar.columns)
+        QQ.Component {
+            id: yearPicker
 
-                QQC.Control {
-                    id: cell
-
-                    required property var modelData
-                    required property int index
-                    readonly property bool today: modelData.inMonth && Model.isToday(modelData.date, Time.date)
-                    readonly property int day: modelData.date.getDate()
-
-                    width: calendar.cellWidth
-                    height: Sizing.calendarDayHeight
-                    activeFocusOnTab: modelData.inMonth && (calendar.currentMonth ? today : day === 1)
-                    QQ.Accessible.ignored: !modelData.inMonth
-                    QQ.Accessible.name: Qt.formatDate(modelData.date, QQ.Locale.LongFormat)
-
-                    function focusDay(): void {
-                        if (modelData.inMonth)
-                            forceActiveFocus(Qt.TabFocusReason);
-                    }
-
-                    QQ.Keys.onLeftPressed: days.itemAt(index - 1)?.focusDay()
-                    QQ.Keys.onRightPressed: days.itemAt(index + 1)?.focusDay()
-                    QQ.Keys.onUpPressed: days.itemAt(index - calendar.columns)?.focusDay()
-                    QQ.Keys.onDownPressed: days.itemAt(index + calendar.columns)?.focusDay()
-
-                    Components.Surface {
-                        anchors.centerIn: parent
-                        width: Math.min(parent.width, Sizing.calendarDayMarkerSize)
-                        height: width
-                        radius: Shape.full
-                        container: cell.today ? Theme.primary : Theme.transparent
-
-                        Components.StateLayer {
-                            anchors.fill: parent
-                            radius: Shape.full
-                            contentColor: cell.today ? Theme.onPrimary : Theme.onSurface
-                            focused: cell.visualFocus
-                        }
-                    }
-
-                    Components.Text {
-                        anchors.centerIn: parent
-                        text: cell.modelData.inMonth ? cell.day : ""
-                        role: "bodyLarge"
-                        color: cell.today ? Theme.onPrimary : Theme.onSurface
-                    }
+            CalendarYearGrid {
+                displayedYear: calendar.month.getFullYear()
+                onYearChosen: year => {
+                    calendar.month = Model.monthInYear(calendar.month, year);
+                    calendar.choosingYear = false;
+                    monthButton.forceActiveFocus(Qt.TabFocusReason);
                 }
             }
         }

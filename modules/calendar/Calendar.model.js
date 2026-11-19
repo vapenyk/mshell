@@ -1,5 +1,10 @@
 .pragma library
 
+var daysPerWeek = 7;
+var weeksPerMonth = 6;
+var firstYear = 1;
+var lastYear = 9999;
+
 function dateInMonth(year, monthIndex, day) {
     var date = new Date(0);
     date.setFullYear(year, monthIndex, day);
@@ -9,12 +14,12 @@ function dateInMonth(year, monthIndex, day) {
 
 function month(year, monthIndex, weekStart) {
     var first = dateInMonth(year, monthIndex, 1);
-    var leading = (first.getDay() - weekStart + 7) % 7;
+    var leading = (first.getDay() - weekStart + daysPerWeek) % daysPerWeek;
     var weeks = [];
-    for (var row = 0; row < 6; row++) {
+    for (var row = 0; row < weeksPerMonth; row++) {
         var week = [];
-        for (var column = 0; column < 7; column++) {
-            var day = dateInMonth(year, monthIndex, 1 - leading + row * 7 + column);
+        for (var column = 0; column < daysPerWeek; column++) {
+            var day = dateInMonth(year, monthIndex, 1 - leading + row * daysPerWeek + column);
             week.push({ date: day, inMonth: day.getMonth() === first.getMonth() });
         }
         weeks.push(week);
@@ -29,10 +34,36 @@ function daysForMonth(year, monthIndex, weekStart) {
 }
 
 function shiftMonth(date, offset) {
-    return dateInMonth(date.getFullYear(), date.getMonth() + offset, 1);
+    var target = dateInMonth(date.getFullYear(), date.getMonth() + offset, 1);
+    var year = target.getFullYear();
+    return year >= firstYear && year <= lastYear ? target : date;
 }
 
-function isToday(day, now) {
-    return day.getFullYear() === now.getFullYear() &&
-           day.getMonth() === now.getMonth() && day.getDate() === now.getDate();
+function monthInYear(date, year) {
+    return dateInMonth(year, date.getMonth(), 1);
+}
+
+function sameDay(first, second) {
+    return first.getFullYear() === second.getFullYear() &&
+           first.getMonth() === second.getMonth() && first.getDate() === second.getDate();
+}
+
+function dayState(cell, selectedDate, today) {
+    if (!cell.inMonth)
+        return "blank";
+    if (sameDay(cell.date, selectedDate))
+        return "selected";
+    return sameDay(cell.date, today) ? "today" : "plain";
+}
+
+function focusDayIndex(days, selectedDate, today) {
+    var selected = days.findIndex(function(cell) {
+        return cell.inMonth && sameDay(cell.date, selectedDate);
+    });
+    if (selected >= 0)
+        return selected;
+    var current = days.findIndex(function(cell) {
+        return cell.inMonth && sameDay(cell.date, today);
+    });
+    return current >= 0 ? current : days.findIndex(function(cell) { return cell.inMonth; });
 }
