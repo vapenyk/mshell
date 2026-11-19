@@ -9,6 +9,7 @@ Components.Pill {
     required property string sizeClass
 
     idleContainer: Theme.transparent
+    active: UiState.openPopup === "calendar" && UiState.popupAnchor === root
     text: Model.label(Time.date, root.sizeClass, true)
-    onClicked: UiState.toggle("calendar")
+    onClicked: UiState.toggleAt("calendar", root)
 }

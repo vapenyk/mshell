@@ -17,12 +17,14 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 03 | `03-bar.md` | bar, clock pill, status pill, services | ✅ |
 | 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | ✅ |
 | 05 | `05-notifications.md` | service, popup, center, bell pill | ✅ |
-| 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ⬜ |
+| 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | Calendar ✅ · keyboard ⬜ · media deferred |
 | 07 | `07-launcher-osd.md` | launcher, OSD | ⬜ |
 | 08 | `08-lock-powermenu.md` | lock, power menu | ⬜ |
 | 09 | `09-polish.md` | motion tuning, responsive pass, cleanup | ⬜ |
 
 Backlog (no plan yet, don't start): dock, screenshot toolbar, settings window, desktop widgets.
+
+Media steps 6.1–6.4 are deferred together. Continue stage 06 with the calendar and keyboard layout picker.
 
 Backlog references: dock and desktop widgets [21](../design/reference/21-desktop-bar-widgets-dock.webp), menus [24](../design/reference/24-menu-context.webp) and [25](../design/reference/25-menu-overflow.webp), settings window [26](../design/reference/26-settings-window-dark.webp), window chrome and snackbars [27](../design/reference/27-app-windows-snackbar-fab.webp).
 

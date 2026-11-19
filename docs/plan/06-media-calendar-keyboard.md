@@ -1,6 +1,8 @@
 # 06 — Media, calendar, keyboard layout
 Goal: shots 10, 11, 12, 09.
 
+Media steps 6.1–6.4 are deferred until MPRIS is wanted. The calendar and keyboard layout picker can proceed independently.
+
 ## 6.1 Media service
 - Create: `services/Media.qml`
 - [ ] Mpris: choose the active player (playing first, else most recent), `title`, `artist`, `art`, `playing`, `position`, `length`, `play/pause`, `next`, `previous`, `seek`
@@ -32,17 +34,20 @@ Goal: shots 10, 11, 12, 09.
 ## 6.5 Calendar
 - On-device reference: [29](../design/reference/29-device-clock-calendar-closed.png), [30](../design/reference/30-device-calendar-open.png) for closed and open states.
 - Read: shot 12
-- Create: `modules/calendar/CalendarPopup.qml`, `modules/calendar/Calendar.model.js`, test
-- [ ] Model: `month(year, month, weekStart)` → weeks of day cells with `inMonth`, `isToday(now)`; navigation helpers; `now` passed in
-- [ ] Popup: title + prev/next, weekday header, grid; today = filled circle `primary`
-- [ ] Opens from `ClockPill` (`UiState` popup `calendar`)
+- Create: `modules/calendar/CalendarPopup.qml`, `modules/calendar/Calendar.model.js`, `tests/modules/Calendar.model.test.js`, and `components/AnchoredPopup.qml` for the calendar and the layout picker in 6.6.
+- Update: `shell.qml`, `ClockPill.qml`, `config/Sizing.qml`, and the component catalogue.
+- [x] Model: `month(year, month, weekStart)` → six weeks of day cells with `inMonth`, `isToday(day, now)`, and month navigation
+- [x] Popup: localized month title, previous and next, localized week start, and a grid with today highlighted in `primary`.
+- [x] Opens from `ClockPill` (`UiState` popup `calendar`)
 - Done when: matches shot 12; tests for leap year, month starting on Mon/Sun, 6-week months
+- Verified month navigation, arrow-key day focus, Escape, clicking the clock again, and outside-click dismissal in nested Hyprland.
 
 ## 6.6 Keyboard layout
-- On-device reference: [32](../design/reference/32-device-keyboard-layouts.png) for language codes, names, and selected row styling.
+- On-device reference: [32](../design/reference/32-device-keyboard-layouts.png) for language codes, names, and selected row styling. Omit the title and settings button.
 - Read: shot 09; Hyprland: layout comes from the keyboard device (`hyprctl devices -j`) and the `activelayout` raw event; switch with `hyprctl switchxkblayout <device> next|<id>`
-- Create: `services/Keyboard.qml`, `modules/bar/pills/KeyboardPill.qml`, `components/ListItem.qml`
+- Create: `services/Keyboard.qml`, `services/Keyboard.model.js`, `tests/services/Keyboard.model.test.js`, `modules/bar/pills/KeyboardPill.qml`, and `modules/keyboard/KeyboardPopup.qml`. Keep the layout row in the picker.
+- Update: `shell.qml`, `Bar.qml`, `config/Sizing.qml`, the component catalogue, and the reference index.
 - [ ] Service: `layouts`, `current`, `switchTo(i)` (Hyprland only); parsing of `hyprctl` JSON goes in a tested model
-- [ ] Pill shows 2-letter code; popup lists layouts (selected = `secondaryContainer`)
+- [ ] The pill shows the current layout code. Click opens the list without changing layout. Select a row to switch and close the list. Use `secondaryContainer` for the active row.
 - [ ] Hidden when only one layout exists
 - Done when: switching layouts works from the popup

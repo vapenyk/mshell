@@ -22,6 +22,10 @@ Singleton {
     readonly property int notificationThumbnailHeight: 40
     readonly property int notificationPreviewMaxHeight: 200
     readonly property int notificationReplyHeight: 48
+    readonly property int calendarWidth: 360
+    readonly property int calendarCompactWidth: 320
+    readonly property int calendarDayHeight: 44
+    readonly property int calendarDayMarkerSize: 36
     readonly property int tileHeight: 64
     readonly property int tileChipSize: 48
     readonly property int tilePadding: 8
