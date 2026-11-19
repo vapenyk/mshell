@@ -8,25 +8,45 @@ import QtQuick.Controls as QQC
 
 QQ.FocusScope {
     id: root
-
     required property Component initialPage
     readonly property int depth: stack.depth
     signal rootEscapePressed(event: var)
-
     readonly property int _exitDuration: Math.round(Motion.medium2 * Motion.sharedAxisFadeOutFraction)
     readonly property int _enterDuration: Motion.medium2 - _exitDuration
     readonly property real _pageHeight: stack.currentItem?.implicitHeight ?? 0
-    property real _previousPageHeight: 0
+    property real _previousHeight: 0
+    property bool _animateHeight: false
+    readonly property bool _shrinking: header.height + _pageHeight < _previousHeight
     property bool _popPending: false
-
-    implicitHeight: header.height + (stack.busy ? Math.max(_previousPageHeight, _pageHeight) : _pageHeight)
+    property real viewportHeight: header.height + _pageHeight
+    // Keep the window large enough for both pages while the visible panel animates.
+    implicitHeight: stack.busy || heightAnimation.running
+        ? Math.max(_previousHeight, header.height + _pageHeight) : viewportHeight
     clip: true
     focus: true
 
-    // Pages provide a title, their implicit content height, and an optional headerAction or headerContent component.
+    QQ.Behavior on viewportHeight {
+        enabled: root._animateHeight
+        QQ.SequentialAnimation {
+            id: heightAnimation
+            QQ.PauseAnimation { duration: root._shrinking ? root._exitDuration : 0 }
+            QQ.NumberAnimation {
+                duration: root._shrinking ? root._enterDuration : Motion.medium2
+                easing.type: QQ.Easing.BezierSpline
+                easing.bezierCurve: Motion.emphasized
+            }
+
+            onRunningChanged: {
+                if (!running && !stack.busy)
+                    root._animateHeight = false;
+            }
+        }
+    }
+
     function push(page: Component, props: var): void {
         if (depth === 1 && !stack.busy) {
-            _previousPageHeight = _pageHeight;
+            _previousHeight = viewportHeight;
+            _animateHeight = true;
             stack.pushItem(page, props ?? {}, QQC.StackView.PushTransition);
         }
     }
@@ -37,7 +57,8 @@ QQ.FocusScope {
         if (stack.busy) {
             _popPending = true;
         } else {
-            _previousPageHeight = _pageHeight;
+            _previousHeight = viewportHeight;
+            _animateHeight = true;
             stack.popCurrentItem(QQC.StackView.PopTransition);
         }
         return true;
@@ -63,7 +84,6 @@ QQ.FocusScope {
 
     QQ.Item {
         id: header
-
         width: root.width
         height: Math.max(Sizing.pillHeight, action.implicitHeight, customHeader.implicitHeight)
         readonly property real sideSpace: Math.min(width / 2, Math.max(
@@ -72,7 +92,6 @@ QQ.FocusScope {
 
         Pill {
             id: backButton
-
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
             visible: root.depth > 1
@@ -102,7 +121,6 @@ QQ.FocusScope {
 
         QQ.Loader {
             id: customHeader
-
             width: parent.width
             anchors.verticalCenter: parent.verticalCenter
             sourceComponent: stack.currentItem?.headerContent ?? null
@@ -110,7 +128,6 @@ QQ.FocusScope {
 
         QQ.Loader {
             id: action
-
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
             sourceComponent: customHeader.item ? null : stack.currentItem?.headerAction ?? null
@@ -120,7 +137,6 @@ QQ.FocusScope {
 
     QQC.StackView {
         id: stack
-
         anchors {
             top: header.bottom
             left: parent.left
@@ -131,69 +147,54 @@ QQ.FocusScope {
         clip: true
         focus: true
         initialItem: root.initialPage
-        pushEnter: PageEnter { offset: Motion.sharedAxisDistance }
-        pushExit: PageExit { offset: -Motion.sharedAxisDistance }
-        popEnter: PageEnter { offset: -Motion.sharedAxisDistance }
-        popExit: PageExit { offset: Motion.sharedAxisDistance }
+        pushEnter: PageTransition { entering: true; offset: Motion.sharedAxisDistance }
+        pushExit: PageTransition { entering: false; offset: -Motion.sharedAxisDistance }
+        popEnter: PageTransition { entering: true; offset: -Motion.sharedAxisDistance }
+        popExit: PageTransition { entering: false; offset: Motion.sharedAxisDistance }
 
         onBusyChanged: {
+            if (!busy && !heightAnimation.running)
+                root._animateHeight = false;
             if (!busy && root._popPending) {
                 root._popPending = false;
                 Qt.callLater(root.pop);
             }
         }
     }
-
-    component PageEnter: QQ.Transition {
-        id: enter
-
+    component PageTransition: QQ.Transition {
+        id: pageTransition
+        required property bool entering
         required property real offset
+        readonly property int duration: entering ? root._enterDuration : root._exitDuration
 
         QQ.SequentialAnimation {
-            QQ.PropertyAction { property: "x"; value: enter.offset }
-            QQ.PropertyAction { property: "opacity"; value: 0 }
-            QQ.PauseAnimation { duration: root._exitDuration }
+            QQ.PropertyAction {
+                property: "x"
+                value: pageTransition.entering ? pageTransition.offset : 0
+            }
+            QQ.PropertyAction {
+                property: "opacity"
+                value: pageTransition.entering ? 0 : 1
+            }
+            QQ.PauseAnimation { duration: pageTransition.entering ? root._exitDuration : 0 }
             QQ.ParallelAnimation {
                 QQ.NumberAnimation {
                     property: "x"
-                    from: enter.offset
-                    to: 0
-                    duration: root._enterDuration
+                    from: pageTransition.entering ? pageTransition.offset : 0
+                    to: pageTransition.entering ? 0 : pageTransition.offset
+                    duration: pageTransition.duration
                     easing.type: QQ.Easing.BezierSpline
                     easing.bezierCurve: Motion.emphasized
                 }
                 QQ.NumberAnimation {
                     property: "opacity"
-                    from: 0
-                    to: 1
-                    duration: root._enterDuration
+                    from: pageTransition.entering ? 0 : 1
+                    to: pageTransition.entering ? 1 : 0
+                    duration: pageTransition.duration
                     easing.type: QQ.Easing.BezierSpline
                     easing.bezierCurve: Motion.emphasized
                 }
             }
-        }
-    }
-
-    component PageExit: QQ.Transition {
-        id: exit
-
-        required property real offset
-
-        QQ.NumberAnimation {
-            property: "x"
-            from: 0
-            to: exit.offset
-            duration: root._exitDuration
-            easing.type: QQ.Easing.BezierSpline
-            easing.bezierCurve: Motion.emphasized
-        }
-        QQ.NumberAnimation {
-            property: "opacity"
-            from: 1
-            to: 0
-            duration: root._exitDuration
-            easing.type: QQ.Easing.BezierSpline
-            easing.bezierCurve: Motion.emphasized
         }
     }
 }

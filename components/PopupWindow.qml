@@ -14,6 +14,7 @@ PanelWindow {
     required property bool opened
     required property int preferredWidth
     property list<QtObject> barWindows
+    property real contentViewportHeight: body.implicitHeight
     default property alias content: body.data
 
     signal dismissRequested()
@@ -74,7 +75,7 @@ PanelWindow {
             id: surface
 
             width: parent.width
-            height: parent.height
+            height: Math.min(root.height, root.contentViewportHeight + 2 * Sizing.popupInnerPadding)
             container: Theme.surfaceContainer
             radius: Shape.extraLarge
             scale: Motion.enterScale + (1 - Motion.enterScale) * _progress
@@ -112,7 +113,7 @@ PanelWindow {
                 anchors.fill: parent
                 anchors.margins: Sizing.popupInnerPadding
                 contentWidth: width
-                contentHeight: body.implicitHeight
+                contentHeight: root.contentViewportHeight
                 clip: true
                 interactive: contentHeight > height
 

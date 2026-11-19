@@ -63,6 +63,7 @@ Scope {
             anchorItem: root._mountedAnchor
             opened: anchorItem !== null && root.requestedAnchor === anchorItem
             preferredWidth: Sizing.controlCenterWidth
+            contentViewportHeight: pages.viewportHeight
             barWindows: root.barWindows
             onDismissRequested: Qt.callLater(root._dismissPopup, popup)
             onExited: Qt.callLater(root._unmountPopup)
