@@ -4,10 +4,11 @@ Goal: shell starts, settings load, tokens exist, a themed clock shows. Nothing e
 ## 1.1 Skeleton
 - Read: `../conventions/STRUCTURE.md`, `../conventions/CODE-STYLE.md` (imports section)
 - Create: `shell.qml`, `.qmlls.ini` (empty)
-- [ ] Start a nested Hyprland in the development sandbox described in `AGENTS.md`. Record the commands to start and stop it in the `Commands` section there.
-- [ ] `shell.qml`: `ShellRoot {}` with nothing in it
-- [ ] In the same sandbox, `qs -c mshell` connects to the nested Hyprland display, stays alive, and emits no stderr
-- [ ] Check which import style works (`import qs.config` vs relative) and whether a relative `import "x.js" as X` works; write the result into the **verify** lines of `CODE-STYLE.md`
+- Update: `tools/unused.sh` to skip source directories that later steps have yet to create.
+- [x] Start a nested Hyprland in the development sandbox described in `AGENTS.md`. Record the commands to start and stop it in the `Commands` section there.
+- [x] `shell.qml`: `ShellRoot {}` with nothing in it
+- [x] In the same sandbox, `qs -c mshell` connects to the nested Hyprland display, stays alive, and emits no stderr
+- [x] Check which import style works (`import qs.config` vs relative) and whether a relative `import "x.js" as X` works; write the result into the **verify** lines of `CODE-STYLE.md`
 - Done when: the sandbox startup and shutdown commands are documented, Quickshell runs on the nested Hyprland display, and the CODE-STYLE verify lines are updated
 
 ## 1.2 Config
