@@ -98,9 +98,11 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Verified page navigation and live scanning in nested Hyprland. Connection and disconnection commands were tested with fixtures. The active host Wi-Fi connection was left in place.
 
 ## 4.11 BluetoothPage
-- Create: `modules/controlcenter/pages/BluetoothPage.qml` (+ service additions: devices)
-- [ ] Paired devices with connect/disconnect
+- Create: `modules/controlcenter/pages/BluetoothPage.qml` and `ConnectionRow.qml`, shared by the Wi-Fi and Bluetooth pages.
+- Update: `ControlCenter.qml` for navigation, `NetworkPage.qml` to use the shared row, and `services/Bluetooth.qml` and its model and tests for paired-device actions.
+- [x] Paired devices with connect/disconnect
 - Done when: can connect a paired device
+- Verified the live paired-device list, and exercised connect/disconnect in nested Hyprland against an isolated BlueZ fixture.
 
 ## 4.12 AudioPage
 - Create: `modules/controlcenter/pages/AudioPage.qml`

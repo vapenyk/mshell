@@ -78,6 +78,8 @@ Scope {
                             pages.push(modesPage);
                         else if (tileId === "wifi")
                             pages.push(networkPage);
+                        else if (tileId === "bluetooth")
+                            pages.push(bluetoothPage);
                     }
                 }
 
@@ -99,6 +101,12 @@ Scope {
                 id: networkPage
 
                 NetworkPage {}
+            }
+
+            Component {
+                id: bluetoothPage
+
+                BluetoothPage {}
             }
         }
     }
