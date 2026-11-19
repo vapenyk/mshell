@@ -35,7 +35,7 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 - Create: `modules/notifications/NotifCenter.qml`, `modules/notifications/NotifGroup.qml`, `modules/notifications/NotifHistory.qml`, `modules/bar/pills/NotifPill.qml`
 - Update: `shell.qml`, `Bar.qml`, `Notifs.qml`, `NotifCard.qml`, and `NotifPopup.qml` to connect the center, unread state, grouping, and IPC. Add the unread indicator size in `config/Sizing.qml`.
 - History shows notifications cleared or closed during the current session.
-- [x] `NotifCenter` popup: sections ("Silent" with ✕ to clear the section), grouped cards with counter, bottom row: history, wide **Clear all**, settings (opens nothing yet → omit button until it has an action)
+- [x] `NotifCenter` popup: sections ("Silent" with ✕ to clear the section), grouped cards with counter, bottom row: history and wide **Clear all** at the same height, settings (opens nothing yet → omit button until it has an action)
 - [x] Empty state designed
 - [x] `NotifPill`: bell icon, dot when unread, click toggles `UiState` popup `notifications`; added to the bar before `StatusPill`
 - [x] IPC `notifs`: `toggleDnd`, `clear`

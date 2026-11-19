@@ -133,6 +133,7 @@ Scope {
 
                     Components.Pill {
                         Layouts.Layout.fillWidth: true
+                        Layouts.Layout.fillHeight: true
                         visible: !content.historyOpen && content.count > 0
                         text: qsTr("Clear all")
                         activeFocusOnTab: true
