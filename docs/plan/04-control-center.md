@@ -56,11 +56,12 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 
 ## 4.6 Tile grid
 - Read: `../design/RESPONSIVE.md` (Content robustness → Tile grid)
-- Create: `modules/controlcenter/tiles/TileRegistry.qml`, `modules/controlcenter/TileGrid.qml`, `modules/controlcenter/TileGrid.model.js`, tests
-- [ ] Registry: id → `{ comp, span, available }` (span fixed in code)
-- [ ] Model: `visibleTiles(order, defs)` (order from `Config.tiles`; unknown ids dropped; missing ids appended; unavailable hidden), `columnsFor(width)`, `spanWidth(span, cols, cell, gap)`, `move(list, from, to)`
-- [ ] Grid = `Flow` + `ScriptModel` keyed by id; reorder animates with spatial spring
-- [ ] Tests for each model function incl. empty list and unknown ids
+- Create: `modules/controlcenter/tiles/TileRegistry.qml`, `modules/controlcenter/TileGrid.qml`, `modules/controlcenter/TileGrid.model.js`, `tests/modules/controlcenter/TileGrid.model.test.js`.
+- Update: `pages/MainPage.qml` to host the grid, `components/Tile.qml` for icon-only tiles, and `config/Sizing.qml` with grid spacing. The registry uses disabled tiles until 4.7 supplies live components and hardware availability.
+- [x] Registry: id → `{ comp, span, available }` (span fixed in code)
+- [x] Model: `visibleTiles(order, defs)` (order from `Config.tiles`; unknown ids dropped; missing ids appended; unavailable hidden), `columnsFor(width)`, `spanWidth(span, cols, cell, gap)`, `move(list, from, to)`
+- [x] Grid = `Flow` + `ScriptModel` keyed by id; reorder animates with spatial spring
+- [x] Tests for each model function incl. empty list and unknown ids
 - Done when: grid renders from `Config.tiles` order (empty → default order from registry)
 
 ## 4.7 First tiles

@@ -10,6 +10,7 @@ QQ.Item {
     id: root
 
     property bool active: false
+    property bool iconOnly: false
     required property string icon
     required property string title
     property string subtitle: ""
@@ -69,49 +70,72 @@ QQ.Item {
             }
         }
 
-        contentItem: QQL.RowLayout {
-            spacing: Sizing.tilePadding
+        QQC.ToolTip.text: root.title
+        QQC.ToolTip.visible: root.iconOnly && button.hovered
+        QQC.ToolTip.delay: Motion.long2
 
-            QQ.Rectangle {
-                implicitWidth: Sizing.tileChipSize
-                implicitHeight: Sizing.tileChipSize
-                color: root.active ? Theme.primaryContainer : Theme.surfaceContainerHighest
-                radius: root.active ? Shape.large : height / 2
+        contentItem: QQ.Item {
+            implicitWidth: root.iconOnly ? glyph.implicitWidth : labels.implicitWidth
+            implicitHeight: root.iconOnly ? glyph.implicitHeight : labels.implicitHeight
 
-                QQ.Behavior on radius {
-                    QQ.SpringAnimation {
-                        spring: Motion.spatialFast.spring
-                        damping: Motion.spatialFast.damping
-                        mass: Motion.spatialFast.mass
+            Icon {
+                id: glyph
+
+                anchors.centerIn: parent
+                visible: root.iconOnly
+                name: root.icon
+                color: button._contentColor
+                filled: root.active
+            }
+
+            QQL.RowLayout {
+                id: labels
+
+                anchors.fill: parent
+                visible: !root.iconOnly
+                spacing: Sizing.tilePadding
+
+                QQ.Rectangle {
+                    implicitWidth: Sizing.tileChipSize
+                    implicitHeight: Sizing.tileChipSize
+                    color: root.active ? Theme.primaryContainer : Theme.surfaceContainerHighest
+                    radius: root.active ? Shape.large : height / 2
+
+                    QQ.Behavior on radius {
+                        QQ.SpringAnimation {
+                            spring: Motion.spatialFast.spring
+                            damping: Motion.spatialFast.damping
+                            mass: Motion.spatialFast.mass
+                        }
+                    }
+
+                    Icon {
+                        anchors.centerIn: parent
+                        name: root.icon
+                        color: root.active ? Theme.onPrimary : Theme.onSurfaceVariant
+                        filled: root.active
                     }
                 }
 
-                Icon {
-                    anchors.centerIn: parent
-                    name: root.icon
-                    color: root.active ? Theme.onPrimary : Theme.onSurfaceVariant
-                    filled: root.active
-                }
-            }
-
-            QQL.ColumnLayout {
-                QQL.Layout.fillWidth: true
-                QQL.Layout.minimumWidth: Shape.none
-                spacing: Shape.none
-
-                Text {
+                QQL.ColumnLayout {
                     QQL.Layout.fillWidth: true
-                    text: root.title
-                    role: "labelLarge"
-                    color: button._contentColor
-                }
+                    QQL.Layout.minimumWidth: Shape.none
+                    spacing: Shape.none
 
-                Text {
-                    QQL.Layout.fillWidth: true
-                    visible: root.subtitle.length > 0
-                    text: root.subtitle
-                    role: "bodySmall"
-                    color: root.active ? Theme.onPrimary : Theme.onSurfaceVariant
+                    Text {
+                        QQL.Layout.fillWidth: true
+                        text: root.title
+                        role: "labelLarge"
+                        color: button._contentColor
+                    }
+
+                    Text {
+                        QQL.Layout.fillWidth: true
+                        visible: root.subtitle.length > 0
+                        text: root.subtitle
+                        role: "bodySmall"
+                        color: root.active ? Theme.onPrimary : Theme.onSurfaceVariant
+                    }
                 }
             }
         }
