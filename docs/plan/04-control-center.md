@@ -1,0 +1,90 @@
+# 04 — Control center
+Goal: screenshot 01/05/06 behaviour. Fixed sliders on top, auto-laid-out tiles below, left click toggles, right click opens a page, user can reorder.
+
+Common read: `../design/SPEC.md` (Control center rules), `../design/reference/INDEX.md` (shots 01, 05, 06, 07).
+
+## 4.1 PopupWindow
+- Read: `../design/MOTION.md` (Popup open/close), `../design/RESPONSIVE.md` (Popup placement)
+- Create: `components/PopupWindow.qml`, `modules/controlcenter/ControlCenter.qml`
+- [ ] Layer-shell popup under an anchor item; `LazyLoader` on `UiState.openPopup === "controlcenter"`
+- [ ] Open: scale .92→1 + fade + 8 dp slide (spatial spring); close: faster
+- [ ] Close on outside click and Escape; only one popup at a time
+- [ ] Surface `surfaceContainer`, radius `extraLarge`, width 400 (compact: screen − 16)
+- [ ] IPC `controlcenter`: `toggle`, `close`
+- Done when: StatusPill click opens/closes it, correctly placed on each screen
+
+## 4.2 PageStack
+- Create: `components/PageStack.qml`
+- [ ] Header: back button (only when depth > 1), centered title, trailing action; pages pushed/popped with slide+fade
+- [ ] `push(component, props)`, `pop()`, `depth`
+- Done when: ControlCenter hosts it with `MainPage` as the root
+
+## 4.3 ValueSlider
+- Read: `../design/COMPONENTS.md` (ValueSlider), M3 sliders page
+- Create: `components/ValueSlider.qml`, `components/ValueSlider.model.js`, test
+- [ ] Model: `valueFromPos(x, width, min, max, step)`, `posFromValue(...)`, clamp
+- [ ] Look: height 40, full radius, active track `primary`, rest `surfaceContainerHighest`, icon inside at the end, vertical handle bar
+- [ ] Drag follows pointer 1:1; release settles handle with spatial fast; keyboard arrows step
+- [ ] Tests: clamp, step rounding, round-trip pos↔value, zero width
+- Done when: looks like shot 01 sliders (dark roles); tests pass
+
+## 4.4 Top controls
+- Read: `00-OVERVIEW.md` open-question answers (brightnessctl)
+- Create: `components/IconButton.qml`, `services/Audio.qml`, `services/Brightness.qml`, `modules/controlcenter/TopControls.qml`
+- [ ] `Audio`: `volume`, `muted`, `setVolume`, `toggleMute`, source mute (for mic tile); Pipewire + `PwObjectTracker`
+- [ ] `Brightness`: `value` 0..1, `set`, via `brightnessctl` (`Process`, array command; read with `-m` machine-readable output, parse in a tested helper), clamp to a sane minimum; refresh on change by external tools
+- [ ] `IconButton` (standard/tonal/filled, toggle) with StateLayer
+- [ ] Two rows: `ValueSlider` + round `IconButton` (night mode, mixer). Not part of the tile grid
+- Done when: moving sliders changes real volume/brightness; external changes reflect back
+
+## 4.5 Tile
+- Create: `components/Tile.qml`
+- [ ] Props `active, icon, title, subtitle`; signals `toggled`, `settingsRequested`
+- [ ] Left click → `toggled`; right click → `settingsRequested`; icon chip on the left, texts elided
+- [ ] On = `primary`/`onPrimary`, off = `surfaceContainerHigh`; chip shape morph on toggle
+- Done when: matches shot 07 tile anatomy; used by 4.6
+
+## 4.6 Tile grid
+- Read: `../design/RESPONSIVE.md` (Content robustness → Tile grid)
+- Create: `modules/controlcenter/tiles/TileRegistry.qml`, `modules/controlcenter/TileGrid.qml`, `modules/controlcenter/TileGrid.model.js`, tests
+- [ ] Registry: id → `{ comp, span, available }` (span fixed in code)
+- [ ] Model: `visibleTiles(order, defs)` (order from `Config.tiles`; unknown ids dropped; missing ids appended; unavailable hidden), `columnsFor(width)`, `spanWidth(span, cols, cell, gap)`, `move(list, from, to)`
+- [ ] Grid = `Flow` + `ScriptModel` keyed by id; reorder animates with spatial spring
+- [ ] Tests for each model function incl. empty list and unknown ids
+- Done when: grid renders from `Config.tiles` order (empty → default order from registry)
+
+## 4.7 First tiles
+- Create: `modules/controlcenter/tiles/WifiTile.qml`, `BluetoothTile.qml`, `ModesTile.qml`, `MicTile.qml`, `services/Modes.qml`
+- [ ] Each: bind to its service, `onToggled` → service action, `onSettingsRequested` → push page (pages come in 4.9–4.12; until then, no-op)
+- [ ] `Modes`: `dndOn`, `toggleDnd()` (the notification service honours it in step 05)
+- Done when: toggling works and reflects external changes; matches shot 01 look
+
+## 4.8 Reorder (edit mode)
+- Create: nothing new except `TileSlot.qml` if needed
+- [ ] Edit button in the header toggles `UiState.editMode`; in edit mode tiles show move arrows (left/right); drag-and-drop is a later improvement, not this step
+- [ ] Reorder writes `Config.tiles`; persisted; survives restart
+- [ ] Left/right click behaviour disabled in edit mode
+- Done when: order changes persist and animate
+
+## 4.9 ModesPage (first right-click page)
+- Read: shot 06
+- Create: `modules/controlcenter/pages/ModesPage.qml`
+- [ ] Header "Modes", list card "Do Not Disturb / Off|On" with switch; right-click on ModesTile pushes it
+- Done when: matches shot 06 structure; back button works
+
+## 4.10 NetworkPage
+- Create: `modules/controlcenter/pages/NetworkPage.qml` (+ service additions: network list, connect)
+- [ ] List of networks, connect/disconnect, switch for Wi-Fi
+- Done when: can connect to a known network
+
+## 4.11 BluetoothPage
+- Create: `modules/controlcenter/pages/BluetoothPage.qml` (+ service additions: devices)
+- [ ] Paired devices with connect/disconnect
+- Done when: can connect a paired device
+
+## 4.12 AudioPage
+- Create: `modules/controlcenter/pages/AudioPage.qml`
+- [ ] Output device selection + per-app stream volume (mixer button in TopControls opens it)
+- Done when: switching output works
+
+End-of-step: tests, unused check, matrix, compare with 01/05/06.

@@ -1,0 +1,40 @@
+# 03 — Bar
+Goal: the bar as in screenshots 07/10/12, with clock and status pills working. Other pills arrive with their features (05 bell, 06 media + keyboard).
+
+Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE.md` (Bar column).
+
+## 3.1 UiState
+- Read: `../conventions/NAMING.md` (Relations between features)
+- Create: `services/UiState.qml`
+- [ ] `openPopup: string` (`""` = none), `open(name)`, `close()`, `toggle(name)`; `editMode: bool`
+- Done when: consumed by pills below (3.3, 3.4)
+
+## 3.2 Status services (minimal)
+- Read: `00-OVERVIEW.md` open-question answers (Quickshell 0.3.2, Hyprland); the 0.3.2 docs for `Quickshell.Networking` / `Quickshell.Bluetooth` / `Quickshell.Services.UPower`
+- Create: `services/Network.qml`, `services/Bluetooth.qml`, `services/Battery.qml`
+- [ ] Prefer native Quickshell modules if the version has them; otherwise one `Process` per service (array command)
+- [ ] `Network`: `connected`, `kind` (`wifi`/`ethernet`), `ssid`, `strength`, `enabled`, `toggle()`
+- [ ] `Bluetooth`: `available`, `enabled`, `connectedCount`, `toggle()`
+- [ ] `Battery`: `present`, `percent` (0–100), `charging`, `low` (≤ 15)
+- Done when: values print correctly via a temporary `console.log` (remove after)
+
+## 3.3 ClockPill
+- Create: `modules/bar/pills/ClockPill.qml`, `modules/bar/pills/ClockPill.model.js`, test
+- [ ] Model: `label(date, sizeClass, use24h)` → compact: time only; otherwise "13:15 Mon 12 Oct"
+- [ ] Click → `UiState.toggle("calendar")` (popup arrives in 06; no-op until then)
+- Done when: matches shot 12 left side; test passes
+
+## 3.4 StatusPill
+- Create: `modules/bar/pills/StatusPill.qml`, `modules/bar/pills/StatusPill.model.js`, test
+- [ ] Model: `icons(state)` → ordered list of `{name, filled}` for **active only**: network (kind/strength), bluetooth connected, DND on (later), battery (with percent, charging)
+- [ ] Empty list → pill hidden (width spring to 0 + fade)
+- [ ] Click → `UiState.toggle("controlcenter")`; `active` while that popup is open
+- [ ] Tests: nothing active → `[]`; wifi+bt → 2 icons in order; battery low flag; ethernet vs wifi
+- Done when: matches shot 07 (wifi + battery %) ; hides when nothing is active
+
+## 3.5 Bar layout
+- Modify: `modules/bar/Bar.qml`
+- [ ] Left: `ClockPill`. Right: `StatusPill` (other pills added by later steps in the order from the Bar anatomy)
+- [ ] Margins, gaps, height from TOKENS; transparent window, exclusive zone = bar height
+- [ ] Compact class: clock without date
+- Done when: resize/scale matrix OK; `unused.sh` clean; tests pass
