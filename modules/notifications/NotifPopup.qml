@@ -119,8 +119,10 @@ Scope {
             anchors { top: true; right: true }
             margins.top: Sizing.barHeight + Sizing.popupGap
             margins.right: Sizing.barSideMargin
-            implicitWidth: Math.max(1, Math.min(Sizing.notificationPopupWidth, modelData.width - 2 * Sizing.barSideMargin))
-            implicitHeight: Math.min(column.implicitHeight, Math.max(1, modelData.height - margins.top - Sizing.barSideMargin))
+            implicitWidth: Math.max(1, Math.min(Sizing.notificationPopupWidth,
+                (modelData?.width ?? 0) - 2 * Sizing.barSideMargin))
+            implicitHeight: Math.min(column.implicitHeight,
+                Math.max(1, (modelData?.height ?? 0) - margins.top - Sizing.barSideMargin))
             exclusionMode: ExclusionMode.Ignore
             color: Theme.transparent
             WlrLayershell.layer: WlrLayer.Overlay

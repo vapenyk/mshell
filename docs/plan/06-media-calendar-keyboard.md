@@ -46,8 +46,9 @@ Media steps 6.1–6.4 are deferred until MPRIS is wanted. The calendar and keybo
 - On-device reference: [32](../design/reference/32-device-keyboard-layouts.png) for language codes, names, and selected row styling. Omit the title and settings button.
 - Read: shot 09; Hyprland: layout comes from the keyboard device (`hyprctl devices -j`) and the `activelayout` raw event; switch with `hyprctl switchxkblayout <device> next|<id>`
 - Create: `services/Keyboard.qml`, `services/Keyboard.model.js`, `tests/services/Keyboard.model.test.js`, `modules/bar/pills/KeyboardPill.qml`, and `modules/keyboard/KeyboardPopup.qml`. Keep the layout row in the picker.
-- Update: `shell.qml`, `Bar.qml`, `config/Sizing.qml`, the component catalogue, and the reference index.
-- [ ] Service: `layouts`, `current`, `switchTo(i)` (Hyprland only); parsing of `hyprctl` JSON goes in a tested model
-- [ ] The pill shows the current layout code. Click opens the list without changing layout. Select a row to switch and close the list. Use `secondaryContainer` for the active row.
-- [ ] Hidden when only one layout exists
+- Update: `shell.qml`, `Bar.qml`, `config/Sizing.qml`, the component catalogue, the reference index, and the popup behavior and placement docs. Let `AnchoredPopup.qml` and `PopupWindow.qml` opt into centering under the pill, with placement and tests in the existing popup model. Clear the anchored popup in `UiState.qml` when its screen is removed and handle the disappearing screen in notification window sizing.
+- [x] Service: `layouts`, `current`, `switchTo(i)` from Hyprland. Parse `hyprctl devices` and XKB layout names in the tested model. Refresh after `activelayout` and `configreloaded`.
+- [x] The pill shows the current layout code. Click opens the list without changing layout. Select a row to switch and close the list. Use `secondaryContainer` for the active row.
+- [x] Hidden when only one layout exists
 - Done when: switching layouts works from the popup
+- Verified with US, RU, and UA in nested Hyprland. Checked mouse and keyboard selection, external switches, Escape, swapping with the calendar, one-layout visibility, and output removal.

@@ -17,7 +17,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 03 | `03-bar.md` | bar, clock pill, status pill, services | ✅ |
 | 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | ✅ |
 | 05 | `05-notifications.md` | service, popup, center, bell pill | ✅ |
-| 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | Calendar ✅ · keyboard ⬜ · media deferred |
+| 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ✅ Calendar and keyboard · media deferred |
 | 07 | `07-launcher-osd.md` | launcher, OSD | ⬜ |
 | 08 | `08-lock-powermenu.md` | lock, power menu | ⬜ |
 | 09 | `09-polish.md` | motion tuning, responsive pass, cleanup | ⬜ |

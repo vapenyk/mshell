@@ -35,7 +35,7 @@ If a screen is wider than `extraLarge`, do not grow anything; popups stay the sa
 - Hot-plug must not crash or duplicate: all per-screen state lives in the per-screen component, all system state in services.
 
 ## Popup placement
-1. Anchor under the pill, aligned to the pill's nearer screen edge.
+1. Anchor under the pill, aligned to the pill's nearer screen edge. Center the keyboard layout picker under its pill.
 2. If it would overflow horizontally, shift to fit with 8 dp margin.
 3. If it would overflow vertically, cap height at `screen height − bar − 16` and scroll the content (`Flickable`), never shrink typography.
 4. Popup content has `implicitWidth` from tokens and grows in height by content.

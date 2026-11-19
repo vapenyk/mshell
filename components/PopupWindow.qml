@@ -16,6 +16,7 @@ PanelWindow {
     property list<QtObject> barWindows
     property real contentViewportHeight: body.implicitHeight
     property bool waitForContentLayout: false
+    property bool centerOnAnchor: false
     default property alias content: body.data
 
     signal dismissRequested()
@@ -30,7 +31,7 @@ PanelWindow {
         _anchorScreen?.width ?? 0, _anchorScreen?.height ?? 0,
         anchorItem?.x ?? 0, anchorItem?.width ?? 0, _anchorWindow?.height ?? Sizing.barHeight,
         preferredWidth, body.implicitHeight + 2 * Sizing.popupInnerPadding,
-        Sizing.barSideMargin, Sizing.popupGap)
+        Sizing.barSideMargin, Sizing.popupGap, centerOnAnchor)
 
     screen: _anchorScreen
     visible: _anchorScreen !== null

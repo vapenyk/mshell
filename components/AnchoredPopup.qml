@@ -1,4 +1,5 @@
 import qs.components as Components
+import qs.config
 
 import Quickshell
 import QtQuick
@@ -8,8 +9,10 @@ Scope {
 
     required property Item requestedAnchor
     required property int preferredWidth
+    property int compactWidth: preferredWidth
     required property Component content
     required property list<QtObject> barWindows
+    property bool centerOnAnchor: false
     property Item _mountedAnchor: null
 
     signal dismissRequested()
@@ -47,7 +50,8 @@ Scope {
 
             anchorItem: root._mountedAnchor
             opened: anchorItem !== null && root.requestedAnchor === anchorItem
-            preferredWidth: root.preferredWidth
+            preferredWidth: Theme.sizeClass(screen) === "compact" ? root.compactWidth : root.preferredWidth
+            centerOnAnchor: root.centerOnAnchor
             barWindows: root.barWindows
             waitForContentLayout: true
             onDismissRequested: Qt.callLater(root._dismiss, popup)

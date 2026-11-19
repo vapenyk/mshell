@@ -13,7 +13,8 @@ Components.AnchoredPopup {
     id: root
 
     requestedAnchor: UiState.openPopup === "calendar" ? UiState.popupAnchor : null
-    preferredWidth: requestedAnchor?.sizeClass === "compact" ? Sizing.calendarCompactWidth : Sizing.calendarWidth
+    preferredWidth: Sizing.calendarWidth
+    compactWidth: Sizing.calendarCompactWidth
     onDismissRequested: UiState.close()
 
     content: QQ.Column {

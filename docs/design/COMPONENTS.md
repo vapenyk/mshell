@@ -28,6 +28,7 @@ Check this catalogue before creating a UI component. Look for a shared component
 |---|---|---|
 | Bar and pills | [Bar.qml](../../modules/bar/Bar.qml), [ClockPill.qml](../../modules/bar/pills/ClockPill.qml), [StatusPill.qml](../../modules/bar/pills/StatusPill.qml), [NotifPill.qml](../../modules/bar/pills/NotifPill.qml) | Clock, status indicators, and notification bell |
 | Calendar | [CalendarPopup.qml](../../modules/calendar/CalendarPopup.qml) | Month grid with the current day highlighted, shots 12 and 30 |
+| Keyboard layout picker | [KeyboardPill.qml](../../modules/bar/pills/KeyboardPill.qml), [KeyboardPopup.qml](../../modules/keyboard/KeyboardPopup.qml) | Layout indicator and selectable rows, shot 32 |
 | Control center and sliders | [ControlCenter.qml](../../modules/controlcenter/ControlCenter.qml), [TopControls.qml](../../modules/controlcenter/TopControls.qml) | Popup, page navigation, brightness, and volume |
 | Tile grid and registry | [TileGrid.qml](../../modules/controlcenter/TileGrid.qml), [TileRegistry.qml](../../modules/controlcenter/tiles/TileRegistry.qml) | Tile layout, order, and availability |
 | Individual tiles | [WifiTile.qml](../../modules/controlcenter/tiles/WifiTile.qml), [BluetoothTile.qml](../../modules/controlcenter/tiles/BluetoothTile.qml), [ModesTile.qml](../../modules/controlcenter/tiles/ModesTile.qml), [MicTile.qml](../../modules/controlcenter/tiles/MicTile.qml) | Bind shared Tile to the respective service |
@@ -43,8 +44,7 @@ Check this catalogue before creating a UI component. Look for a shared component
 | Component | Planned location | Plan or reference |
 |---|---|---|
 | WavyBar | `components/WavyBar.qml` and its model | 06, progress indicators, [motion](MOTION.md) |
-| ListItem | `components/ListItem.qml` | 06, keyboard popup |
-| MediaPill, KeyboardPill | `modules/bar/pills/` | 06, shots 10, 32 |
+| MediaPill | `modules/bar/pills/` | 06, shot 10 |
 | MediaCard | `modules/media/` | 06, shot 11 |
 | SearchBar, Launcher, AppItem | `components/SearchBar.qml`, `modules/launcher/` | 07, discuss launcher before implementation |
 | Osd | `modules/osd/` | 07, shots 41–43, use ValueSlider |

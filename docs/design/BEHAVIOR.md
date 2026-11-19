@@ -95,7 +95,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Notification center | NotifPill | same | same |
 | Calendar | ClockPill | same | same |
 | Media card | MediaPill | same | container transform from pill |
-| Keyboard popup | KeyboardPill | same | fade through when swapping |
+| Keyboard popup | KeyboardPill | outside, Esc, pill, swap, layout selection | fade through when swapping |
 | Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade + slide |
 | Launcher | IPC | Esc, outside, launch | fade + scale / fade |
 | OSD | volume/brightness change | 1.5 s timeout (resets on change) | fade + slide / fade |

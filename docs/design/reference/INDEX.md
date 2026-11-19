@@ -95,7 +95,7 @@ Use the first one listed; the rest are fallbacks.
 | Notification center | 31 (empty), 22 and 08 (populated) |
 | Notification popup and inline reply | 45–49 for content, editing, and the sender update; 17 for the outlined Open link action |
 | Notification attachment preview | 50 (collapsed), 51 (expanded); 22 for another collapsed example |
-| Keyboard popup | 09 only |
+| Keyboard popup | 32 first, then 09. Use the layout rows and omit the title and settings button. |
 | Launcher | 23, then 13 |
 | Lock screen | 18 only |
 | OSD | 41 (volume), 42 (brightness), 43 (muted) |
@@ -110,7 +110,7 @@ Use the first one listed; the rest are fallbacks.
 - **Tiles (19):** only Wi‑Fi and Bluetooth are wide in the default layout. Everything else is a 1-column icon-only tile. This matches the span 2 / span 1 rule in `SPEC.md`; small tiles have no title or subtitle on screen.
 - **Status pill (19, 21, 22):** a dark capsule with the DND glyph, Wi‑Fi and the battery number. Charging shows the number in green with a bolt (22, 25, 26).
 - **Sparkle-flag icon (19, 21, 22, 25):** it sits between the media pill and the bell and is separate from the DND glyph in the status pill. What it does is not visible in any shot, so the "modes/DND icon" line in the bar anatomy above needs a decision before step 06.
-- **Keyboard pill:** not visible in any of 19–27. Keep shot 09 for its popup.
+- **Keyboard pill:** shots 32 and 09 show the current layout code and the picker it opens.
 - **Clock (21, 26):** shown as plain text on the wallpaper, with no visible container. Shot 12 shows it as a pill.
 - **Launcher (23):** a compact, accent-tinted popup next to the dock, not a centered panel. `BEHAVIOR.md` currently places it on the focused screen; this shot is a look reference, not a position rule.
 - **Notifications (22):** actions are plain text buttons, not outlined buttons (shot 17). Cards sit in one grouped container with small inner corners.

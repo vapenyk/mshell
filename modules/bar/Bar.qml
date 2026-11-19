@@ -58,6 +58,23 @@ Variants {
             }
         }
 
+        KeyboardPill {
+            id: keyboardPill
+
+            anchors {
+                right: notifPill.left
+                rightMargin: Sizing.pillGap
+                verticalCenter: parent.verticalCenter
+            }
+        }
+
+        // The open popup's focus grab can leave keyboard focus on the bar.
+        Shortcut {
+            sequence: "Escape"
+            enabled: UiState.openPopup === "calendar" || UiState.openPopup === "keyboard"
+            onActivated: UiState.close()
+        }
+
         TapHandler {
             enabled: UiState.openPopup !== ""
             acceptedButtons: Qt.AllButtons
@@ -65,7 +82,9 @@ Variants {
                 const overClock = clockPill.contains(clockPill.mapFromItem(barWindow.contentItem, point.position));
                 const overStatus = statusPill.contains(statusPill.mapFromItem(barWindow.contentItem, point.position));
                 const overNotif = notifPill.contains(notifPill.mapFromItem(barWindow.contentItem, point.position));
-                if (!overClock && !overStatus && !overNotif)
+                const overKeyboard = keyboardPill.visible
+                    && keyboardPill.contains(keyboardPill.mapFromItem(barWindow.contentItem, point.position));
+                if (!overClock && !overStatus && !overNotif && !overKeyboard)
                     UiState.close();
             }
         }

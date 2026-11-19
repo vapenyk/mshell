@@ -20,3 +20,8 @@ test("placement shrinks to fit a narrow output and caps the scroll viewport", ()
     assert.equal(compact.width, 344);
     assert.equal(compact.height, 180);
 });
+
+test("centered placement aligns to the pill center and clamps to the screen margin", () => {
+    assert.equal(placement(1920, 1080, 1720, 32, 44, 296, 180, 8, 8, true).x, 1588);
+    assert.equal(placement(1920, 1080, 1840, 32, 44, 296, 180, 8, 8, true).x, 1616);
+});

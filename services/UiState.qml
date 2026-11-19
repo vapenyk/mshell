@@ -10,10 +10,15 @@ Singleton {
     readonly property Item popupAnchor: _popup.anchor
     property bool editMode: false
 
-    property var _popup: ({ name: "", anchor: null })
+    property var _popup: ({ name: "", anchor: null, anchored: false })
+
+    onPopupAnchorChanged: {
+        if (!popupAnchor && _popup.anchored)
+            close();
+    }
 
     function openAt(name: string, anchor: Item): void {
-        _popup = { name: name, anchor: anchor };
+        _popup = { name: name, anchor: anchor, anchored: anchor !== null };
     }
 
     function open(name: string): void {
