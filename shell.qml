@@ -4,6 +4,6 @@ import Quickshell
 import QtQml
 
 ShellRoot {
-    // Initialize the singleton so its IPC handler is available at startup.
-    Component.onCompleted: Config
+    // Theme loads the palette and starts Config for the accent IPC.
+    Component.onCompleted: Theme
 }

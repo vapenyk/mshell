@@ -24,11 +24,12 @@ Goal: shell starts, settings load, tokens exist, a themed clock shows. Nothing e
 ## 1.3 Theme
 - Read: `../design/TOKENS.md` (Color, State layers), `../design/RESPONSIVE.md` (size classes)
 - Create: `config/Theme.qml`, `config/Theme.model.js`, `tests/config/Theme.model.test.js`
-- [ ] Model: `pickScheme(accents, name)` (unknown name → `blue`), `sizeClass(width)` per RESPONSIVE
-- [ ] Theme loads `config/accents.json` (`FileView`, `blockLoading: true`, path via `Quickshell.shellPath` — **verify**)
-- [ ] One `readonly property color` per role in TOKENS (all roles, from the picked scheme)
-- [ ] `stateHover/Focus/Pressed/Dragged` opacity properties
-- [ ] Tests: unknown accent fallback, all roles present, size class boundaries (599/600/839/840/1199/1200/1599/1600)
+- Update: `shell.qml` to initialize Theme at startup and load Config through it.
+- [x] Model: `pickScheme(accents, name)` (unknown name → `blue`), `sizeClass(width)` per RESPONSIVE
+- [x] Theme loads `config/accents.json` via `FileView` with `blockLoading: true`. Verified `Quickshell.shellPath` under Quickshell 0.3.2 from outside the shell directory.
+- [x] Expose each color role in TOKENS as a read-only color from the selected scheme. Use aliases for the `on*` roles to avoid QML's signal handler syntax.
+- [x] `stateHover/Focus/Pressed/Dragged` opacity properties
+- [x] Tests: unknown accent fallback, all roles present, size class boundaries (599/600/839/840/1199/1200/1599/1600)
 - Done when: tests pass; changing `Config.accent` changes `Theme.primary` live
 
 ## 1.4 Typography, Shape, Motion
