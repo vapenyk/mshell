@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import "../../utils/Format.js" as Format
+import "NotifCard.model.js" as Model
 
 import qs.components as Components
 import qs.config
@@ -24,6 +25,8 @@ QQ.Item {
 
     readonly property var _actions: Array.from(notification?.actions ?? [])
     readonly property NotificationAction _defaultAction: _actions.find(action => action.identifier === "default") ?? null
+    readonly property string _body: notification?.body ?? ""
+    readonly property string _link: expanded ? Model.webLink(_body) : ""
     readonly property string _age: Format.relative(arrivedAt, Time.date)
     readonly property string _app: notification?.appName || qsTr("Notification")
     readonly property string _appIcon: notification?.appIcon || notification?.desktopEntry || ""
@@ -37,7 +40,7 @@ QQ.Item {
         hoverEnabled: true
         focusPolicy: Qt.StrongFocus
         QQ.Accessible.name: root.notification?.summary || root._app
-        QQ.Accessible.description: root.notification?.body ?? ""
+        QQ.Accessible.description: root._body
         QQ.Keys.onReturnPressed: click()
         QQ.Keys.onEnterPressed: click()
         onClicked: {
@@ -73,6 +76,8 @@ QQ.Item {
 
         QQ.Item {
             QQL.Layout.alignment: Qt.AlignTop
+            QQL.Layout.minimumWidth: implicitWidth
+            QQL.Layout.maximumWidth: implicitWidth
             implicitWidth: Sizing.pillHeight
             implicitHeight: implicitWidth
 
@@ -98,11 +103,30 @@ QQ.Item {
             QQL.Layout.fillWidth: true
             spacing: Sizing.pillGap
 
-            Components.Text {
+            QQL.RowLayout {
                 QQL.Layout.fillWidth: true
-                role: "labelMedium"
-                color: Theme.onSurfaceVariant
-                text: root._age ? qsTr("%1 · %2").arg(root._app).arg(root._age) : root._app
+                spacing: Sizing.pillGap
+                Components.Text {
+                    QQL.Layout.fillWidth: true
+                    role: "labelMedium"
+                    color: Theme.onSurfaceVariant
+                    text: root._age ? qsTr("%1 · %2").arg(root._app).arg(root._age) : root._app
+                }
+                Components.IconButton {
+                    QQL.Layout.preferredWidth: Sizing.pillHeight
+                    QQL.Layout.preferredHeight: Sizing.pillHeight
+                    text: root.expanded ? qsTr("Collapse notification") : qsTr("Expand notification")
+                    iconName: root.expanded ? "expand_less" : "expand_more"
+                    onClicked: root.expanded = !root.expanded
+                }
+                Components.IconButton {
+                    QQL.Layout.preferredWidth: Sizing.pillHeight
+                    QQL.Layout.preferredHeight: Sizing.pillHeight
+                    visible: root.expanded
+                    text: qsTr("Dismiss notification")
+                    iconName: "close"
+                    onClicked: root.dismissRequested()
+                }
             }
 
             Components.Text {
@@ -119,81 +143,30 @@ QQ.Item {
                 visible: text.length > 0
                 role: "bodyMedium"
                 color: Theme.onSurfaceVariant
-                text: root.expanded ? root.notification?.body ?? "" : (root.notification?.body ?? "").replace(/\s+/g, " ")
+                text: root.expanded ? root._body : root._body.replace(/\s+/g, " ")
                 wrapMode: root.expanded ? QQ.Text.Wrap : QQ.Text.NoWrap
                 elide: root.expanded ? QQ.Text.ElideNone : QQ.Text.ElideRight
             }
 
             QQ.Flow {
                 QQL.Layout.fillWidth: true
-                visible: root.expanded && actionButtons.count > 0
-                spacing: Sizing.pillGap
-
+                visible: root.expanded && (root._link.length > 0 || actionButtons.count > 0)
+                spacing: Sizing.popupGap
                 QQ.Repeater {
                     id: actionButtons
-
                     model: root.expanded ? root._actions.filter(action => action.identifier !== "default") : []
-
-                    delegate: Basic.Button {
-                        id: actionButton
-
+                    delegate: NotifActionButton {
                         required property NotificationAction modelData
-
                         text: modelData.text
-                        width: Math.min(implicitWidth, parent.width)
-                        implicitHeight: Sizing.pillHeight
-                        horizontalPadding: Sizing.pillHorizontalPadding
-                        hoverEnabled: true
-                        QQ.Keys.onReturnPressed: click()
-                        QQ.Keys.onEnterPressed: click()
                         onClicked: root.actionRequested(modelData)
-
-                        contentItem: Components.Text {
-                            text: actionButton.text
-                            role: "labelLarge"
-                            color: Theme.primary
-                            verticalAlignment: QQ.Text.AlignVCenter
-                        }
-
-                        background: QQ.Rectangle {
-                            color: Theme.transparent
-                            border.color: Theme.outline
-                            border.width: Sizing.outlineWidth
-                            radius: Shape.full
-
-                            Components.StateLayer {
-                                anchors.fill: parent
-                                radius: parent.radius
-                                contentColor: Theme.primary
-                                hovered: actionButton.hovered
-                                pressed: actionButton.down
-                                focused: actionButton.visualFocus
-                            }
-                        }
                     }
                 }
-            }
-        }
-
-        QQL.ColumnLayout {
-            QQL.Layout.alignment: Qt.AlignTop
-            spacing: Sizing.pillGap
-
-            Components.IconButton {
-                QQL.Layout.preferredWidth: Sizing.pillHeight
-                QQL.Layout.preferredHeight: Sizing.pillHeight
-                text: root.expanded ? qsTr("Collapse notification") : qsTr("Expand notification")
-                iconName: root.expanded ? "expand_less" : "expand_more"
-                onClicked: root.expanded = !root.expanded
-            }
-
-            Components.IconButton {
-                QQL.Layout.preferredWidth: Sizing.pillHeight
-                QQL.Layout.preferredHeight: Sizing.pillHeight
-                visible: root.expanded
-                text: qsTr("Dismiss notification")
-                iconName: "close"
-                onClicked: root.dismissRequested()
+                NotifActionButton {
+                    visible: root._link.length > 0
+                    outlined: true
+                    text: qsTr("Open link")
+                    onClicked: Qt.openUrlExternally(root._link)
+                }
             }
         }
     }
