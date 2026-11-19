@@ -2,25 +2,28 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 const { loadModel } = require("../load.js");
 
-const { deviceOfType, connectedDevice, connectedNetwork, listNetworks, canConnect, activateNetwork } = loadModel("services/Network.model.js");
+const { deviceOfType, connectedNetwork, listNetworks, canConnect, activateNetwork } = loadModel("services/Network.model.js");
 
 const wiredType = 1;
 const wifiType = 2;
 
-test("connectedDevice prefers connected Ethernet to Wi-Fi", () => {
+test("detects connected Wi-Fi and Ethernet separately when both are active", () => {
+    const offlineWifi = { type: wifiType, connected: false };
     const wifi = { type: wifiType, connected: true };
     const wired = { type: wiredType, connected: true };
-    assert.equal(connectedDevice([wifi, wired], wiredType, wifiType), wired);
+    const devices = [offlineWifi, wifi, wired];
+
+    assert.equal(deviceOfType(devices, wiredType, true), wired);
+    assert.equal(deviceOfType(devices, wifiType, true), wifi);
 });
 
-test("connectedDevice falls back to Wi-Fi and ignores unsupported or disconnected devices", () => {
+test("ignores disconnected and unsupported devices in a connected-device lookup", () => {
     const loopback = { type: 0, connected: true };
     const wired = { type: wiredType, connected: false };
-    const wifi = { type: wifiType, connected: true };
 
-    assert.equal(connectedDevice([loopback, wired, wifi], wiredType, wifiType), wifi);
-    assert.equal(connectedDevice([loopback, wired], wiredType, wifiType), null);
-    assert.equal(connectedDevice([], wiredType, wifiType), null);
+    assert.equal(deviceOfType([loopback, wired], wiredType, true), null);
+    assert.equal(deviceOfType([loopback, wired], wifiType, true), null);
+    assert.equal(deviceOfType([], wifiType, true), null);
 });
 
 test("connectedNetwork selects the connected Wi-Fi network rather than a stronger scan result", () => {

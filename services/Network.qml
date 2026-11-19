@@ -9,9 +9,9 @@ import QtQml
 Singleton {
     id: root
 
-    readonly property bool connected: _device !== null
-    readonly property string kind: _device?.type === Native.DeviceType.Wifi ? "wifi"
-                                   : connected ? "ethernet" : ""
+    readonly property bool wifiConnected: _wifiDevice !== null
+    readonly property bool ethernetConnected: Model.deviceOfType(
+        Native.Networking.devices.values, Native.DeviceType.Wired, true) !== null
     readonly property string ssid: _wifi?.name ?? ""
     readonly property real strength: _wifi?.signalStrength ?? 0
     readonly property bool available: _wifiAdapter !== null
@@ -19,8 +19,6 @@ Singleton {
     readonly property var networks: enabled ? Model.listNetworks(_wifiAdapter?.networks.values ?? []) : []
     property bool scanning: false
 
-    readonly property Native.NetworkDevice _device: Model.connectedDevice(
-        Native.Networking.devices.values, Native.DeviceType.Wired, Native.DeviceType.Wifi)
     readonly property Native.WifiDevice _wifiDevice: Model.deviceOfType(
         Native.Networking.devices.values, Native.DeviceType.Wifi, true)
     readonly property Native.WifiDevice _wifiAdapter: _wifiDevice

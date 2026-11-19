@@ -16,7 +16,7 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Create: `services/Network.model.js`, `services/Bluetooth.model.js`, `services/Battery.model.js` and their tests in `tests/services/` for device selection, counting, and charge conversion.
 - Update: `shell.qml` to start each service once.
 - [x] Use the native Networking, Bluetooth, and UPower modules in Quickshell 0.3.2.
-- [x] `Network`: `connected`, `kind` (`wifi`/`ethernet`), `ssid`, `strength` (0–1), `enabled`, `toggle()`. Prefer Ethernet when both connection types are active.
+- [x] `Network`: independent `wifiConnected` and `ethernetConnected` flags, Wi-Fi `ssid` and `strength` (0–1), `enabled`, `toggle()`.
 - [x] `Bluetooth`: `available`, `enabled`, `connectedCount`, `toggle()`
 - [x] `Battery`: `present`, `percent` (0–100), `charging`, `low` (≤ 15)
 - Done when: the services match the system's readings in the nested sandbox and the toggles and live updates work on a private test bus.
@@ -32,11 +32,13 @@ Common read: `../design/reference/INDEX.md` (Bar anatomy), `../design/RESPONSIVE
 - Read: `../design/MOTION.md` (status pill hide/show), `../design/reference/07-control-center-tiles-closeup.png`
 - Create: `modules/bar/pills/StatusPill.qml`, `modules/bar/pills/StatusPill.model.js`, `tests/modules/bar/pills/StatusPill.model.test.js`
 - Update: `modules/bar/Bar.qml` to load the status pill at the right edge.
-- [x] Model: `icons(state)` returns ordered descriptors for connected Ethernet or Wi-Fi, connected Bluetooth devices, and the battery. Wi-Fi uses signal bars. The battery descriptor carries its percentage and low-charge state, with a distinct charging icon. DND arrives with its service.
+- [x] Model: `icons(state)` displays active DND, Ethernet, Wi-Fi, Bluetooth, and battery in that order. Ethernet and Wi-Fi can appear together. Wi-Fi uses signal bars. The battery descriptor carries its percentage and low-charge state, with a distinct charging icon.
 - [x] Empty list → pill hidden (width spring to 0 + fade)
 - [x] Click → `UiState.toggle("controlcenter")`; `active` while that popup is open
-- [x] Tests: nothing active → `[]`; wifi+bt → 2 icons in order; battery low flag; ethernet vs wifi
+- [x] Tests: empty state, Wi-Fi signal levels, DND on its own, all active connections together, and battery state.
 - Done when: matches shot 07 (wifi + battery %) ; hides when nothing is active
+
+- Verified the DND indicator with the live service in nested Hyprland. A device fixture in the same sandbox also verified Wi-Fi, Ethernet, and Bluetooth together and the removal of each network icon independently.
 
 ## 3.5 Bar layout
 - Modify: `modules/bar/Bar.qml`

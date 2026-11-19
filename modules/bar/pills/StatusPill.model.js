@@ -5,12 +5,14 @@ function icons(state) {
     var network = state.network;
     var battery = state.battery;
 
-    if (network?.connected) {
-        if (network.kind === "wifi")
-            result.push({ name: wifiIcon(network.strength), filled: true });
-        else if (network.kind === "ethernet")
-            result.push({ name: "settings_ethernet", filled: true });
-    }
+    if (state.dndOn)
+        result.push({ name: "do_not_disturb_on", filled: true });
+
+    if (network?.ethernetConnected)
+        result.push({ name: "settings_ethernet", filled: true });
+
+    if (network?.wifiConnected)
+        result.push({ name: wifiIcon(network.strength), filled: true });
 
     if (state.bluetooth?.connectedCount > 0)
         result.push({ name: "bluetooth_connected", filled: true });

@@ -11,6 +11,7 @@ Item {
     id: root
 
     readonly property var icons: Model.icons({
+        dndOn: Modes.dndOn,
         network: Network,
         bluetooth: Bluetooth,
         battery: Battery,
