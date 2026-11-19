@@ -48,6 +48,7 @@ Scope {
             anchorItem: root._mountedAnchor
             opened: anchorItem !== null && root.requestedAnchor === anchorItem
             preferredWidth: Sizing.notificationPopupWidth
+            waitForContentLayout: true
             barWindows: root.barWindows
             onDismissRequested: Qt.callLater(root._dismissPopup, popup)
             onExited: Qt.callLater(root._unmountPopup)
@@ -125,6 +126,8 @@ Scope {
                     spacing: Sizing.popupGap
 
                     Components.IconButton {
+                        id: historyButton
+
                         text: content.historyOpen ? qsTr("Back to notifications") : qsTr("Notification history")
                         iconName: content.historyOpen ? "arrow_back" : "history"
                         variant: "tonal"
@@ -133,7 +136,7 @@ Scope {
 
                     Components.Pill {
                         Layouts.Layout.fillWidth: true
-                        Layouts.Layout.fillHeight: true
+                        implicitHeight: historyButton.implicitHeight
                         visible: !content.historyOpen && content.count > 0
                         text: qsTr("Clear all")
                         activeFocusOnTab: true

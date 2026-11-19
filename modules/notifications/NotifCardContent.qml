@@ -29,6 +29,7 @@ QQL.RowLayout {
     readonly property bool _avatar: _hasImage
         && Model.conversationAvatar(category, imageProbe.sourceSize.width, imageProbe.sourceSize.height)
     readonly property bool _preview: _hasImage && !_avatar
+    readonly property QQ.Item _imageSlot: (root._avatar ? avatar.item : root.expanded ? preview.item : thumbnail.item)?.contentItem ?? null
 
     spacing: Sizing.popupGap
     QQ.Image {
@@ -37,14 +38,6 @@ QQL.RowLayout {
         visible: false
         asynchronous: true
     }
-    QQ.Image {
-        parent: root._avatar ? avatar.contentItem : root.expanded ? preview.contentItem : thumbnail.contentItem
-        anchors.fill: parent
-        fillMode: root.expanded && !root._avatar ? QQ.Image.PreserveAspectFit : QQ.Image.PreserveAspectCrop
-        source: root._hasImage ? root.image : ""
-        asynchronous: true
-    }
-
     QQ.Item {
         id: leading
         QQL.Layout.alignment: Qt.AlignTop
@@ -53,12 +46,20 @@ QQL.RowLayout {
         implicitWidth: Sizing.notificationAvatarSize
         implicitHeight: implicitWidth
 
-        Widgets.ClippingRectangle {
+        QQ.Image {
+            parent: root._imageSlot ?? leading
+            visible: root._imageSlot !== null
+            anchors.fill: parent
+            fillMode: root.expanded && !root._avatar ? QQ.Image.PreserveAspectFit : QQ.Image.PreserveAspectCrop
+            source: root._hasImage ? root.image : ""
+            asynchronous: true
+        }
+
+        QQ.Loader {
             id: avatar
             anchors.fill: parent
-            radius: Shape.full
-            color: Theme.transparent
-            visible: root._avatar
+            active: root._avatar
+            sourceComponent: Widgets.ClippingRectangle { radius: Shape.full; color: Theme.transparent }
         }
 
         QQ.Rectangle {
@@ -171,26 +172,29 @@ QQL.RowLayout {
                 }
             }
 
-            Widgets.ClippingRectangle {
+            QQ.Loader {
                 id: thumbnail
-
-                visible: root._preview && !root.expanded
-                implicitWidth: Sizing.notificationThumbnailWidth
-                implicitHeight: Sizing.notificationThumbnailHeight
-                radius: Shape.small
-                color: Theme.transparent
+                active: root._preview && !root.expanded
+                visible: active
+                QQL.Layout.preferredWidth: Sizing.notificationThumbnailWidth
+                QQL.Layout.preferredHeight: Sizing.notificationThumbnailHeight
+                sourceComponent: attachmentClip
             }
         }
 
-        Widgets.ClippingRectangle {
+        QQ.Loader {
             id: preview
-
             QQL.Layout.fillWidth: true
-            visible: root._preview && root.expanded
-            implicitHeight: visible ? Math.min(Sizing.notificationPreviewMaxHeight,
+            active: root._preview && root.expanded
+            visible: active
+            QQL.Layout.preferredHeight: visible ? Math.min(Sizing.notificationPreviewMaxHeight,
                 width * imageProbe.sourceSize.height / Math.max(1, imageProbe.sourceSize.width)) : 0
-            radius: Shape.small
-            color: Theme.transparent
+            sourceComponent: attachmentClip
         }
+    }
+
+    QQ.Component {
+        id: attachmentClip
+        Widgets.ClippingRectangle { radius: Shape.small; color: Theme.transparent }
     }
 }

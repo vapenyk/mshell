@@ -15,6 +15,7 @@ PanelWindow {
     required property int preferredWidth
     property list<QtObject> barWindows
     property real contentViewportHeight: body.implicitHeight
+    property bool waitForContentLayout: false
     default property alias content: body.data
 
     signal dismissRequested()
@@ -22,8 +23,9 @@ PanelWindow {
 
     readonly property QsWindow _anchorWindow: anchorItem?.QsWindow.window ?? null
     readonly property ShellScreen _anchorScreen: _anchorWindow?.screen ?? null
-    readonly property bool _shown: _ready && opened
+    readonly property bool _shown: _ready && opened && (!waitForContentLayout || _layoutSettled)
     property bool _ready: false
+    property bool _layoutSettled: false
     readonly property var _placement: Model.placement(
         _anchorScreen?.width ?? 0, _anchorScreen?.height ?? 0,
         anchorItem?.x ?? 0, anchorItem?.width ?? 0, _anchorWindow?.height ?? Sizing.barHeight,
@@ -47,14 +49,29 @@ PanelWindow {
     WlrLayershell.namespace: "mshell-popup"
 
     mask: Region {
-        item: root.opened ? surface : null
+        item: root._shown ? surface : null
     }
 
     Component.onCompleted: _ready = true
     onClosed: dismissRequested()
     onOpenedChanged: {
-        if (_ready && !opened && surface.opacity === 0)
-            exited();
+        if (!opened) {
+            _layoutSettled = false;
+            if (_ready && surface.opacity === 0)
+                exited();
+        }
+    }
+
+    FrameAnimation {
+        running: root.waitForContentLayout && root._ready && root.opened && !root._layoutSettled
+
+        onTriggered: {
+            // Start the reveal after the window has adopted the content size.
+            if (root.contentViewportHeight > 0
+                    && root.width === Math.round(root._placement.width)
+                    && root.height === Math.round(root._placement.height))
+                root._layoutSettled = true;
+        }
     }
 
     HyprlandFocusGrab {

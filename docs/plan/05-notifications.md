@@ -41,6 +41,7 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 - [x] IPC `notifs`: `toggleDnd`, `clear`
 - Done when: matches shot 08; bell dot appears and clears; `unused.sh` clean
 - Verified bell and unread state, group expansion, section clearing, empty state, session history, and IPC on the nested session bus.
+- Start the center's opening animation after its initial content size has been applied to the window. Load image clipping only for the avatar, thumbnail, or expanded preview currently in use.
 
 ## Follow-up: inline reply
 - Create: `modules/notifications/NotifReply.qml` and `NotifActions.qml`.
