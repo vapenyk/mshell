@@ -81,6 +81,18 @@ Source: user-supplied screenshot and cropped frames from the 2026-11-19 screen r
 | 50 | [50-device-notification-preview-collapsed.png](50-device-notification-preview-collapsed.png) | 0:29 | The saved-screen-recording card shows its app icon on the left and a small attachment thumbnail on the right. | Collapsed attachment preview placement. |
 | 51 | [51-device-notification-preview-expanded.png](51-device-notification-preview-expanded.png) | 0:31 | The same card shows a larger preview below its text and the Share action below the preview. | Expanded attachment preview, aspect ratio, and action placement. |
 
+## On-device calendar captures (52–56)
+
+Source screenshots supplied by the user on 2026-11-19 in `bebe-20261119T122843Z-1-001.zip`.
+
+| # | File | Shows | Use for |
+|---|---|---|---|
+| 52 | [52-device-calendar-today.png](52-device-calendar-today.png) | November 2026 open below the active clock. November 19 is filled. The month and year have a down chevron. | Initial state, calendar header, and today's marker. |
+| 53 | [53-device-calendar-day-selected.png](53-device-calendar-day-selected.png) | November 25 is filled while today, November 19, has an outline. | Distinguishing the selected date from today. |
+| 54 | [54-device-calendar-year-picker.png](54-device-calendar-year-picker.png) | A scrollable, three-column year grid replaces the day grid. 2026 is highlighted and the header chevron points up. | Year picker, its selected year and header affordance. |
+| 55 | [55-device-calendar-previous-month.png](55-device-calendar-previous-month.png) | October 2026, with blank cells before the first day and no date highlighted. | Navigation to a month outside the current and selected dates. |
+| 56 | [56-device-calendar-next-year-month.png](56-device-calendar-next-year-month.png) | January 2027, with January 31 on the sixth week. | Navigation across the year boundary and a full six-week grid. |
+
 ## Which shot for which surface
 Use the first one listed; the rest are fallbacks.
 | Surface | Shots |
@@ -88,7 +100,7 @@ Use the first one listed; the rest are fallbacks.
 | Bar (all pills) | 21, then 10, 12, 07 |
 | Media pill (collapsed) | 21, 10 |
 | Media card (expanded, wavy seek bar) | 11 only |
-| Clock + calendar popup | 29 (closed), 30 (open), then 12 |
+| Clock + calendar popup | 29 (closed), 52–56 (calendar states), then 30 and 12 |
 | Control center | 28, 44 (Wi-Fi tooltip), then 19, 01, 05, 07 |
 | Control center subpages | 36 (Modes), 35 (Network), 33–34 (Bluetooth), 37–38 (Audio); 06 for Modes fallback |
 | Control center edit mode | 39, then 20 |

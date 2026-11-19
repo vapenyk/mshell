@@ -42,6 +42,14 @@ Media steps 6.1–6.4 are deferred until MPRIS is wanted. The calendar and keybo
 - Done when: matches shot 12; tests for leap year, month starting on Mon/Sun, 6-week months
 - Verified month navigation, arrow-key day focus, Escape, clicking the clock again, and outside-click dismissal in nested Hyprland.
 
+### 6.5 follow-up — date selection and year picker
+
+- Read the [on-device calendar captures](../design/reference/INDEX.md#on-device-calendar-captures-5256) and the [M3 calendar reference](../design/REFERENCES.md). Use mshell's color and typography tokens.
+- [ ] Start on the current month with today's date filled, as in [52](../design/reference/52-device-calendar-today.png). Selecting another day fills that date and leaves today outlined whenever both dates are visible, as in [53](../design/reference/53-device-calendar-day-selected.png).
+- [ ] Make the month and year label open a scrollable three-column year picker in the same panel. On entry, show the displayed year and highlight it. The chevron indicates the open state. Choosing a year returns to the month grid for that year. See [54](../design/reference/54-device-calendar-year-picker.png).
+- [ ] Verify previous and next month navigation in a month without either date in view ([55](../design/reference/55-device-calendar-previous-month.png)) and across December and January ([56](../design/reference/56-device-calendar-next-year-month.png)). Keep the panel height stable and use blank cells outside the displayed month.
+- Update `CalendarPopup.qml` for the day and year views and `Calendar.model.js` with tests for date selection and year navigation.
+
 ## 6.6 Keyboard layout
 - On-device reference: [32](../design/reference/32-device-keyboard-layouts.png) for language codes, names, and selected row styling. Omit the title and settings button.
 - Read: shot 09; Hyprland: layout comes from the keyboard device (`hyprctl devices -j`) and the `activelayout` raw event; switch with `hyprctl switchxkblayout <device> next|<id>`
