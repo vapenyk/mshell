@@ -5,6 +5,7 @@ import qs.services
 import "Osd.model.js" as Model
 
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 import QtQuick
 
@@ -12,61 +13,57 @@ PanelWindow {
     id: root
 
     property ShellScreen _targetScreen: null
-    property var _previous: ({})
-    property var _presentation: null
     property string _kind: ""
     property bool _shown: false
 
-    readonly property var _output: Audio.available
-        ? ({ device: Audio.output.id, current: Audio.volume, max: 1, muted: Audio.muted }) : null
-    on_OutputChanged: {
-        if (Audio.writingVolume)
-            _record("volume", _output, true);
-        else
-            Qt.callLater(_updateOutput);
+    readonly property bool _suppressed: UiState.openPopup === "controlcenter" || UiState.lockActive
+    readonly property var _reading: _kind === "display" ? Brightness.display
+        : _kind === "keyboard" ? Brightness.keyboard
+        : _kind === "volume" && Audio.available ? ({ current: Audio.volume, max: 1, muted: Audio.muted }) : null
+    readonly property var _presentation: Model.presentation(_kind, _reading)
+
+    on_SuppressedChanged: {
+        if (_suppressed)
+            _close();
+    }
+    on_TargetScreenChanged: {
+        if (!_targetScreen)
+            _close();
+    }
+    on_ReadingChanged: {
+        if (!_reading && _shown)
+            _close();
     }
 
-    function _updateOutput(): void {
-        _record("volume", _output, false);
+    function _close(): void {
+        timeout.stop();
+        _shown = false;
     }
 
-    function _recordDisplay(): void {
-        const reading = Brightness.display;
-        _record("display", reading, reading?.writtenByShell === true);
-    }
-
-    function _record(kind: string, reading: var, writtenByShell: bool): void {
-        const previous = _previous[kind];
-        _previous[kind] = reading;
-        const change = Model.levelChange(previous, reading, writtenByShell);
-        if (change === "local" && _kind === kind) {
-            timeout.stop();
-            _shown = false;
-        }
-        if (change !== "external" || !Compositor.focusedScreen)
+    function _show(kind: string, accepted: bool): void {
+        if (!accepted || _suppressed || !Compositor.focusedScreen)
             return;
 
         _targetScreen = Compositor.focusedScreen;
         _kind = kind;
-        _presentation = Model.presentation(kind, reading);
         _shown = true;
         timeout.restart();
     }
 
-    Component.onCompleted: {
-        _updateOutput();
-        _recordDisplay();
-        _record("keyboard", Brightness.keyboard, false);
-    }
+    IpcHandler {
+        target: "osd"
 
-    Connections {
-        target: Brightness
-        function onDisplayChanged(): void { root._recordDisplay(); }
-        function onKeyboardChanged(): void { root._record("keyboard", Brightness.keyboard, false); }
+        function volumeUp(): void { root._show("volume", Audio.stepVolume(1)); }
+        function volumeDown(): void { root._show("volume", Audio.stepVolume(-1)); }
+        function toggleMute(): void { root._show("volume", Audio.toggleMute()); }
+        function brightnessUp(): void { root._show("display", Brightness.step("display", 1)); }
+        function brightnessDown(): void { root._show("display", Brightness.step("display", -1)); }
+        function keyboardBrightnessUp(): void { root._show("keyboard", Brightness.step("keyboard", 1)); }
+        function keyboardBrightnessDown(): void { root._show("keyboard", Brightness.step("keyboard", -1)); }
     }
 
     screen: _targetScreen
-    visible: _targetScreen !== null && (_shown || pill.opacity > 0)
+    visible: !_suppressed && _targetScreen !== null && _reading !== null && (_shown || pill.opacity > 0)
     anchors { top: true; right: true }
     margins.top: Sizing.barHeight + Sizing.popupGap
     margins.right: Sizing.barSideMargin
@@ -109,6 +106,7 @@ PanelWindow {
         }
 
         Behavior on opacity {
+            enabled: !root._suppressed && root._targetScreen !== null
             NumberAnimation {
                 duration: root._shown ? Motion.short2 : Motion.short3
                 easing.type: Easing.BezierSpline

@@ -17,7 +17,6 @@ Singleton {
 
     readonly property PwNode output: _sink
     readonly property PwNode input: _source
-    readonly property bool writingVolume: _writingVolume
     property bool mixerOpen: false
     readonly property var outputs: mixerOpen
         ? Model.nodesOfType(Pipewire.nodes.values, PwNodeType.AudioSink, PwNodeType.AudioDuplex) : []
@@ -26,7 +25,6 @@ Singleton {
 
     readonly property PwNode _sink: Pipewire.defaultAudioSink
     readonly property PwNode _source: Pipewire.defaultAudioSource
-    property bool _writingVolume: false
 
     function deviceName(node: PwNode): string {
         return Model.deviceName(node);
@@ -47,20 +45,26 @@ Singleton {
     }
 
     function setVolume(value: real): void {
-        if (!available)
-            return;
-
-        _writingVolume = true;
-        try {
+        if (available)
             _sink.audio.volume = value;
-        } finally {
-            _writingVolume = false;
-        }
     }
 
-    function toggleMute(): void {
-        if (available)
-            _sink.audio.muted = !muted;
+    function stepVolume(direction: int): bool {
+        if (!available)
+            return false;
+
+        const next = Model.volumeStep(volume, muted, direction);
+        _sink.audio.muted = next.muted;
+        setVolume(next.volume);
+        return true;
+    }
+
+    function toggleMute(): bool {
+        if (!available)
+            return false;
+
+        _sink.audio.muted = !muted;
+        return true;
     }
 
     function setSourceVolume(value: real): void {

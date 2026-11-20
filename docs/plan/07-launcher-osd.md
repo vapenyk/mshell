@@ -17,6 +17,11 @@ Before starting launcher work (7.1 or 7.2), contact the user to discuss how it s
 - Done when: `qs ipc call launcher toggle` → type → Enter launches
 
 ## 7.3 OSD
+
+The IPC follow-up below defines the current OSD behavior.
+
+### Initial implementation (complete)
+
 - Read: on-device references [41](../design/reference/41-device-osd-volume.png), [42](../design/reference/42-device-osd-brightness.png), [43](../design/reference/43-device-osd-volume-muted.png) for normal volume, brightness, and muted volume.
 - Read: Material 3 slider [specs](https://m3.material.io/components/sliders/specs) and [guidelines](https://m3.material.io/components/sliders/guidelines).
 - Read: `../design/BEHAVIOR.md` sections 1, 2, 4, 5 and the OSD row in section 6, `../design/MOTION.md`, `../design/COMPONENTS.md`, and `../conventions/TESTING.md`.
@@ -28,3 +33,31 @@ Before starting launcher work (7.1 or 7.2), contact the user to discuss how it s
 - [x] Use the Control Center sliders themselves as feedback for adjustments made there. Keep the OSD available for external changes while Control Center is open.
 - Done when: volume, mute, display brightness, and stepped keyboard backlight update in the nested session. Verify repeated input, hidden startup, timeout, and layer placement.
 - Verified in nested Hyprland with two outputs, a test PipeWire sink, and simulated brightness devices. Checked output changes and removal, click-through, slider writes without OSD, and external changes with Control Center open.
+
+### 7.3 follow-up — show OSD from key actions
+
+Read the `AGENTS.md` runtime sandbox procedure, `../design/BEHAVIOR.md` sections 1, 2, 4 and the OSD row in section 6, the Multi-monitor section of `../design/RESPONSIVE.md`, and `../conventions/TESTING.md`. Read `services/{Audio,Brightness,Compositor,UiState}.qml`, their relevant existing models and tests, and `modules/osd/`. Check the volume and brightness bindings in `~/.config/hypr/hyprland.lua`.
+
+Update `services/{Audio,Brightness}.qml`, `services/{Audio,Brightness}.model.js`, `modules/osd/Osd.qml`, `modules/osd/Osd.model.js`, their existing model tests, and the OSD rules in `../design/{BEHAVIOR,RESPONSIVE}.md` and `../conventions/NAMING.md`. Keep the existing file layout. `Audio` owns PipeWire, `Brightness` owns both brightness devices through `brightnessctl`, and `Osd.qml` owns the IPC handler, window, and timer. Control Center calls the system services directly.
+
+1. [x] Add and test the service operations. Volume keys change the level by 2 percentage points within 0–100%. `volumeUp` clears mute and raises volume in the same action. `volumeDown` preserves mute. `toggleMute` changes only mute.
+2. [x] Queue relative screen brightness commands `5%+` and `5%-` in order, including under repeat. Each command uses the current device level. Use a minimum of 1% of the hardware maximum, rounded up to a raw integer, for both the key actions and the Control Center slider. The slider currently uses a 5% minimum. Keyboard backlight uses relative one-level steps from zero to the hardware maximum. Apply `-n` only to screen brightness. [brightnessctl usage](https://github.com/Hummer12007/brightnessctl#usage)
+3. [x] Open or extend the OSD through the `osd` IPC actions only. Bind the displayed value to the relevant service. The click-through window stays below the bar and switches content in place on the same monitor. Every accepted action, including a repeat at a range limit, restarts the single 1.5 s timer when the OSD is eligible to show. Slider writes and external device changes can update visible content. Remove the change-origin tracking and all show or timeout triggers tied to value changes.
+4. [x] Select `Compositor.focusedScreen` for each IPC action that opens or extends the OSD. After a focus change, the next action moves the OSD to the focused output. On output removal, close the OSD and resolve the focused output on the next action.
+5. [x] Use `UiState` to close the OSD immediately when Control Center opens or the session locks. IPC actions still change levels while Control Center is open or the session is locked. The OSD stays hidden in both cases. A new action after closing the panel or unlocking can show it again.
+6. [x] Test the IPC and Lua bindings in the nested sandbox before replacing the direct host binds for the listed keys. Each command uses `qs -c mshell ipc call osd <method>`. Use `hl.bind` with `hl.dsp.exec_cmd`, keep `locked = true` on the existing volume and screen brightness keys, and set `repeating = true` for up/down. Mute uses a single action. Bind keyboard backlight only after verifying which events the laptop emits and whether firmware already handles them.
+
+   | Key | IPC method |
+   |---|---|
+   | `XF86AudioRaiseVolume` | `volumeUp` |
+   | `XF86AudioLowerVolume` | `volumeDown` |
+   | `XF86AudioMute` | `toggleMute` |
+   | `XF86MonBrightnessUp` | `brightnessUp` |
+   | `XF86MonBrightnessDown` | `brightnessDown` |
+   | `XF86KbdBrightnessUp` | `keyboardBrightnessUp` |
+   | `XF86KbdBrightnessDown` | `keyboardBrightnessDown` |
+
+7. [x] Verify in nested Hyprland with two outputs. Check hidden startup, a slider change to 40% followed by closing Control Center and raising volume to 42%, mute/unmute, brightness limits and ordered repeats. Check Wayland logs for zero OSD surface creations during slider drags and external writes. Hold a key while opening and closing Control Center and while changing monitor focus. Switch from volume to brightness on the same monitor and verify that one surface updates, one timeout restarts, and repeat stays responsive. Check output removal, click-through, and level changes during session lock.
+8. [x] Update the behavior and IPC documentation to match the result. Run model tests and `sh tools/unused.sh`, tick the completed checks, update `00-OVERVIEW.md`, and commit the follow-up.
+
+Verified in nested Hyprland with two outputs, an isolated PipeWire sink, simulated brightness devices, and virtual media keys. The five existing host audio and screen brightness bindings use the tested IPC targets. The ASUS WMI device reports hardware-driven keyboard backlight changes and exposes no keyboard backlight key events. Its Fn behavior stays with the driver. `keyboardBrightnessUp` and `keyboardBrightnessDown` are available through IPC.

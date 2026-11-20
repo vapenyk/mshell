@@ -32,7 +32,7 @@ If a screen is wider than `extraLarge`, do not grow anything; popups stay the sa
 ## Multi-monitor
 - `Bar` is a `Variants` over `Quickshell.screens`; one bar per screen.
 - Popups, launcher, and notification popups appear on the **focused** screen (from `Compositor`), anchored to the pill that opened them where applicable.
-- The OSD uses the focused display for each level change.
+- The OSD resolves the focused display each time an IPC action opens or extends it.
 - Lock covers every screen.
 - Hot-plug must not crash or duplicate: all per-screen state lives in the per-screen component, all system state in services.
 
