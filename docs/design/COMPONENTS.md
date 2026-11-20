@@ -20,7 +20,7 @@ Check this catalogue before creating a UI component. Look for a shared component
 | Button | [Button.qml](../../components/Button.qml) | Text and icon actions with Material color variants and press feedback | Buttons | 08 |
 | Dialog | [Dialog.qml](../../components/Dialog.qml) | Centered confirmation with scrim and cancel/confirm actions | Dialogs | 08 |
 | Switch / toggle | [ToggleSwitch.qml](../../components/ToggleSwitch.qml) | Labeled on/off switch used by Modes, Wi-Fi, and Bluetooth | Switch | 04 |
-| Slider | [ValueSlider.qml](../../components/ValueSlider.qml) and [model](../../components/ValueSlider.model.js) | Volume, brightness, and input level track with a vertical handle | Sliders | 04 |
+| Slider | [ValueSlider.qml](../../components/sliders/ValueSlider.qml) and [model](../../components/sliders/ValueSlider.model.js) | Continuous and stepped tracks with a vertical handle. Interactive in Control Center and read-only in the OSD | Sliders | 04, 07 |
 | Tile | [Tile.qml](../../components/Tile.qml) | Icon-only or labeled control center tile with toggle and settings actions | Toggle buttons | 04 |
 | Page stack | [PageStack.qml](../../components/PageStack.qml) | Animated page navigation with a back button, title, and header actions | Shell component | 04 |
 | Popup window | [PopupWindow.qml](../../components/PopupWindow.qml) and [model](../../components/PopupWindow.model.js) | Anchored layer-shell window with outside-click close | Menus and dialogs | 04 |
@@ -44,6 +44,7 @@ Check this catalogue before creating a UI component. Look for a shared component
 | Notification input and actions | [NotifReply.qml](../../modules/notifications/NotifReply.qml), [NotifActions.qml](../../modules/notifications/NotifActions.qml), [NotifActionButton.qml](../../modules/notifications/NotifActionButton.qml) | Inline reply field, text actions, and outlined Open link action |
 | Notification center and history | [NotifCenter.qml](../../modules/notifications/NotifCenter.qml), [NotifHistory.qml](../../modules/notifications/NotifHistory.qml) | Grouped lists, empty state, and session history |
 | Notification popup and toast | [NotifPopup.qml](../../modules/notifications/NotifPopup.qml), [NotifToast.qml](../../modules/notifications/NotifToast.qml) | On-screen stack, timeout, hover pause, and transitions |
+| OSD | [Osd.qml](../../modules/osd/Osd.qml) and [model](../../modules/osd/Osd.model.js) | One read-only level pill for output volume and mute, display brightness, and keyboard backlight. Device references 41–43 |
 
 ## Planned components
 
@@ -53,7 +54,6 @@ Check this catalogue before creating a UI component. Look for a shared component
 | MediaPill | `modules/bar/pills/` | 06, shot 10 |
 | MediaCard | `modules/media/` | 06, shot 11 |
 | SearchBar, Launcher, AppItem | `components/SearchBar.qml`, `modules/launcher/` | 07, discuss launcher before implementation |
-| Osd | `modules/osd/` | 07, shots 41–43, use ValueSlider |
 | Menu | `components/Menu.qml` | Backlog, shots 24, 25 |
 
 ## States every interactive component must implement

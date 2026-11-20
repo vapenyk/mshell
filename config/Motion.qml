@@ -31,6 +31,7 @@ Singleton {
 
     readonly property real enterScale: 0.92
     readonly property int notificationTimeout: 5000
+    readonly property int osdTimeout: 1500
     readonly property int popupSlideDistance: 8
     readonly property int sharedAxisDistance: 30
     readonly property real sharedAxisFadeOutFraction: 0.35

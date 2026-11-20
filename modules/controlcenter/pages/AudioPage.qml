@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import qs.components as Components
+import qs.components.sliders as Sliders
 import qs.config
 import qs.services
 
@@ -54,7 +55,7 @@ QQL.ColumnLayout {
         }
     }
 
-    Components.ValueSlider {
+    Sliders.ValueSlider {
         QQL.Layout.fillWidth: true
         enabled: Audio.available
         accessibleName: qsTr("Output volume")
@@ -80,7 +81,7 @@ QQL.ColumnLayout {
         onClicked: Audio.toggleSourceMute()
     }
 
-    Components.ValueSlider {
+    Sliders.ValueSlider {
         QQL.Layout.fillWidth: true
         visible: Audio.sourceAvailable
         accessibleName: qsTr("Microphone input level")
@@ -114,7 +115,7 @@ QQL.ColumnLayout {
                 text: stream.applicationName
             }
 
-            Components.ValueSlider {
+            Sliders.ValueSlider {
                 QQL.Layout.fillWidth: true
                 accessibleName: qsTr("%1 volume").arg(stream.applicationName)
                 enabled: stream.modelData.ready && stream.modelData.audio !== null

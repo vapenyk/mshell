@@ -51,5 +51,10 @@ Singleton {
     readonly property int switchThumbOnSize: 24
     readonly property int sliderHeight: 40
     readonly property int sliderHandleWidth: 4
+    readonly property int sliderPressedHandleWidth: 2
     readonly property int sliderHandleGap: 4
+    readonly property int sliderStopTrackHeight: 16
+    readonly property int sliderStopSize: 4
+    readonly property int sliderStopSpacing: 12
+    readonly property int osdWidth: 296
 }

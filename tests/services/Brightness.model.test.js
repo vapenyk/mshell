@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 const { loadModel } = require("../load.js");
 
-const { parseInfo, rawValue } = loadModel("services/Brightness.model.js");
+const { parseDevices, parseInfo, rawValue } = loadModel("services/Brightness.model.js");
 
 test("reads the raw brightness and maximum instead of the rounded percentage", () => {
     const record = parseInfo("intel_backlight,backlight,199,50%,400\n");
@@ -27,6 +27,19 @@ test("ignores unrelated or malformed lines and selects the first usable backligh
 test("converts normalized brightness to the nearest hardware level", () => {
     assert.equal(rawValue(0.5, 255), 128);
     assert.equal(rawValue(1.1, 255), 255);
+});
+
+test("reads display and keyboard backlight from one device list", () => {
+    const records = [
+        "input3::capslock,leds,1,100%,1",
+        "intel_backlight,backlight,199,50%,400",
+        "asus::kbd_backlight,leds,0,0%,3",
+    ].join("\n");
+    const devices = parseDevices(records);
+    assert.deepEqual({ ...devices.display }, { device: "intel_backlight", current: 199, max: 400 });
+    assert.deepEqual({ ...devices.keyboard }, { device: "asus::kbd_backlight", current: 0, max: 3 });
+    assert.equal(parseDevices("input3::capslock,leds,1,100%,1").keyboard, null);
+    assert.equal(parseDevices("kbd_backlight,leds,7,100%,7").keyboard.max, 7);
 });
 
 test("keeps at least five percent and never requests a fully dark backlight", () => {

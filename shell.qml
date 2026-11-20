@@ -5,6 +5,7 @@ import qs.modules.controlcenter
 import qs.modules.keyboard
 import qs.modules.lock
 import qs.modules.notifications
+import qs.modules.osd
 import qs.modules.powermenu
 import qs.services
 
@@ -26,6 +27,7 @@ ShellRoot {
     }
 
     NotifPopup {}
+    Osd {}
 
     NotifCenter { barWindows: bar.instances }
     CalendarPopup { barWindows: bar.instances }

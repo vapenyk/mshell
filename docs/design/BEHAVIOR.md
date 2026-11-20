@@ -10,7 +10,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Popup (control center, notification center, calendar, media, keyboard) | Overlay | on demand (only while open) | whole popup | screen of the pill that opened it | closes on outside click via focus grab |
 | Notification popups | Overlay | none on arrival, exclusive only during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
 | Launcher | Overlay | exclusive while open | whole | focused screen | |
-| OSD | Overlay | none | **none** (fully click-through) | focused screen | |
+| OSD | Overlay | none | **none** (fully click-through) | focused screen at each change | one pill under the bar, top-right |
 | Power dropdown | Inside Control Center | menu focus while open | dropdown and outside dismissal within Control Center | screen of the Control Center | anchored under the Power button |
 | Confirmation dialog | Overlay | exclusive while open | whole + scrim | screen where the action was chosen | |
 | Lock | session lock | exclusive | whole | every screen | nothing else is visible |
@@ -61,7 +61,6 @@ Z-order (low → high): bar, popups, notification popups, OSD, dialogs, lock.
 | `launcher` | `toggle` |
 | `controlcenter` | `toggle`, `close` |
 | `notifs` | `toggleDnd`, `clear` |
-| `osd` | `show` (only if needed) |
 | `powermenu` | `toggle` |
 | `lock` | `lock` |
 | `config` | `setAccent <name>` |
@@ -99,12 +98,14 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Keyboard popup | KeyboardPill | outside, Esc, pill, swap, layout selection | fade through when swapping |
 | Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade + slide |
 | Launcher | IPC | Esc, outside, launch | fade + scale / fade |
-| OSD | volume/brightness change | 1.5 s timeout (resets on change) | fade + slide / fade |
+| OSD | output volume or mute, display brightness, keyboard backlight | 1.5 s timeout (resets on change) | fade + slide / fade |
 | Power menu | CC power button, IPC | Esc, outside, button, action | fade through |
 | Power confirmation | Restart or Power off | Esc, outside, Cancel, confirm | |
 | Lock | Power menu, IPC, future idle trigger | successful PAM auth | fade in |
 
 On the lock surface the bar displays its live indicators. Clicking the bar focuses the password input. The native Wayland session lock keeps the desktop and its popups behind the lock surfaces. The Power menu and IPC share the lock request in `UiState`, which is also the entry point for the future idle trigger.
+
+The OSD opens on a change from a device's first reading. A change replaces the contents of the same pill and restarts its timeout. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
 
 ## 7. Notifications (freedesktop semantics, not M3)
 - Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.

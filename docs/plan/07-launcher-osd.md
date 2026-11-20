@@ -18,7 +18,12 @@ Before starting launcher work (7.1 or 7.2), contact the user to discuss how it s
 
 ## 7.3 OSD
 - Read: on-device references [41](../design/reference/41-device-osd-volume.png), [42](../design/reference/42-device-osd-brightness.png), [43](../design/reference/43-device-osd-volume-muted.png) for normal volume, brightness, and muted volume.
-- Create: `modules/osd/Osd.qml`
-- [ ] Appears on volume/brightness change (not on first load), pill-shaped surface below the right side of the bar, with a horizontal level track, visible handle, and a glyph for the current state (including mute); hides after 1.5 s; spatial in / fade out; focused screen
-- [ ] IPC `osd`: `show` (optional, only if needed)
-- Done when: changing volume by key shows OSD and doesn't flicker on repeat
+- Read: Material 3 slider [specs](https://m3.material.io/components/sliders/specs) and [guidelines](https://m3.material.io/components/sliders/guidelines).
+- Read: `../design/BEHAVIOR.md` sections 1, 2, 4, 5 and the OSD row in section 6, `../design/MOTION.md`, `../design/COMPONENTS.md`, and `../conventions/TESTING.md`.
+- Create: `modules/osd/Osd.qml`, `modules/osd/Osd.model.js`, and `tests/modules/osd/Osd.model.test.js`.
+- Move `ValueSlider.qml` and its model to `components/sliders/` and move the model test to `tests/components/sliders/`. Update its Control Center consumers and catalogue links.
+- Update: `shell.qml`, `services/Brightness.qml` and its model and tests, `modules/controlcenter/TopControls.qml`, `config/Sizing.qml`, `config/Motion.qml`, and the design docs.
+- [x] Observe output volume/mute, display brightness, and keyboard backlight changes after the initial device readings. Show one click-through pill under the bar on the focused screen, with a horizontal track, handle, and current state icon. Restart the 1.5 s timeout on each change.
+- [x] Render keyboard backlight with stop indicators from its reported integer range, including off. The shared slider supports both continuous and stepped tracks. Keep the existing interactive Control Center sliders working.
+- Done when: volume, mute, display brightness, and stepped keyboard backlight update in the nested session. Verify repeated input, hidden startup, timeout, and layer placement.
+- Verified in nested Hyprland with two outputs, a test PipeWire sink, and simulated brightness devices. Checked output changes and removal, click-through, and writes from both Control Center sliders.

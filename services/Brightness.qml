@@ -10,25 +10,20 @@ import QtQml
 Singleton {
     id: root
 
-    readonly property bool available: _backlight !== null
-    readonly property real value: available ? _desired / _backlight.max : 0
-    readonly property int refreshInterval: 1000
+    readonly property var display: _devices.display
+    readonly property var keyboard: _devices.keyboard
+    readonly property bool available: display !== null
+    readonly property real value: available ? _desired / display.max : 0
 
-    readonly property list<string> _command: ["brightnessctl", "-m", "-c", "backlight"]
-    property var _backlight: null
+    property var _devices: ({ display: null, keyboard: null })
     property int _pending: -1
     property int _writing: -1
     readonly property int _desired: _pending >= 0 ? _pending
                                   : _writing >= 0 ? _writing
-                                  : (_backlight?.current ?? -1)
-
-    function refresh(): void {
-        if (!worker.running && _pending < 0)
-            worker.exec([..._command, "info"]);
-    }
+                                  : (display?.current ?? -1)
 
     function set(value: real): void {
-        const target = Model.rawValue(value, _backlight?.max ?? 0);
+        const target = Model.rawValue(value, display?.max ?? 0);
         if (target >= 0 && target !== _desired) {
             _pending = target;
             _writePending();
@@ -39,11 +34,23 @@ Singleton {
         if (worker.running || _pending < 0)
             return;
         const target = _pending;
-        if (available && target !== _backlight.current) {
+        if (available && target !== display.current) {
             _writing = target;
-            worker.exec([..._command, "-d", _backlight.device, "set", String(target)]);
+            worker.exec(["brightnessctl", "-m", "-c", "backlight", "-d", display.device, "set", String(target)]);
         }
         _pending = -1;
+    }
+
+    Timer {
+        // Coalesce both device reads into one query while the OSD listens for external changes.
+        interval: 200
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: {
+            if (!worker.running && root._pending < 0)
+                worker.exec(["brightnessctl", "-m", "-l"]);
+        }
     }
 
     Process {
@@ -51,9 +58,13 @@ Singleton {
 
         stdout: StdioCollector { id: output }
         onExited: code => {
-            const state = code === 0 ? Model.parseInfo(output.text) : null;
-            if (state || root._writing < 0)
-                root._backlight = state;
+            if (root._writing < 0) {
+                root._devices = Model.parseDevices(code === 0 ? output.text : "");
+            } else if (code === 0) {
+                const display = Model.parseInfo(output.text);
+                if (display)
+                    root._devices = { display, keyboard: root.keyboard };
+            }
             root._writing = -1;
             Qt.callLater(root._writePending);
         }

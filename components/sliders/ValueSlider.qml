@@ -1,5 +1,6 @@
 pragma ComponentBehavior: Bound
 
+import qs.components as Components
 import qs.config
 import "ValueSlider.model.js" as Model
 
@@ -14,19 +15,22 @@ QQ.Item {
     property real maximumValue: 1
     property real stepSize: 0.01
     property real value: minimumValue
+    property bool interactive: true
+    property bool showStops: false
 
     signal moved(value: real)
 
     readonly property real _handleWidth: Math.min(width, Sizing.sliderHandleWidth)
     readonly property real _travel: width - _handleWidth
     readonly property real _valuePosition: Model.posFromValue(value, _travel, minimumValue, maximumValue)
-    readonly property real _position: pointer.pressed ? _pointerPosition(pointer.mouseX)
+    readonly property real _position: pointer.pressed && !showStops ? _pointerPosition(pointer.mouseX)
                                       : settle.running ? _settlingPosition : _valuePosition
     readonly property real _handleCenter: _handleWidth / 2 + Model.clamp(_position, 0, _travel)
+    readonly property real _trackHeight: showStops ? Math.min(height, Sizing.sliderStopTrackHeight) : height
     property real _settlingPosition: 0
 
     implicitHeight: Sizing.sliderHeight
-    activeFocusOnTab: enabled
+    activeFocusOnTab: enabled && interactive
     onValueChanged: settle.stop()
 
     function _requestValue(next: real): void {
@@ -43,7 +47,7 @@ QQ.Item {
     }
 
     function _step(direction: int): void {
-        if (enabled)
+        if (enabled && interactive)
             _requestValue(Model.stepValue(value, minimumValue, maximumValue, stepSize, direction));
     }
 
@@ -51,9 +55,9 @@ QQ.Item {
     QQ.Keys.onDownPressed: root._step(-1)
     QQ.Keys.onRightPressed: root._step(1)
     QQ.Keys.onUpPressed: root._step(1)
-    QQ.Accessible.role: QQ.Accessible.Slider
+    QQ.Accessible.role: interactive ? QQ.Accessible.Slider : QQ.Accessible.ProgressBar
     QQ.Accessible.name: accessibleName
-    QQ.Accessible.focusable: enabled
+    QQ.Accessible.focusable: enabled && interactive
     QQ.Accessible.onDecreaseAction: root._step(-1)
     QQ.Accessible.onIncreaseAction: root._step(1)
 
@@ -78,6 +82,8 @@ QQ.Item {
     }
 
     TrackSegment {
+        id: unfilled
+
         leading: false
         anchors.right: parent.right
         width: Math.max(0, root.width - root._handleCenter - root._handleWidth / 2 - Sizing.sliderHandleGap)
@@ -85,24 +91,46 @@ QQ.Item {
         contentColor: Theme.onSurfaceVariant
     }
 
+    QQ.Repeater {
+        model: root.showStops ? Model.stopValues(root.minimumValue, root.maximumValue, root.stepSize,
+                                                 root._travel, Sizing.sliderStopSpacing) : []
+
+        QQ.Rectangle {
+            required property real modelData
+            readonly property real inset: (Sizing.sliderStopSize + Sizing.sliderHandleGap) / 2
+            readonly property bool activeTrack: x + width <= filled.width
+
+            x: Model.clamp(root._handleWidth / 2 + Model.posFromValue(modelData, root._travel,
+                root.minimumValue, root.maximumValue), inset, root.width - inset) - width / 2
+            anchors.verticalCenter: parent.verticalCenter
+            width: Sizing.sliderStopSize
+            height: width
+            radius: Shape.full
+            visible: modelData !== root.value && (activeTrack || x >= unfilled.x)
+            color: activeTrack ? Theme.onPrimary : Theme.onSurfaceVariant
+            opacity: root.enabled ? 1 : Theme.disabledContentOpacity
+        }
+    }
+
     QQ.Rectangle {
         x: root._handleCenter - width / 2
-        width: root._handleWidth
+        width: pointer.pressed ? Math.min(root._handleWidth, Sizing.sliderPressedHandleWidth) : root._handleWidth
         height: root.height
         color: root.enabled ? Theme.primary : Theme.onSurface
         opacity: root.enabled ? 1 : Theme.disabledContentOpacity
         radius: Shape.full
     }
 
-    Icon {
-        anchors.right: parent.right
-        anchors.rightMargin: Sizing.pillHorizontalPadding
+    Components.Icon {
+        readonly property real paddedWidth: width + 2 * Sizing.pillHorizontalPadding
+        readonly property bool onActiveTrack: filled.width >= paddedWidth
+
         anchors.verticalCenter: parent.verticalCenter
-        visible: root.icon.length > 0 && root.width >= width + 2 * Sizing.pillHorizontalPadding
+        x: (onActiveTrack ? filled.width : root.width) - width - Sizing.pillHorizontalPadding
+        visible: !root.showStops && root.icon.length > 0 && (onActiveTrack || unfilled.width >= paddedWidth)
         name: root.icon
         size: Sizing.smallIconSize
-        color: !root.enabled ? Theme.onSurface
-             : filled.width >= x + width / 2 ? Theme.onPrimary : Theme.onSurfaceVariant
+        color: !root.enabled ? Theme.onSurface : onActiveTrack ? Theme.onPrimary : Theme.onSurfaceVariant
         opacity: root.enabled ? 1 : Theme.disabledContentOpacity
     }
 
@@ -110,6 +138,7 @@ QQ.Item {
         id: pointer
 
         anchors.fill: parent
+        enabled: root.interactive
         hoverEnabled: true
         preventStealing: true
         scrollGestureEnabled: false
@@ -131,7 +160,7 @@ QQ.Item {
         onReleased: mouse => {
             root._requestAt(mouse.x);
             settle.from = root._pointerPosition(mouse.x);
-            if (settle.from !== settle.to) {
+            if (!root.showStops && settle.from !== settle.to) {
                 root._settlingPosition = settle.from;
                 settle.start();
             }
@@ -144,7 +173,8 @@ QQ.Item {
         required property bool leading
         required property QQ.color contentColor
 
-        height: root.height
+        anchors.verticalCenter: parent.verticalCenter
+        height: root._trackHeight
         opacity: root.enabled ? 1 : Theme.disabledContainerOpacity
         radius: Shape.full
         topLeftRadius: leading ? radius : Shape.extraSmall
@@ -152,7 +182,7 @@ QQ.Item {
         topRightRadius: leading ? Shape.extraSmall : radius
         bottomRightRadius: topRightRadius
 
-        StateLayer {
+        Components.StateLayer {
             anchors.fill: parent
             radius: segment.radius
             topLeftRadius: segment.topLeftRadius

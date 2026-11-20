@@ -102,6 +102,9 @@ Popup `surfaceContainer` over wallpaper; cards `surfaceContainerHigh`. A soft sh
 | Tile height | 64 |
 | Tile grid | 4 columns, gap 8; large = 2 cols, small = 1 col |
 | Slider height | 40 |
+| Slider handle and track gap | 4 wide, 2 while pressed, 4 gap on each side at rest |
+| Stepped track and stops | 16 track height, 4 stop diameter, 12 minimum spacing between displayed stops |
+| OSD pill | 296 max width, 56 height, 8 padding |
 | Icon size | 24 (inside pills/buttons: 20) |
 | Min pointer target | 32 |
 | Icon set | Material Symbols Rounded, variable font, FILL 0/1 for off/on |

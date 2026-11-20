@@ -1,6 +1,7 @@
 pragma ComponentBehavior: Bound
 
 import qs.components as Components
+import qs.components.sliders as Sliders
 import qs.config
 import qs.services
 
@@ -14,21 +15,18 @@ Column {
     spacing: Sizing.popupGap
 
     Timer {
-        interval: Brightness.refreshInterval
+        interval: 1000
         repeat: true
         triggeredOnStart: true
         running: root.visible
-        onTriggered: {
-            Brightness.refresh();
-            NightLight.refresh();
-        }
+        onTriggered: NightLight.refresh()
     }
 
     Row {
         anchors.right: parent.right
         spacing: root.spacing
 
-        Components.ValueSlider {
+        Sliders.ValueSlider {
             width: Math.max(0, root.width - nightLight.width - parent.spacing)
             visible: Brightness.available
             accessibleName: qsTr("Brightness")
@@ -55,7 +53,7 @@ Column {
         spacing: root.spacing
         visible: Audio.available
 
-        Components.ValueSlider {
+        Sliders.ValueSlider {
             width: Math.max(0, root.width - mixer.width - parent.spacing)
             accessibleName: qsTr("Volume")
             icon: Audio.muted ? "volume_off" : "music_note"

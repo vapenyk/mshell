@@ -24,13 +24,15 @@ Icons and fonts are scaled by the compositor. Raster assets: avoid; use Material
 | Notification popup width | screen width − 16 (max 400) | 400 | 400 |
 | Launcher | 1 column list, no grid | grid 4 cols | grid 6 cols, 560 dp wide |
 | Calendar | 320 wide | 360 | 360 |
+| OSD width | screen width − 16 (max 296) | 296 | 296 |
 | Lock clock | headlineLarge-ish scale 0.5 | 0.75 | 1.0 |
 
 If a screen is wider than `extraLarge`, do not grow anything; popups stay the same size.
 
 ## Multi-monitor
 - `Bar` is a `Variants` over `Quickshell.screens`; one bar per screen.
-- Popups, OSD, launcher, notification popups appear on the **focused** screen (from `Compositor`), anchored to the pill that opened them where applicable.
+- Popups, launcher, and notification popups appear on the **focused** screen (from `Compositor`), anchored to the pill that opened them where applicable.
+- The OSD uses the focused display for each level change.
 - Lock covers every screen.
 - Hot-plug must not crash or duplicate: all per-screen state lives in the per-screen component, all system state in services.
 
@@ -39,6 +41,7 @@ If a screen is wider than `extraLarge`, do not grow anything; popups stay the sa
 2. If it would overflow horizontally, shift to fit with 8 dp margin.
 3. If it would overflow vertically, cap height at `screen height − bar − 16` and scroll the content (`Flickable`), never shrink typography.
 4. Popup content has `implicitWidth` from tokens and grows in height by content.
+5. The OSD sits 8 dp below the bar and 8 dp from the right screen edge.
 
 ## Content robustness (the "responsive" that actually breaks)
 - Every `Text` that can be long: `elide: Text.ElideRight`, `maximumLineCount`, and a fixed container width.

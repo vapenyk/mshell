@@ -40,3 +40,21 @@ function stepValue(value, min, max, step, direction) {
     var nextIndex = direction > 0 ? Math.floor(index) + 1 : Math.ceil(index) - 1;
     return clamp(min + nextIndex * step, min, max);
 }
+
+function stopValues(min, max, step, width, spacing) {
+    var intervals = Math.ceil((max - min) / step);
+    if (!Number.isSafeInteger(intervals) || intervals < 1 || step <= 0 || width <= 0 || spacing <= 0)
+        return [];
+
+    var capacity = Math.max(1, Math.floor(width / spacing));
+    var stride = Math.ceil(intervals / capacity);
+    var stops = [];
+    for (var index = 0; index < intervals; index += stride) {
+        var value = min + index * step;
+        if (value >= max)
+            break;
+        stops.push(value);
+    }
+    stops.push(max);
+    return stops;
+}
