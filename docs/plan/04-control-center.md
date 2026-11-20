@@ -25,13 +25,14 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - Done when: ControlCenter hosts it with `MainPage` as the root
 
 ## 4.3 ValueSlider
+- The component now lives in `components/sliders/`. [Step 10](10-slider.md) defines the size presets, handle geometry, and icon placement that supersede the initial look below.
 - Visual reference: shot [19](../design/reference/19-control-center-final.webp) for the two tracks and the gap around the handle.
 - Read: `../design/COMPONENTS.md` (ValueSlider), the [M3 sliders page](https://m3.material.io/components/sliders/overview), and shot 01 in `../design/reference/`.
 - Create: `components/ValueSlider.qml`, `components/ValueSlider.model.js`, `tests/components/ValueSlider.model.test.js`, and `tools/SliderPreview.qml`.
 - Update: `config/Sizing.qml` with slider geometry tokens and `config/Theme.qml` with the documented disabled opacity.
 - Verify the slider in a sandbox copy of MainPage using `SliderPreview` from `tools/` as its content. The preview holds its own interactive values.
 - [x] Model: `valueFromPos(x, width, min, max, step)`, `posFromValue(...)`, clamp
-- [x] Look: height 40, full radius, active track `primary`, rest `surfaceContainerHighest`, icon inside at the end, vertical handle bar
+- [x] Initial look: height 40, full radius, active track `primary`, rest `surfaceContainerHighest`, inset icon, vertical handle bar
 - [x] Drag follows pointer 1:1; release settles handle with spatial fast; keyboard arrows step
 - [x] Tests: clamp, step rounding, round-trip pos↔value, zero width
 - Done when: looks like shot 01 sliders (dark roles); tests pass

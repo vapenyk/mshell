@@ -93,4 +93,4 @@ Not used for: the control-center brightness/volume sliders (screenshot 01 shows 
 
 ### Other expressive touches (only these, add nothing else without a spec change)
 - Pill/tile **shape morph** on press (full → large) — spatial fast.
-- One scalloped/cookie shape for the lock-screen or calendar "today" accent (optional, plan step 09).
+- One scalloped/cookie shape for the lock-screen or calendar "today" accent (optional, [plan step 11](../plan/11-polish.md)).

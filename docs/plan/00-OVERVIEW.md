@@ -3,7 +3,7 @@
 Work in **small steps**. One step = one sitting = one commit. Read only the files the step lists.
 
 ## How to work a step
-1. Open the first step below that is not ✅. Open its file; do the first unchecked sub-step.
+1. Use the step the user selects. Otherwise, open the first step below that is not ✅. In that file, do the first unchecked sub-step unless the user selects one.
 2. Read only that sub-step's **Read** list.
 3. Create only the files in its **Create** list.
 4. Run its **Done when** checks. Fix, don't extend.
@@ -20,7 +20,9 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ✅ Calendar and keyboard · media deferred |
 | 07 | `07-launcher-osd.md` | launcher, OSD | 7.3 OSD with ASUS Fn and bottom-center placement ✅ · launcher pending |
 | 08 | `08-lock-powermenu.md` | lock, Control Center power menu | ✅ |
-| 09 | `09-polish.md` | motion tuning, responsive pass, cleanup | ⬜ |
+| 09 | `09-m3-finalize.md` | M3 container roles, panel shadows, reply focus | ⬜ |
+| 10 | `10-slider.md` | shared slider sizing, interaction, and stops | ⬜ |
+| 11 | `11-polish.md` | motion tuning, responsive pass, cleanup | ⬜ |
 
 Backlog (no plan yet, don't start): dock, screenshot toolbar, settings window, desktop widgets.
 

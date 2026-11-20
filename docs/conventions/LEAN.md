@@ -13,7 +13,7 @@ The failure mode is a pile of code nobody uses. These rules exist to prevent it.
 9. **One fact, one owner.** If a service has it, UI doesn't recompute or re-fetch it.
 10. **Size budgets.** QML ≤ 200 lines, model ≤ 150, function ≤ 30. Over budget = split, or the design is wrong.
 11. **Small commits.** One plan step (or sub-step) per commit: `04.3: ValueSlider`. Never mix two steps.
-12. **Stop at "Done when".** Finishing a step means stopping. No polish beyond the step's list; polish has its own step (09).
+12. **Stop at "Done when".** Finishing a step means stopping. General polish is covered by [step 11](../plan/11-polish.md).
 
 ## End-of-step checklist
 - [ ] Only planned files created/changed

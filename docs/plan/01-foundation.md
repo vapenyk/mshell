@@ -38,7 +38,7 @@ Goal: shell starts, settings load, tokens exist, a themed clock shows. Nothing e
 - Update: `shell.qml` to load the token singletons at startup and `../design/MOTION.md` to record the verified Qt easing enum.
 - [x] Typography: every role as an object `{ size, lineHeight, weight }` + `family`
 - [x] Shape: radius scale as properties
-- [x] Motion: durations, easing curves as `[x1,y1,x2,y2,1,1]` arrays, spring presets (`spring`, `damping`, `mass`) for the six tokens (rough values; tuned in step 09)
+- [x] Motion: durations, easing curves as `[x1,y1,x2,y2,1,1]` arrays, spring presets (`spring`, `damping`, `mass`) for the six tokens (rough values; tuned in [step 11](11-polish.md))
 - [x] Fonts present (see open questions); fallbacks set
 - Done when: files load without errors; every token in the docs has a property; no value in the docs is missing
 

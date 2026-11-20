@@ -4,7 +4,7 @@ Quickshell shell, Material 3 Expressive, dark only, one user-picked accent.
 Read this file, then ONLY the files your current task points to. Do not read all of `docs/`.
 
 ## Start here
-1. `docs/plan/00-OVERVIEW.md` — find the first unchecked step.
+1. `docs/plan/00-OVERVIEW.md` — use the step the user selects. Otherwise, find the first unchecked step.
 2. Open that step file. Do that step only. Its "Read" list is your whole reading list.
 3. When done: tick the TODOs, update the table in `00-OVERVIEW.md`, stop.
 

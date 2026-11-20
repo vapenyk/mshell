@@ -19,6 +19,7 @@ Before starting launcher work (7.1 or 7.2), contact the user to discuss how it s
 ## 7.3 OSD
 
 The IPC follow-up below defines the current OSD behavior.
+[Step 10](10-slider.md) defines the shared slider geometry, stops, and icon placement for the OSD.
 
 ### Initial implementation (complete)
 
