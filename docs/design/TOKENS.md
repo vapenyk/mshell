@@ -1,6 +1,6 @@
 # TOKENS — the only source of numbers
 
-Units: **1 dp = 1 logical pixel** (Wayland already scales; never multiply by devicePixelRatio).
+Units: **1 dp = 1 logical pixel**. Qt and Wayland apply display scaling to logical geometry.
 Anything marked `verify` was written from memory of the M3 spec; check once against `REFERENCES.md`, then delete the mark.
 Anything marked `project` is our decision, not M3.
 
@@ -66,6 +66,8 @@ Family: Roboto Flex if installed (variable, enables expressive weights), else Ro
 
 Lock-screen clock (screenshot 18) uses a project role `clockHuge`: 120 / 112, weight 500, two stacked lines (HH over MM).
 
+Bar pills use `labelLarge`.
+
 Lock uses an opaque gradient from `surfaceContainer` to `surface` as its fallback. A supplied wallpaper uses the `lockBackgroundBlur` radius and `lockWallpaperScrimOpacity` over the image.
 
 ## Shape (`Shape.qml`) — corner radius scale, dp `verify`
@@ -75,7 +77,8 @@ Lock uses an opaque gradient from `surfaceContainer` to `surface` as its fallbac
 |---|---|
 | Popup / panel | extraLarge |
 | Card | large |
-| Tile, Pill, Button, IconButton, Search bar | full (pill) — tiles may use `extraLarge` if 64 dp tall looks too round |
+| Tile | extraLarge |
+| Pill, Button, IconButton, Search bar | full (pill) |
 | Tile icon chip | `large` square-ish (screenshot 07) |
 | List group, first/last item | large; inner items `extraSmall` (screenshot 02) |
 | Dialog | extraLarge |
@@ -88,23 +91,29 @@ Popup `surfaceContainer` over wallpaper; cards `surfaceContainerHigh`. A soft sh
 ## Sizing (`project`)
 | Thing | Size |
 |---|---|
-| Bar window height | 44 (4 margin around pills) |
+| Bar window height | 44 |
 | Pill height | 32; min width 32 (icon only) |
 | Pill horizontal padding | 8 (pills with text or trailing content) |
 | Pill gap | 6 |
 | Bar side margin | 8 |
 | Popup gap below bar | 8 |
-| Control center width | 400 (see RESPONSIVE) |
+| Control Center, notification center, and toast max width | 400 (see RESPONSIVE) |
+| Power menu width | 184 |
+| Confirmation dialog max width | 360 |
 | Popup inner padding | 16 |
 | Notification avatar and app badge | 40 and 18 |
 | Notification thumbnail and expanded preview | 56 × 40 thumbnail, preview max height 200 |
 | Notification reply field and Send target | 48 high, field radius full |
-| Tile height | 64 |
+| Calendar day row height and marker size | 44 and 36 |
+| Keyboard layout row height | 52 |
+| Lock password field | 320 max width × 48 high |
+| Tile height and icon chip size | 64 and 48 |
 | Tile grid | 4 columns, gap 8; large = 2 cols, small = 1 col |
-| Slider height | 40 |
+| Slider and default button height | 40 |
 | Slider handle and track gap | 4 wide, 2 while pressed, 4 gap on each side at rest |
 | Stepped track and stops | 16 track height, 4 stop diameter, 12 minimum spacing between displayed stops |
 | OSD pill | 296 max width, 56 height, 8 padding, 16 bottom margin |
+| Switch track | 52 × 32 |
 | Icon size | 24 (inside pills/buttons: 20) |
 | Min pointer target | 32 |
 | Icon set | Material Symbols Rounded, variable font, FILL 0/1 for off/on |

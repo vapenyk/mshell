@@ -3,8 +3,7 @@
 A shell does not reflow like a web page. It must survive: different screen sizes and scale factors, multiple monitors, hot-plug, and long/short content. M3 window size classes are used as the vocabulary.
 
 ## Units
-1 dp = 1 logical px. Never read `devicePixelRatio`. Never use screen-percent sizes for popups; use dp from `TOKENS.md`.
-Icons and fonts are scaled by the compositor. Raster assets: avoid; use Material Symbols.
+1 dp = 1 logical px. Use the dp tokens in `TOKENS.md` for layout, including geometry and type. Qt and Wayland apply the display scale. Raster decode sizes can use the relevant screen's `devicePixelRatio`.
 
 ## Size classes (by the **screen's logical width**) `verify`
 | Class | Width dp |
@@ -21,25 +20,25 @@ Icons and fonts are scaled by the compositor. Raster assets: avoid; use Material
 |---|---|---|---|
 | Bar | pills shrink: media pill icon-only, clock without date | media pill text capped 160 dp | media pill text capped 240 dp |
 | Control center width | screen width − 16 (max 400) | 400 | 400 |
-| Notification popup width | screen width − 16 (max 400) | 400 | 400 |
+| Notification center and toast width | screen width − 16 (max 400) | 400 | 400 |
 | Launcher | 1 column list, no grid | grid 4 cols | grid 6 cols, 560 dp wide |
-| Calendar | 320 wide | 360 | 360 |
+| Calendar width | screen width − 16 (max 320) | 360 | 360 |
+| Keyboard picker width | screen width − 16 (max 296) | 296 | 296 |
 | OSD width | screen width − 16 (max 296) | 296 | 296 |
-| Lock clock | headlineLarge-ish scale 0.5 | 0.75 | 1.0 |
+| Lock clock scale (`clockHuge`) | 0.5 | 0.75 | 1.0 |
 
 If a screen is wider than `extraLarge`, do not grow anything; popups stay the same size.
 
 ## Multi-monitor
 - `Bar` is a `Variants` over `Quickshell.screens`; one bar per screen.
-- Popups, launcher, and notification popups appear on the **focused** screen (from `Compositor`), anchored to the pill that opened them where applicable.
-- The OSD resolves the focused display for each IPC action or ASUS keyboard backlight event that opens or extends it.
+- Anchored popups appear on the display of the pill that opened them. Notification toasts arrive on the focused display selected by `Compositor`. The OSD resolves the focused display for each IPC action or ASUS keyboard backlight event that opens or extends it.
 - Lock covers every screen.
 - Hot-plug must not crash or duplicate: all per-screen state lives in the per-screen component, all system state in services.
 
 ## Popup placement
-1. Anchor under the pill, aligned to the pill's nearer screen edge. Center the keyboard layout picker under its pill.
-2. If it would overflow horizontally, shift to fit with 8 dp margin.
-3. If it would overflow vertically, cap height at `screen height − bar − 16` and scroll the content (`Flickable`), never shrink typography.
+1. Open 8 dp below the bar. Align the popup to the pill's left or right edge according to which half of the screen contains the pill's center. Center the keyboard layout picker under its pill.
+2. Cap the width at the preferred width or available screen width with 8 dp margins on each side, whichever is smaller. Shift the popup as needed to keep both margins.
+3. Cap the height at `screen height − bar height − popup gap − bottom margin`. Scroll overflowing content at its original text size.
 4. Popup content has `implicitWidth` from tokens and grows in height by content.
 5. The OSD is horizontally centered with a 16 dp margin from the bottom edge of the focused screen.
 

@@ -36,13 +36,6 @@ Items marked **verify** depend on your Quickshell version; check once on first u
 - Lists from JS arrays: `ScriptModel { values: … ; objectProp: "id" }` so delegates survive updates.
 - Persist across `--reload` only if a step says so: `PersistentProperties { reloadableId: "…" }`.
 
-## Visuals
-- No literals for color, radius, size, duration, font. Tokens only (`TOKENS.md`).
-- Hover/press/focus: put a `StateLayer` inside the component. Do not hand-roll `onEntered` color changes.
-- Animation parameters come from `Motion` (`duration: Motion.short4`, `easing.bezierCurve: Motion.standard`, springs via presets such as `Motion.spatialDefault.spring` / `.damping`). No inline `duration: 200`.
-- Text: `Text` component with a `role`, never raw `QtQuick.Text` with a font size.
-- Elide long text; give containers explicit max widths (`RESPONSIVE.md`).
-
 ## Don'ts
 - No commented-out code. No TODO comments (TODOs live in `docs/plan`).
 - No "just in case" properties, signals, or config keys.
