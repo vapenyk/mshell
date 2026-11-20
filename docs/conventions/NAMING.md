@@ -44,7 +44,7 @@ One row = one feature. If you add a feature, add its row here first.
 | Media | `modules/media` | `Media` | `MediaCard.model.js`, `WavyBar.model.js` | — | — | 10, 11 |
 | Calendar | `modules/calendar` | `Time` | `Calendar.model.js` | — | — | 12 |
 | Launcher | `modules/launcher` | `Apps` | `Fuzzy.js` (utils) | `launcher` | — | 13 |
-| OSD | `modules/osd` | `Audio`, `Brightness`, `Compositor`, `UiState` | `Osd.model.js` | `osd` | — | 41–43 |
+| OSD | `modules/osd` | `Audio`, `Brightness`, `Compositor`, `UiState`, `AsusKeyboardBacklight` | `Osd.model.js` | `osd` | — | 41–43 |
 | Lock | `modules/lock` | `Time`, `UiState`, `Quickshell.Services.Pam` | — | `lock` | — | 57, 18 |
 | Power menu | `modules/powermenu` | `UiState`, `Power`, `Compositor` | `Power.model.js` | `powermenu` | — | 40 |
 
@@ -55,5 +55,6 @@ Notifs service ──► Bar NotifPill (badge)  /  NotifPopup (card)  /  NotifCe
 Modes service  ──► ModesTile, DND icon in bar, Notifs (suppress popups)
 Audio/Brightness ──► TopControls sliders and Osd values
 Hyprland keys ──► osd IPC ──► Audio/Brightness actions and Osd display
+ASUS keyboard backlight hardware event ──► AsusKeyboardBacklight ──► Brightness refresh and Osd display
 ```
 Features read services; features never read each other's components.

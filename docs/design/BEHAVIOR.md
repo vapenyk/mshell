@@ -10,7 +10,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Popup (control center, notification center, calendar, media, keyboard) | Overlay | on demand (only while open) | whole popup | screen of the pill that opened it | closes on outside click via focus grab |
 | Notification popups | Overlay | none on arrival, exclusive only during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
 | Launcher | Overlay | exclusive while open | whole | focused screen | |
-| OSD | Overlay | none | **none** (fully click-through) | focused screen at each OSD action | one pill under the bar, top-right |
+| OSD | Overlay | none | **none** (fully click-through) | focused screen at each OSD action | one pill, bottom center |
 | Power dropdown | Inside Control Center | menu focus while open | dropdown and outside dismissal within Control Center | screen of the Control Center | anchored under the Power button |
 | Confirmation dialog | Overlay | exclusive while open | whole + scrim | screen where the action was chosen | |
 | Lock | session lock | exclusive | whole | every screen | nothing else is visible |
@@ -99,14 +99,14 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Keyboard popup | KeyboardPill | outside, Esc, pill, swap, layout selection | fade through when swapping |
 | Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade + slide |
 | Launcher | IPC | Esc, outside, launch | fade + scale / fade |
-| OSD | volume, mute, display brightness, or keyboard backlight IPC action | 1.5 s timeout from the last action, Control Center opens, session locks, or output is removed | fade + slide / fade on timeout |
+| OSD | volume, mute, or brightness IPC action or ASUS keyboard backlight hardware event | 1.5 s timeout from the last action, Control Center opens, session locks, or output is removed | fade + slide / fade on timeout |
 | Power menu | CC power button, IPC | Esc, outside, button, action | fade through |
 | Power confirmation | Restart or Power off | Esc, outside, Cancel, confirm | |
 | Lock | Power menu, IPC, future idle trigger | successful PAM auth | fade in |
 
 On the lock surface the bar displays its live indicators. Clicking the bar focuses the password input. The native Wayland session lock keeps the desktop and its popups behind the lock surfaces. The Power menu and IPC share the lock request in `UiState`, which is also the entry point for the future idle trigger.
 
-The OSD opens and extends its timeout on key actions delivered through IPC. An action selects the focused screen and updates the contents of the same pill. A visible pill follows the live system level. Control Center sliders and external level changes only update that level. Opening Control Center or locking the session hides the OSD immediately. The keys continue to change levels in both states. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
+The OSD opens and extends its timeout on key actions delivered through IPC or an ASUS keyboard backlight hardware event. The ASUS adapter watches `brightness_hw_changed` and requests a fresh reading from `Brightness`. The ASUS driver performs the hardware write. An action selects the focused screen and updates the contents of the same pill. A visible pill follows the live system level. Control Center sliders and ordinary software writes only update that level. Opening Control Center or locking the session hides the OSD immediately. The keys continue to change levels in both states. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
 
 ## 7. Notifications (freedesktop semantics, not M3)
 - Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.

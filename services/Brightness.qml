@@ -18,6 +18,7 @@ Singleton {
     property var _devices: ({ display: null, keyboard: null })
     property var _queue: []
     property var _writing: null
+    property bool _refreshPending: false
     readonly property var _displayTarget: Model.displayTarget(_queue, _writing, display?.device)
 
     function set(value: real): void {
@@ -28,18 +29,31 @@ Singleton {
         return _enqueue(Model.relativeWrite(kind, _devices[kind], direction));
     }
 
+    function refresh(): void {
+        _refreshPending = true;
+        _runPending();
+    }
+
     function _enqueue(write: var): bool {
         if (!write)
             return false;
 
         _queue = Model.enqueue(_queue, write);
-        _writePending();
+        _runPending();
         return true;
     }
 
-    function _writePending(): void {
-        if (worker.running || _writing || !_queue.length)
+    function _runPending(): void {
+        if (worker.running || _writing)
             return;
+
+        if (!_queue.length) {
+            if (_refreshPending) {
+                _refreshPending = false;
+                worker.exec(["brightnessctl", "-m", "-l"]);
+            }
+            return;
+        }
 
         const write = _queue[0];
         const device = _devices[write.kind];
@@ -47,21 +61,17 @@ Singleton {
             _writing = write;
             worker.exec(Model.writeCommand(write, device));
         } else {
-            Qt.callLater(_writePending);
+            Qt.callLater(_runPending);
         }
         _queue = _queue.slice(1);
     }
 
     Timer {
-        // Read both devices together when the write queue is idle.
         interval: 200
         repeat: true
         running: true
         triggeredOnStart: true
-        onTriggered: {
-            if (!worker.running && !root._writing && !root._queue.length)
-                worker.exec(["brightnessctl", "-m", "-l"]);
-        }
+        onTriggered: root.refresh()
     }
 
     Process {
@@ -80,7 +90,7 @@ Singleton {
                 };
             }
             root._writing = null;
-            Qt.callLater(root._writePending);
+            Qt.callLater(root._runPending);
         }
     }
 }

@@ -57,4 +57,5 @@ Singleton {
     readonly property int sliderStopSize: 4
     readonly property int sliderStopSpacing: 12
     readonly property int osdWidth: 296
+    readonly property int osdBottomMargin: 16
 }

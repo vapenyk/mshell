@@ -42,7 +42,7 @@ Update `services/{Audio,Brightness}.qml`, `services/{Audio,Brightness}.model.js`
 
 1. [x] Add and test the service operations. Volume keys change the level by 2 percentage points within 0–100%. `volumeUp` clears mute and raises volume in the same action. `volumeDown` preserves mute. `toggleMute` changes only mute.
 2. [x] Queue relative screen brightness commands `5%+` and `5%-` in order, including under repeat. Each command uses the current device level. Use a minimum of 1% of the hardware maximum, rounded up to a raw integer, for both the key actions and the Control Center slider. The slider currently uses a 5% minimum. Keyboard backlight uses relative one-level steps from zero to the hardware maximum. Apply `-n` only to screen brightness. [brightnessctl usage](https://github.com/Hummer12007/brightnessctl#usage)
-3. [x] Open or extend the OSD through the `osd` IPC actions only. Bind the displayed value to the relevant service. The click-through window stays below the bar and switches content in place on the same monitor. Every accepted action, including a repeat at a range limit, restarts the single 1.5 s timer when the OSD is eligible to show. Slider writes and external device changes can update visible content. Remove the change-origin tracking and all show or timeout triggers tied to value changes.
+3. [x] Open or extend the OSD through the `osd` IPC actions and the ASUS exception described below. Bind the displayed value to the relevant service. The click-through window switches content in place on the same monitor. Every accepted action, including a repeat at a range limit, restarts the single 1.5 s timer when the OSD is eligible to show. Slider writes and external device changes can update visible content. Remove the change-origin tracking and all show or timeout triggers tied to value changes.
 4. [x] Select `Compositor.focusedScreen` for each IPC action that opens or extends the OSD. After a focus change, the next action moves the OSD to the focused output. On output removal, close the OSD and resolve the focused output on the next action.
 5. [x] Use `UiState` to close the OSD immediately when Control Center opens or the session locks. IPC actions still change levels while Control Center is open or the session is locked. The OSD stays hidden in both cases. A new action after closing the panel or unlocking can show it again.
 6. [x] Test the IPC and Lua bindings in the nested sandbox before replacing the direct host binds for the listed keys. Each command uses `qs -c mshell ipc call osd <method>`. Use `hl.bind` with `hl.dsp.exec_cmd`, keep `locked = true` on the existing volume and screen brightness keys, and set `repeating = true` for up/down. Mute uses a single action. Bind keyboard backlight only after verifying which events the laptop emits and whether firmware already handles them.
@@ -61,3 +61,21 @@ Update `services/{Audio,Brightness}.qml`, `services/{Audio,Brightness}.model.js`
 8. [x] Update the behavior and IPC documentation to match the result. Run model tests and `sh tools/unused.sh`, tick the completed checks, update `00-OVERVIEW.md`, and commit the follow-up.
 
 Verified in nested Hyprland with two outputs, an isolated PipeWire sink, simulated brightness devices, and virtual media keys. The five existing host audio and screen brightness bindings use the tested IPC targets. The ASUS WMI device reports hardware-driven keyboard backlight changes and exposes no keyboard backlight key events. Its Fn behavior stays with the driver. `keyboardBrightnessUp` and `keyboardBrightnessDown` are available through IPC.
+
+### 7.3 follow-up — ASUS keyboard backlight key
+
+Read `services/Brightness.qml`, `modules/osd/Osd.qml`, and the OSD rules in `../design/{BEHAVIOR,RESPONSIVE}.md`. Create `services/AsusKeyboardBacklight.qml`. Update those files and the OSD entry in `../conventions/NAMING.md`. Remove the temporary keyboard backlight probe from `~/.config/hypr/hyprland.lua` after verification.
+
+- [x] Use a single optional ASUS service to watch the driver's `brightness_hw_changed` notification. Refresh the shared `Brightness` reading and present it through one connection in `Osd.qml`. The driver owns the write. Removing the service and its OSD connection removes the exception.
+- [x] Check in nested Hyprland that only the ASUS hardware event and the explicit IPC actions open the keyboard OSD. Check startup, ordinary backlight writes, event repeats, Control Center suppression, and hosts without the ASUS device. Confirm the native Fn key with a hardware event when available.
+
+Verified the real ASUS Fn key on the laptop and confirmed the indicator with the user. The nested run also covered a simulated non-ASUS device.
+
+### 7.3 follow-up — bottom-center placement
+
+The user chose to center the OSD horizontally near the bottom edge of the focused monitor to keep it clear of notifications and windows at the top.
+
+Read and update `modules/osd/Osd.qml`, `config/Sizing.qml`, and the OSD rules in `../design/{BEHAVIOR,MOTION,RESPONSIVE,TOKENS}.md`.
+
+- [x] Anchor the pill to the bottom center with a 16 dp bottom margin. Bring it in from the bottom and keep the current click-through behavior, focus selection, and timeout.
+- [x] Verify the position on two outputs in nested Hyprland and show a notification toast at the same time to confirm their bounds do not overlap.

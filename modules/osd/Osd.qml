@@ -62,11 +62,15 @@ PanelWindow {
         function keyboardBrightnessDown(): void { root._show("keyboard", Brightness.step("keyboard", -1)); }
     }
 
+    Connections {
+        target: AsusKeyboardBacklight
+        function onHardwareChanged(): void { root._show("keyboard", Brightness.keyboard !== null); }
+    }
+
     screen: _targetScreen
     visible: !_suppressed && _targetScreen !== null && _reading !== null && (_shown || pill.opacity > 0)
-    anchors { top: true; right: true }
-    margins.top: Sizing.barHeight + Sizing.popupGap
-    margins.right: Sizing.barSideMargin
+    anchors.bottom: true
+    margins.bottom: Sizing.osdBottomMargin
     implicitWidth: Math.max(1, Math.min(Sizing.osdWidth,
         (_targetScreen?.width ?? 0) - 2 * Sizing.barSideMargin))
     implicitHeight: Sizing.sliderHeight + 2 * Sizing.pillHorizontalPadding
@@ -93,7 +97,7 @@ PanelWindow {
         opacity: root._shown ? 1 : 0
 
         transform: Translate {
-            y: root._shown || pill.opacity > 0 ? 0 : -Motion.popupSlideDistance
+            y: root._shown || pill.opacity > 0 ? 0 : Motion.popupSlideDistance
 
             Behavior on y {
                 enabled: root._shown

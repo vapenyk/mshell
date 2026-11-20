@@ -48,7 +48,7 @@ QML uses `easing.type: Easing.BezierSpline` with `easing.bezierCurve: [x1,y1,x2,
 | Tile reorder | spatial default on x/y |
 | Page push/pop in `PageStack` | **shared axis X** (see Transition patterns) |
 | Slider handle release | spatial fast |
-| OSD in | spatial fast slide, `short2` fade |
+| OSD in | spatial fast slide up from the bottom, `short2` fade |
 | Pill hover/press | state layer fade short2; pressed shape squash optional (radius `full`→`large`) |
 | Notification popup in | spatial default from top, out: fade + slide short4 |
 | Media card expand from pill | **container transform** (see Transition patterns) |
