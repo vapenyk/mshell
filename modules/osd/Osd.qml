@@ -93,6 +93,7 @@ PanelWindow {
 
         width: parent.width
         height: parent.height
+        container: Theme.surfaceContainer
         radius: Shape.full
         opacity: root._shown ? 1 : 0
 

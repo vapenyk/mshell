@@ -6,12 +6,12 @@ The [overview](00-OVERVIEW.md#how-to-work-a-step) defines the order. This step u
 
 Read [TOKENS.md](../design/TOKENS.md), [COMPONENTS.md](../design/COMPONENTS.md), [STRUCTURE.md](../conventions/STRUCTURE.md), and [LEAN.md](../conventions/LEAN.md). Review `components/{Surface,PopupWindow,AnchoredPopup,Dialog,Pill,Tile}.qml`, `modules/controlcenter/PowerMenu.qml`, `modules/notifications/{NotifCard,NotifGroup,NotifToast}.qml`, and `modules/osd/Osd.qml`.
 
-- [ ] Extend the existing **Which role for what** table in `TOKENS.md`. It defines the background and shape of each role. `COMPONENTS.md` maps roles to files, and [BEHAVIOR.md](../design/BEHAVIOR.md) defines layers, focus, and dismissal.
-- [ ] Add two rows that share `Shape.full`. Bar pills use a transparent background at rest and `secondaryContainer` when active. The OSD uses `surfaceContainer`.
-- [ ] Document `Card` with `surfaceContainerHigh` and `Shape.large`. Preserve the smaller inner corners in notification groups. `NotifToast` uses the same card.
-- [ ] Check `Tile` against its current tokens. It uses `surfaceContainerHigh` when inactive, `primary` when active, and `Shape.extraLarge` for its corners. Confirmation dialogs use `surfaceContainerHigh`, `Shape.extraLarge`, and a scrim through `Dialog.qml`.
-- [ ] Keep `Surface.qml` as the shared primitive for background, shape, and optional shadow. It accepts a `container` color and a radius and owns `RectangularShadow`. Use the shared `Theme.popupShadow` for popup shadows. Cards, tiles, and bar pills use their tonal fills to establish hierarchy.
-- [ ] Check `Tile.qml`, `Pill.qml`, `PopupWindow.qml`, and `NotifCard.qml` against the agreed roles. Use named tokens for the colors and radii. Use Panel, Card, Tile, Pill, OSD, and Dialog consistently in documentation and implementation comments.
+- [x] Extend the existing **Which role for what** table in `TOKENS.md`. It defines the background and shape of each role. `COMPONENTS.md` maps roles to files, and [BEHAVIOR.md](../design/BEHAVIOR.md) defines layers, focus, and dismissal.
+- [x] Add two rows that share `Shape.full`. Bar pills use a transparent background at rest and `secondaryContainer` when active. The OSD uses `surfaceContainer`.
+- [x] Document `Card` with `surfaceContainerHigh` and `Shape.large`. Preserve the smaller inner corners in notification groups. `NotifToast` uses the same card.
+- [x] Check `Tile` against its current tokens. It uses `surfaceContainerHigh` when inactive, `primary` when active, and `Shape.extraLarge` for its corners. Confirmation dialogs use `surfaceContainerHigh`, `Shape.extraLarge`, and a scrim through `Dialog.qml`.
+- [x] Keep `Surface.qml` as the shared primitive for background, shape, and optional shadow. It accepts a `container` color and a radius and owns `RectangularShadow`. Use the shared `Theme.popupShadow` for popup shadows. Cards, tiles, and bar pills use their tonal fills to establish hierarchy.
+- [x] Check `Tile.qml`, `Pill.qml`, `PopupWindow.qml`, and `NotifCard.qml` against the agreed roles. Use named tokens for the colors and radii. Use Panel, Card, Tile, Pill, OSD, and Dialog consistently in documentation and implementation comments.
 
 ### File hierarchy
 
@@ -44,7 +44,7 @@ Use [STRUCTURE.md](../conventions/STRUCTURE.md) for the folder boundaries. A fea
 
 The source audit covered all 56 QML files in `components/` and `modules/`. It traced the windows assembled by `shell.qml`, checked the design tokens in `config/`, and compared each in-scope base background and its owner against the agreed roles. Visual and input checks are listed in 9.2 and 9.3.
 
-| Surface | Current implementation | Work in step 09 |
+| Surface | Implementation before 9.1 | Work in step 09 |
 |---|---|---|
 | Shared primitive | `Surface.qml` is the sole owner of `RectangularShadow` and uses `Theme.popupShadow`. | Reuse the existing shadow and component properties. |
 | Anchored panels | Control Center, Notification Center, Calendar, and the keyboard layout picker already follow `AnchoredPopup → PopupWindow → Surface → content`. `PopupWindow` already uses `surfaceContainer` and `Shape.extraLarge`. | Enable the shared shadow and check its window bounds in 9.2. |
@@ -55,7 +55,9 @@ The source audit covered all 56 QML files in `components/` and `modules/`. It tr
 | Confirmation dialog | `Dialog.qml` uses a centered `Surface` with the agreed tokens and a separate scrim. | Verify the existing dialog treatment. |
 
 - [x] Check the audited backgrounds for literal colors and corner sizes. The audit found none in the reviewed roles. `sh tools/unused.sh` also passed on the audited source.
-- [ ] Replace the tile's base background with `Surface` and verify active, inactive, hover, pressed, and focus appearance. Keep inner indicators, icon chips, borders, and scrims as elements within their respective controls and surfaces.
+- [x] Replace the tile's base background with `Surface` and verify active, inactive, hover, pressed, and focus appearance. Keep inner indicators, icon chips, borders, and scrims as elements within their respective controls and surfaces.
+
+Verified the five Tile states in Control Center on a headless output within nested Hyprland. Also checked the bar Pill at rest and with Control Center open, the notification toast Card, and the OSD using simulated display brightness. All 89 model tests and the unused-file check passed.
 
 The transparent bar window and native lock surface have their own window roles. The audit also checked the notification history cards, tooltip, selectable rows, and calendar cells. `Button`, `IconButton`, `TextField`, and `NotifActionButton` draw their own token-based stateful control backgrounds. Their control treatments are outside the base container fixes in this step.
 

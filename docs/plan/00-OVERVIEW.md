@@ -20,7 +20,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ✅ Calendar and keyboard · media deferred |
 | 07 | `07-launcher-osd.md` | launcher, OSD | 7.3 OSD with ASUS Fn and bottom-center placement ✅ · launcher pending |
 | 08 | `08-lock-powermenu.md` | lock, Control Center power menu | ✅ |
-| 09 | `09-m3-finalize.md` | M3 container roles, panel shadows, reply focus | ⬜ |
+| 09 | `09-m3-finalize.md` | M3 container roles, panel shadows, reply focus | 9.1 Container roles ✅ · 9.2–9.3 pending |
 | 10 | `10-slider.md` | shared slider sizing, interaction, and stops | ⬜ |
 | 11 | `11-polish.md` | motion tuning, responsive pass, cleanup | ⬜ |
 

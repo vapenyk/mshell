@@ -5,6 +5,19 @@ Spec dp values come from each [M3 page](REFERENCES.md)'s **Specs** tab; copy onl
 
 Check this catalogue before creating a UI component. Look for a shared component first, then for a component local to the feature. Keep the catalogue current when components are added, moved, or removed. See [the rule of two](../conventions/LEAN.md).
 
+## Container roles
+
+[Tokens](TOKENS.md#which-role-for-what-shell-mapping-project) define each role's fill and shape. [Behavior](BEHAVIOR.md#1-surfaces-and-layers) defines its window and input rules. [Surface.qml](../../components/Surface.qml) owns the base fill, corner radii, and optional `RectangularShadow` using `Theme.popupShadow`.
+
+| Role | Implementation |
+|---|---|
+| Panel | [AnchoredPopup](../../components/AnchoredPopup.qml) manages the lifecycle. [PopupWindow](../../components/PopupWindow.qml) sets the width from `preferredWidth` subject to screen bounds and owns the window and its Surface around feature content. The [power dropdown](../../modules/controlcenter/PowerMenu.qml) is inline in Control Center and supplies its own Surface. |
+| Card | [NotifCard](../../modules/notifications/NotifCard.qml) owns its Surface. [NotifGroup](../../modules/notifications/NotifGroup.qml) sets the joined corners. [NotifToast](../../modules/notifications/NotifToast.qml) uses the same Card and manages its timeout. |
+| Tile | [Tile](../../components/Tile.qml) uses Surface behind the state layer and the icon or labels. |
+| Pill | [Pill](../../components/Pill.qml) owns the Surface and active fill. Bar wrappers set the idle fill. |
+| OSD | [Osd](../../modules/osd/Osd.qml) owns the click-through window and the Surface behind the shared slider. |
+| Dialog | [Dialog](../../components/Dialog.qml) owns the modal window, scrim, and centered Surface for confirmations. |
+
 ## Shared components
 
 | Component | File | Use | M3 reference | Step |

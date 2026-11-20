@@ -48,8 +48,8 @@ QQ.Item {
             }
         }
 
-        background: QQ.Rectangle {
-            color: root.active ? Theme.primary : Theme.surfaceContainerHigh
+        background: Surface {
+            container: root.active ? Theme.primary : Theme.surfaceContainerHigh
             radius: Shape.extraLarge
 
             StateLayer {

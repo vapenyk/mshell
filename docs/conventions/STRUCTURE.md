@@ -41,6 +41,7 @@ services ──►  utils
 - A module never imports another module. To affect another module: write to `UiState` or call IPC.
 - `*.model.js` imports nothing from Quickshell/QtQuick. Only other pure JS (`utils/`).
 - `shell.qml` composes modules and supplies their public properties, including content components. The host manages placement and gives focus to the content. The supplied component owns its internal actions and focus.
+- `config/` supplies the shared container tokens. `Surface.qml` paints the background, shape, and optional shadow. Shared window components own placement and input, and modules supply the content and role. See the [container role catalogue](../design/COMPONENTS.md#container-roles).
 
 ## Decision table — "where does this go?"
 | I'm writing… | Goes in |

@@ -12,14 +12,19 @@ Roles in use: `primary onPrimary primaryContainer onPrimaryContainer secondary o
 Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 
 ### Which role for what (shell mapping, `project`)
-| Thing | Container | Content |
+The [component catalogue](COMPONENTS.md#container-roles) maps roles to their implementation. [Behavior](BEHAVIOR.md#1-surfaces-and-layers) covers layers, focus, and dismissal.
+
+| Role | Container | Shape | Content |
+|---|---|---|---|
+| Panel | `surfaceContainer` | `Shape.extraLarge` | `onSurface` |
+| Card | `surfaceContainerHigh` | `Shape.large`. Joined corners in expanded notification groups use `Shape.extraSmall`. | `onSurface`. Notification toasts use the same Card. |
+| Tile | Inactive `surfaceContainerHigh`, active `primary` | `Shape.extraLarge` | Inactive `onSurface` with `onSurfaceVariant` subtitle, active `onPrimary` |
+| Bar Pill | Idle `transparent`, active or pressed `secondaryContainer` | `Shape.full` | Idle `onSurface`, active or pressed `onSecondaryContainer` |
+| OSD | `surfaceContainer` | `Shape.full` | Shared slider tokens |
+| Dialog | `surfaceContainerHigh` with a separate `scrim` at 32% | `Shape.extraLarge` | `onSurface`, with `onSurfaceVariant` supporting text |
+
+| Element | Container | Content |
 |---|---|---|
-| Popup / panel background | `surfaceContainer` | `onSurface` |
-| Card inside popup | `surfaceContainerHigh` | `onSurface` |
-| Bar pill (idle) | `transparent` | `onSurface` |
-| Bar pill (popup open / pressed) | `secondaryContainer` | `onSecondaryContainer` |
-| Tile off | `surfaceContainerHigh` | `onSurface`, subtitle `onSurfaceVariant` |
-| Tile on | `primary` | `onPrimary` |
 | Tile icon chip on | `primaryContainer` | `onPrimaryContainer` ([Material 3 color roles](https://m3.material.io/styles/color/the-color-system/)) |
 | Slider active track | `primary` | handle marker `primary` |
 | Slider inactive track | `surfaceContainerHighest` | icon `onSurfaceVariant` |
@@ -29,7 +34,6 @@ Accents: `blue violet pink red orange yellow green teal mono`. Default `blue`.
 | Outlined button | transparent, border `outline` | `primary` |
 | Plain tooltip | `inverseSurface` | `inverseOnSurface` |
 | Destructive | `errorContainer` | `onErrorContainer` |
-| Scrim behind dialogs | `scrim` @ 32% | |
 | Notification unread dot | `tertiary` | |
 | Shared text field | `surfaceContainerLowest` | `onSurface`, placeholder `onSurfaceVariant`, focus outline `primary` |
 
@@ -75,18 +79,12 @@ Lock uses an opaque gradient from `surfaceContainer` to `surface` as its fallbac
 
 | Thing | Radius |
 |---|---|
-| Popup / panel | extraLarge |
-| Card | large |
-| Tile | extraLarge |
-| Pill, Button, IconButton, Search bar | full (pill) |
+| Button, IconButton, Search bar | full (pill) |
 | Tile icon chip | `large` square-ish (screenshot 07) |
-| List group, first/last item | large; inner items `extraSmall` (screenshot 02) |
-| Dialog | extraLarge |
 | Tooltip | small |
 
 ## Elevation
-Dark theme: express elevation with **surface container steps**, not shadows.
-Popup `surfaceContainer` over wallpaper; cards `surfaceContainerHigh`. A soft shadow (`shadow` @ 24%, blur 24, y 8) is allowed on popups only. `project`
+Cards, Tiles, and bar Pills establish hierarchy through their container fills. Popup shadows use `Theme.popupShadow` (`shadow` at 24%, blur 24, y offset 8). `project`
 
 ## Sizing (`project`)
 | Thing | Size |
