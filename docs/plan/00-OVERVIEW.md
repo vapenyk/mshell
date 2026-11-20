@@ -16,7 +16,7 @@ Work in **small steps**. One step = one sitting = one commit. Read only the file
 | 02 | `02-base-components.md` | StateLayer, Icon, Text, Surface, Pill | ✅ |
 | 03 | `03-bar.md` | bar, clock pill, status pill, services | ✅ |
 | 04 | `04-control-center.md` | popup, sliders, tiles, pages, reorder | ✅ |
-| 05 | `05-notifications.md` | service, popup, center, bell pill | ✅ |
+| 05 | `05-notifications.md` | service, popup, center, bell pill | ✅ Review follow-up verified · Quickshell Reply issue deferred |
 | 06 | `06-media-calendar-keyboard.md` | media, wavy bar, calendar, keyboard | ✅ Calendar and keyboard · media deferred |
 | 07 | `07-launcher-osd.md` | launcher, OSD | 7.3 OSD with ASUS Fn and bottom-center placement ✅ · launcher pending |
 | 08 | `08-lock-powermenu.md` | lock, power menu | ✅ |

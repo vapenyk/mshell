@@ -70,8 +70,19 @@ Common read: `../design/SPEC.md` (Notifications), `../design/reference/INDEX.md`
 
 ### Deferred: stale Reply action in Quickshell 0.3.2
 
-When an app replaces a notification by ID, Quickshell reads the new action list but keeps the previous `hasInlineReply` flag and placeholder. As a result, the old Reply button can remain visible. [Quickshell 0.3.2 source](https://git.outfoxxed.me/quickshell/quickshell/raw/tag/v0.3.2/src/services/notifications/notification.cpp)
+When an app replaces a notification by ID, Quickshell reads the new action list but keeps the previous `hasInlineReply` flag and placeholder. As a result, the old Reply button can remain visible. The nested D-Bus test confirmed that `inline-reply` is absent from `notification.actions` both before and after the replacement. [Quickshell 0.3.2 source](https://raw.githubusercontent.com/quickshell-mirror/quickshell/v0.3.2/src/services/notifications/notification.cpp)
 
 Fix `Notification::updateProperties()` in `src/services/notifications/notification.cpp`. Compute the flag and placeholder from the incoming action list on every update. With no `inline-reply` action, publish `false` and an empty placeholder. If the action is present, publish its new caption and check for duplicates within that incoming list. The mshell card already uses these properties to show Reply and its placeholder.
 
 Verify with a test sender on the nested session bus. Send a notification with Reply, then replace it using the same ID without Reply. The card should stay in place and the Reply button should disappear. Also replace a reply-capable notification with one that supplies a different caption and check that the field shows the new caption.
+
+## Follow-up: notification review before polish
+- Create: `services/Notifs.model.js` and `tests/services/Notifs.model.test.js` for bounded history, `modules/notifications/NotifCardHeader.qml` used by `NotifCardContent`, and `modules/notifications/NotifPopupWindow.qml` used by the toast stack.
+- [x] Refresh replacements and their toast timeout, exclude transient notifications from the center and history, and bound history.
+- [x] Release toast keyboard focus on click-away, preserve unsent replies, and handle critical overflow, timer pauses, and stack input regions.
+- [x] Simplify image loading, card actions and header, pill input, and anchored popup mounting.
+- [x] Verify the replacement and reply APIs in Quickshell 0.3.2 and test notification behavior in nested Hyprland.
+- The toast stack gives pending critical notifications priority and keeps a separate input region per visible card. `NotifPopup.model.js` covers queue priority, eviction, and the remaining timeout after a pause.
+- Notification cards load app icons asynchronously at display size. One notification image moves between the avatar, thumbnail, and expanded preview slots. `Pill` owns keyboard activation and accessibility, and `AnchoredPopup` manages mounting for the notification and control centers. The reveal starts when the window has applied its initial content size.
+- Verified in the nested compositor with the stock Quickshell runtime, an isolated D-Bus session, and Wayland pointer and keyboard input. Replacement updates the object without emitting a second server notification signal. A replacement whose payload leaves all exposed properties identical has no observable QML update in this version.
+- Verified timeout refresh in place, a new toast after expiry, unread and grouping order, transient expiry and DND, the fourth critical toast, expanded timer pause, reply focus and delivery, draft restoration, attachment placement, message copying, and opening the notification center and Control Center.

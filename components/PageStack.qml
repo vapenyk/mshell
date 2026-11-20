@@ -97,12 +97,7 @@ QQ.FocusScope {
             visible: root.depth > 1
             icon: "arrow_back"
             onClicked: root.pop()
-            activeFocusOnTab: true
-            QQ.Keys.onReturnPressed: root.pop()
-            QQ.Keys.onSpacePressed: root.pop()
-            QQ.Accessible.role: QQ.Accessible.Button
             QQ.Accessible.name: qsTr("Back")
-            QQ.Accessible.onPressAction: root.pop()
         }
 
         Text {

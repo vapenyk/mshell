@@ -8,7 +8,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 |---|---|---|---|---|---|
 | Bar | Top | none | whole bar | every screen | exclusive zone = bar height |
 | Popup (control center, notification center, calendar, media, keyboard) | Overlay | on demand (only while open) | whole popup | screen of the pill that opened it | closes on outside click via focus grab |
-| Notification popups | Overlay | none on arrival, exclusive only during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
+| Notification popups | Overlay | none on arrival, on demand during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
 | Launcher | Overlay | exclusive while open | whole | focused screen | |
 | OSD | Overlay | none | **none** (fully click-through) | focused screen at each OSD action | one pill, bottom center |
 | Power dropdown | Inside Control Center | menu focus while open | dropdown and outside dismissal within Control Center | screen of the Control Center | anchored under the Power button |
@@ -109,13 +109,16 @@ On the lock surface the bar displays its live indicators. Clicking the bar focus
 The OSD opens and extends its timeout on key actions delivered through IPC or an ASUS keyboard backlight hardware event. The ASUS adapter watches `brightness_hw_changed` and requests a fresh reading from `Brightness`. The ASUS driver performs the hardware write. An action selects the focused screen and updates the contents of the same pill. A visible pill follows the live system level. Control Center sliders and ordinary software writes only update that level. Opening Control Center or locking the session hides the OSD immediately. The keys continue to change levels in both states. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
 
 ## 7. Notifications (freedesktop semantics, not M3)
-- Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.
-- Hovering a popup or editing an inline reply pauses its timeout. Inline reply is available when the sender advertises a reply action.
-- While editing, Esc discards the draft, restores the actions, and releases reply focus. Enter or Send submits a nonblank reply. The card displays any subsequent sender update in place.
-- `replaces_id` updates the existing notification in place (no new card/animation).
-- Click on the card body = default action if the sender provided one, else dismiss. Action buttons call `invoke`.
-- DND on: everything goes to Silent, no popups, **critical still shows**.
-- Max 3 popups visible; older ones wait in the center.
+- Low urgency goes to Silent. Normal urgency opens a toast for 5 s or the sender's `expire_timeout` in milliseconds. Critical urgency opens a toast without a timeout.
+- Hovering or expanding a toast pauses its timeout. Collapsing and moving the pointer away resumes the remaining time.
+- The Reply button opens the editor when the sender advertises inline reply. Clicking elsewhere releases reply focus and keeps the draft. Esc discards it. Enter or Send submits a nonblank reply. When a persistent notification closes with an unsent draft, it can be copied from history.
+- A `replaces_id` update that changes a property exposed to QML refreshes the notification's arrival time, unread state, group order, and toast timeout. A live toast updates in place. After it has exited, an eligible update opens a new toast.
+- The center groups notifications by desktop entry or app name. Notifications with neither get their own cards.
+- Clicking the card body invokes the sender's default action when available and toggles expansion otherwise. Expanded center cards can copy the message text. The Open link tooltip shows the destination host.
+- DND routes persistent notifications to Silent and suppresses ordinary toasts. Critical notifications still request a toast.
+- The stack holds up to three toasts. A new critical notification can move the oldest toast out of a full critical stack. Persistent notifications remain available in the center.
+- Transient notifications bypass the center, unread indicator, and history. They expire when their toast exits or when delivery cannot show one.
+- History holds the latest 100 closed persistent notifications for the session.
 - The center never auto-closes while notifications arrive.
 - Clearing: per-notification ✕ (on expand), per-section ✕, "Clear all".
 

@@ -23,6 +23,15 @@ test("later arrivals win ties when notifications share a timestamp", () => {
     assert.deepEqual(groupByApp([first, second]).map(group => group.appName), ["Second", "First"]);
 });
 
+test("notifications without an app name or desktop ID stay separate", () => {
+    const first = { notificationId: 1, appName: "", arrivedAt: 1 };
+    const second = { notificationId: 2, appName: "", arrivedAt: 2 };
+    const groups = groupByApp([first, second]);
+
+    assert.deepEqual(groups.map(group => group.key), [2, 1]);
+    assert.deepEqual(Array.from(groups[0].items), [second]);
+});
+
 test("sections count notifications independently even when the application is the same", () => {
     const alert = { appName: "Mail", arrivedAt: 1, silent: false };
     const quiet = { appName: "Mail", arrivedAt: 2, silent: true };

@@ -25,19 +25,13 @@ QQL.RowLayout {
     signal expandRequested()
     signal dismissRequested()
 
-    readonly property bool _hasImage: imageProbe.status === QQ.Image.Ready
+    readonly property bool _hasImage: notificationImage.status === QQ.Image.Ready
     readonly property bool _avatar: _hasImage
-        && Model.conversationAvatar(category, imageProbe.sourceSize.width, imageProbe.sourceSize.height)
+        && Model.conversationAvatar(category, notificationImage.sourceSize.width, notificationImage.sourceSize.height)
     readonly property bool _preview: _hasImage && !_avatar
     readonly property QQ.Item _imageSlot: (root._avatar ? avatar.item : root.expanded ? preview.item : thumbnail.item)?.contentItem ?? null
 
     spacing: Sizing.popupGap
-    QQ.Image {
-        id: imageProbe
-        source: root.image
-        visible: false
-        asynchronous: true
-    }
     QQ.Item {
         id: leading
         QQL.Layout.alignment: Qt.AlignTop
@@ -47,11 +41,13 @@ QQL.RowLayout {
         implicitHeight: implicitWidth
 
         QQ.Image {
+            id: notificationImage
+
             parent: root._imageSlot ?? leading
             visible: root._imageSlot !== null
             anchors.fill: parent
             fillMode: root.expanded && !root._avatar ? QQ.Image.PreserveAspectFit : QQ.Image.PreserveAspectCrop
-            source: root._hasImage ? root.image : ""
+            source: root.image
             asynchronous: true
         }
 
@@ -78,6 +74,9 @@ QQL.RowLayout {
                 anchors.margins: root._avatar ? Sizing.outlineWidth : Shape.none
                 fillMode: QQ.Image.PreserveAspectFit
                 source: root.appIcon
+                asynchronous: true
+                readonly property int _decodeSize: Math.ceil(Sizing.notificationAvatarSize * QQ.Screen.devicePixelRatio)
+                sourceSize: Qt.size(_decodeSize, _decodeSize)
             }
 
             Components.Icon {
@@ -94,53 +93,15 @@ QQL.RowLayout {
         QQL.Layout.minimumWidth: Shape.none
         spacing: Sizing.pillGap
 
-        QQL.RowLayout {
+        NotifCardHeader {
             QQL.Layout.fillWidth: true
-            spacing: Sizing.pillGap
-
-            Components.Text {
-                QQL.Layout.fillWidth: true
-                QQL.Layout.minimumWidth: Shape.none
-                role: "labelMedium"
-                color: Theme.onSurfaceVariant
-                text: root.appLabel
-            }
-
-            Components.Pill {
-                visible: root.groupCount > 1
-                text: root.groupCount.toString()
-                idleContainer: Theme.surfaceContainerHighest
-                trailing: Components.Icon {
-                    name: root.groupExpanded ? "expand_less" : "expand_more"
-                    size: Sizing.smallIconSize
-                    color: Theme.onSurfaceVariant
-                }
-                activeFocusOnTab: visible
-                QQ.Accessible.role: QQ.Accessible.Button
-                QQ.Accessible.name: root.groupExpanded ? qsTr("Collapse group") : qsTr("Expand group")
-                QQ.Accessible.onPressAction: root.groupToggleRequested()
-                QQ.Keys.onReturnPressed: root.groupToggleRequested()
-                QQ.Keys.onSpacePressed: root.groupToggleRequested()
-                onClicked: root.groupToggleRequested()
-            }
-
-            Components.IconButton {
-                QQL.Layout.preferredWidth: Sizing.pillHeight
-                QQL.Layout.preferredHeight: Sizing.pillHeight
-                visible: root.groupCount <= 1 || root.groupExpanded
-                text: root.expanded ? qsTr("Collapse notification") : qsTr("Expand notification")
-                iconName: root.expanded ? "expand_less" : "expand_more"
-                onClicked: root.expandRequested()
-            }
-
-            Components.IconButton {
-                QQL.Layout.preferredWidth: Sizing.pillHeight
-                QQL.Layout.preferredHeight: Sizing.pillHeight
-                visible: root.expanded
-                text: qsTr("Dismiss notification")
-                iconName: "close"
-                onClicked: root.dismissRequested()
-            }
+            appLabel: root.appLabel
+            groupCount: root.groupCount
+            groupExpanded: root.groupExpanded
+            expanded: root.expanded
+            onGroupToggleRequested: root.groupToggleRequested()
+            onExpandRequested: root.expandRequested()
+            onDismissRequested: root.dismissRequested()
         }
 
         QQL.RowLayout {
@@ -188,7 +149,7 @@ QQL.RowLayout {
             active: root._preview && root.expanded
             visible: active
             QQL.Layout.preferredHeight: visible ? Math.min(Sizing.notificationPreviewMaxHeight,
-                width * imageProbe.sourceSize.height / Math.max(1, imageProbe.sourceSize.width)) : 0
+                width * notificationImage.sourceSize.height / Math.max(1, notificationImage.sourceSize.width)) : 0
             sourceComponent: attachmentClip
         }
     }

@@ -1,5 +1,7 @@
 pragma ComponentBehavior: Bound
 
+import "NotifPopup.model.js" as Model
+
 import qs.config
 import qs.services
 
@@ -12,6 +14,10 @@ Item {
     required property QtObject toast
     signal exited()
     readonly property bool replying: card.replying && !toast.leaving
+    readonly property Region inputRegion: Region {
+        item: root.toast.leaving ? null : root
+    }
+    readonly property bool _paused: hover.hovered || card.expanded || toast.leaving
 
     property double _startedAt: 0
     property int _remaining: toast.timeout
@@ -20,10 +26,14 @@ Item {
     opacity: 0
     enabled: !toast.leaving
 
+    function stopReply(): void {
+        card.stopReply();
+    }
+
     function _syncTimer(): void {
-        if (hover.hovered || replying || toast.leaving || toast.timeout === 0) {
+        if (_paused || toast.timeout === 0) {
             if (expiry.running) {
-                _remaining = Math.max(1, _remaining - (Date.now() - _startedAt));
+                _remaining = Model.remainingAfterPause(_remaining, _startedAt, Date.now());
                 expiry.stop();
             }
         } else if (!expiry.running) {
@@ -33,7 +43,13 @@ Item {
         }
     }
 
-    onReplyingChanged: _syncTimer()
+    function _restartTimer(): void {
+        expiry.stop();
+        _remaining = toast.timeout;
+        _syncTimer();
+    }
+
+    on_PausedChanged: _syncTimer()
 
     Component.onCompleted: {
         enter.start();
@@ -47,15 +63,11 @@ Item {
             if (root.toast.leaving) {
                 enter.stop();
                 exit.start();
-                root._syncTimer();
             }
         }
 
-        function onTimeoutChanged(): void {
-            expiry.stop();
-            root._remaining = root.toast.timeout;
-            root._syncTimer();
-        }
+        function onTimeoutChanged(): void { root._restartTimer(); }
+        function onRefreshed(): void { root._restartTimer(); }
     }
 
     RetainableLock {
@@ -68,6 +80,7 @@ Item {
 
         anchors.fill: parent
         notification: root.toast.notification
+        entry: root.toast.entry
         arrivedAt: root.toast.arrivedAt
         onDismissRequested: Notifs.dismiss(root.toast.entry)
         onActionRequested: action => {
@@ -78,7 +91,6 @@ Item {
 
     HoverHandler {
         id: hover
-        onHoveredChanged: root._syncTimer()
     }
 
     Timer {
@@ -89,6 +101,7 @@ Item {
     transform: Translate {
         id: slide
         y: -Motion.popupSlideDistance
+        onYChanged: root.inputRegion?.changed()
     }
 
     ParallelAnimation {

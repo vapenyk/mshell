@@ -25,17 +25,19 @@ Column {
             required property double modelData
             readonly property bool first: root._items[0]?.notification.id === modelData
             readonly property bool last: root._items[root._items.length - 1]?.notification.id === modelData
-            readonly property var entry: root._items.find(item => item.notification.id === modelData)
+            readonly property QtObject currentEntry: root._items.find(item => item.notification.id === modelData) ?? null
 
             width: root.width
-            notification: entry?.notification ?? null
-            arrivedAt: entry?.arrivedAt ?? new Date()
+            entry: currentEntry
+            notification: currentEntry?.notification ?? null
+            arrivedAt: currentEntry?.arrivedAt ?? new Date()
+            copyEnabled: true
             groupCount: first ? root._items.length : 0
             groupExpanded: root._showAll
             topRadius: first ? Shape.large : Shape.extraSmall
             bottomRadius: !root._showAll || last ? Shape.large : Shape.extraSmall
             onGroupToggleRequested: root.expanded = !root.expanded
-            onDismissRequested: Notifs.dismiss(entry)
+            onDismissRequested: Notifs.dismiss(currentEntry)
             onActionRequested: action => Notifs.invoke(action)
         }
     }

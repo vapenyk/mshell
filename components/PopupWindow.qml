@@ -15,7 +15,6 @@ PanelWindow {
     required property int preferredWidth
     property list<QtObject> barWindows
     property real contentViewportHeight: body.implicitHeight
-    property bool waitForContentLayout: false
     property bool centerOnAnchor: false
     default property alias content: body.data
 
@@ -24,7 +23,9 @@ PanelWindow {
 
     readonly property QsWindow _anchorWindow: anchorItem?.QsWindow.window ?? null
     readonly property ShellScreen _anchorScreen: _anchorWindow?.screen ?? null
-    readonly property bool _shown: _ready && opened && (!waitForContentLayout || _layoutSettled)
+    readonly property bool _shown: _ready && opened && _layoutSettled
+    readonly property bool _layoutReady: _ready && opened && contentViewportHeight > 0
+        && width === Math.round(_placement.width) && height === Math.round(_placement.height)
     property bool _ready: false
     property bool _layoutSettled: false
     readonly property var _placement: Model.placement(
@@ -63,16 +64,10 @@ PanelWindow {
         }
     }
 
-    FrameAnimation {
-        running: root.waitForContentLayout && root._ready && root.opened && !root._layoutSettled
-
-        onTriggered: {
-            // Start the reveal after the window has adopted the content size.
-            if (root.contentViewportHeight > 0
-                    && root.width === Math.round(root._placement.width)
-                    && root.height === Math.round(root._placement.height))
-                root._layoutSettled = true;
-        }
+    on_LayoutReadyChanged: {
+        // Reveal once the window has adopted the initial content size.
+        if (_layoutReady)
+            _layoutSettled = true;
     }
 
     HyprlandFocusGrab {

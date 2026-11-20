@@ -16,6 +16,10 @@ function webLink(body) {
     return "";
 }
 
+function webHost(link) {
+    return /^https?:\/\/([^/?#]+)/i.exec(link)?.[1] ?? "";
+}
+
 function conversationAvatar(category, width, height) {
     return (category === "im" || category === "im.received") && width > 0 && width === height;
 }

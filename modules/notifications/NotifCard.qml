@@ -17,6 +17,8 @@ QQ.Item {
     id: root
     required property Notification notification
     required property date arrivedAt
+    required property QQ.QtObject entry
+    property bool copyEnabled: false
     property bool expanded: false
     property int groupCount: 0
     property bool groupExpanded: false
@@ -34,6 +36,7 @@ QQ.Item {
     readonly property string _age: Format.relative(arrivedAt, Time.date)
     readonly property string _app: notification?.appName || qsTr("Notification")
     readonly property bool _canReply: notification?.hasInlineReply ?? false
+    readonly property bool _canSubmit: _canReply && Notifs.contains(entry) && notification.tracked
     readonly property string _entry: notification?.desktopEntry ?? ""
     readonly property string _appIcon: notification?.appIcon
         || (_entry ? DesktopEntries.byId(_entry)?.icon || _entry : "")
@@ -43,6 +46,10 @@ QQ.Item {
     onGroupExpandedChanged: {
         if (!groupExpanded && groupCount > 1)
             expanded = false;
+    }
+
+    function stopReply(): void {
+        reply.editing = false;
     }
 
     implicitHeight: content.implicitHeight + 2 * Sizing.popupInnerPadding
@@ -59,7 +66,7 @@ QQ.Item {
             if (root._defaultAction)
                 root.actionRequested(root._defaultAction);
             else
-                root.dismissRequested();
+                root.expanded = !root.expanded;
         }
 
         background: Components.Surface {
@@ -115,6 +122,7 @@ QQ.Item {
             visible: root.expanded && !root.replying && hasActions
             actions: root.expanded ? root._actions : []
             link: root._link
+            copyText: root.copyEnabled ? root._body || root.notification?.summary || "" : ""
             canReply: root.expanded && root._canReply
             onActionRequested: action => root.actionRequested(action)
             onReplyRequested: reply.startEditing()
@@ -126,11 +134,17 @@ QQ.Item {
             QQL.Layout.fillWidth: true
             visible: root.replying
             placeholder: root.notification?.inlineReplyPlaceholder || qsTr("Type a reply")
+            draft: root.entry?.replyDraft ?? ""
+            canSubmit: root._canSubmit
+            onDraftEdited: text => {
+                if (root.entry)
+                    root.entry.replyDraft = text;
+            }
             onCancelled: actions.focusReply()
             onSubmitted: text => {
-                if (root._canReply && root.notification.tracked)
+                if (root._canSubmit)
                     root.notification.sendInlineReply(text);
-                if (root.notification?.tracked)
+                if (Notifs.contains(root.entry))
                     actions.focusReply();
             }
         }

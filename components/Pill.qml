@@ -18,6 +18,14 @@ QQ.Item {
     signal clicked()
     signal rightClicked()
 
+    activeFocusOnTab: true
+    QQ.Accessible.role: QQ.Accessible.Button
+    QQ.Accessible.name: text
+    QQ.Accessible.onPressAction: clicked()
+    QQ.Keys.onReturnPressed: clicked()
+    QQ.Keys.onEnterPressed: clicked()
+    QQ.Keys.onSpacePressed: clicked()
+
     implicitHeight: Sizing.pillHeight
     implicitWidth: text.length > 0 || trailing
                    ? Math.max(implicitHeight, content.implicitWidth + 2 * Sizing.pillHorizontalPadding)

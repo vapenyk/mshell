@@ -2,7 +2,13 @@ const assert = require("node:assert/strict");
 const test = require("node:test");
 const { loadModel } = require("../../load.js");
 
-const { conversationAvatar, webLink } = loadModel("modules/notifications/NotifCard.model.js");
+const { conversationAvatar, webHost, webLink } = loadModel("modules/notifications/NotifCard.model.js");
+
+test("displays the validated link host without its path, query, or fragment", () => {
+    assert.equal(webHost(webLink("https://Example.org/report?token=123#section")), "Example.org");
+    assert.equal(webHost(webLink("http://[::1]:8080/path")), "[::1]:8080");
+    assert.equal(webHost(""), "");
+});
 
 test("extracts the first web link and removes surrounding punctuation", () => {
     assert.equal(webLink("Read (https://example.org/update). Try https://example.com next."), "https://example.org/update");

@@ -6,6 +6,7 @@ import qs.components as Components
 import qs.config
 import qs.services
 
+import Quickshell
 import QtQuick
 
 Column {
@@ -62,6 +63,12 @@ Column {
                     color: Theme.onSurfaceVariant
                     elide: Text.ElideNone
                     wrapMode: Text.Wrap
+                }
+
+                NotifActionButton {
+                    visible: historyRow.modelData.replyDraft.length > 0
+                    text: qsTr("Copy unsent reply")
+                    onClicked: Quickshell.clipboardText = historyRow.modelData.replyDraft
                 }
             }
         }

@@ -53,6 +53,7 @@ Item {
         anchors.right: parent.right
         idleContainer: Theme.transparent
         active: UiState.openPopup === "controlcenter" && UiState.popupAnchor === root
+        Accessible.name: qsTr("Control Center")
         onClicked: UiState.toggleAt("controlcenter", root)
 
         trailing: Row {

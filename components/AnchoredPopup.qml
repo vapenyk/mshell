@@ -53,11 +53,13 @@ Scope {
             preferredWidth: Theme.sizeClass(screen) === "compact" ? root.compactWidth : root.preferredWidth
             centerOnAnchor: root.centerOnAnchor
             barWindows: root.barWindows
-            waitForContentLayout: true
+            contentViewportHeight: contentLoader.item?.viewportHeight ?? contentLoader.implicitHeight
             onDismissRequested: Qt.callLater(root._dismiss, popup)
             onExited: Qt.callLater(root._unmount)
 
             Loader {
+                id: contentLoader
+
                 width: parent.width
                 focus: true
                 sourceComponent: root.content

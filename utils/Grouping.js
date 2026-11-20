@@ -10,7 +10,7 @@ function groupByApp(list) {
     const groups = new Map();
 
     for (const entry of newestFirst) {
-        const key = entry.desktopEntry || entry.appName;
+        const key = entry.desktopEntry || entry.appName || entry.notificationId;
         let group = groups.get(key);
         if (!group) {
             group = { key, appName: entry.appName, items: [], count: 0 };
