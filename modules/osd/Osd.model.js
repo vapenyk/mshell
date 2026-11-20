@@ -1,8 +1,16 @@
 .pragma library
 
-function changed(previous, current) {
-    return previous != null && current != null && previous.device === current.device &&
-        previous.max === current.max && (previous.current !== current.current || previous.muted !== current.muted);
+function levelChange(previous, current, writtenByShell) {
+    if (previous == null || current == null || previous.device !== current.device || previous.max !== current.max)
+        return "";
+    if (previous.muted !== current.muted)
+        return "external";
+
+    // PipeWire rounds volume when it converts to and from its float channel scale.
+    const tolerance = current.muted === undefined ? 0 : 0.000001;
+    if (Math.abs(previous.current - current.current) <= tolerance)
+        return "";
+    return writtenByShell ? "local" : "external";
 }
 
 function presentation(kind, reading) {

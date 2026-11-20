@@ -105,7 +105,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 
 On the lock surface the bar displays its live indicators. Clicking the bar focuses the password input. The native Wayland session lock keeps the desktop and its popups behind the lock surfaces. The Power menu and IPC share the lock request in `UiState`, which is also the entry point for the future idle trigger.
 
-The OSD opens on a change from a device's first reading. A change replaces the contents of the same pill and restarts its timeout. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
+The OSD opens on an external change from a device's first reading. A change replaces the contents of the same pill and restarts its timeout. The Control Center sliders provide feedback for their own changes and dismiss the OSD for the setting being adjusted. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
 
 ## 7. Notifications (freedesktop semantics, not M3)
 - Urgency: low → Silent section, no popup; normal → popup, timeout 5 s (or the sender's `expire_timeout` if given); critical → popup, no timeout, stays until dismissed.

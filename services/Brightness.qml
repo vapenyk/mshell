@@ -62,8 +62,10 @@ Singleton {
                 root._devices = Model.parseDevices(code === 0 ? output.text : "");
             } else if (code === 0) {
                 const display = Model.parseInfo(output.text);
-                if (display)
+                if (display) {
+                    display.writtenByShell = true;
                     root._devices = { display, keyboard: root.keyboard };
+                }
             }
             root._writing = -1;
             Qt.callLater(root._writePending);

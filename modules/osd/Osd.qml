@@ -19,16 +19,31 @@ PanelWindow {
 
     readonly property var _output: Audio.available
         ? ({ device: Audio.output.id, current: Audio.volume, max: 1, muted: Audio.muted }) : null
-    on_OutputChanged: Qt.callLater(_updateOutput)
-
-    function _updateOutput(): void {
-        _record("volume", _output);
+    on_OutputChanged: {
+        if (Audio.writingVolume)
+            _record("volume", _output, true);
+        else
+            Qt.callLater(_updateOutput);
     }
 
-    function _record(kind: string, reading: var): void {
+    function _updateOutput(): void {
+        _record("volume", _output, false);
+    }
+
+    function _recordDisplay(): void {
+        const reading = Brightness.display;
+        _record("display", reading, reading?.writtenByShell === true);
+    }
+
+    function _record(kind: string, reading: var, writtenByShell: bool): void {
         const previous = _previous[kind];
         _previous[kind] = reading;
-        if (!Model.changed(previous, reading) || !Compositor.focusedScreen)
+        const change = Model.levelChange(previous, reading, writtenByShell);
+        if (change === "local" && _kind === kind) {
+            timeout.stop();
+            _shown = false;
+        }
+        if (change !== "external" || !Compositor.focusedScreen)
             return;
 
         _targetScreen = Compositor.focusedScreen;
@@ -40,14 +55,14 @@ PanelWindow {
 
     Component.onCompleted: {
         _updateOutput();
-        _record("display", Brightness.display);
-        _record("keyboard", Brightness.keyboard);
+        _recordDisplay();
+        _record("keyboard", Brightness.keyboard, false);
     }
 
     Connections {
         target: Brightness
-        function onDisplayChanged(): void { root._record("display", Brightness.display); }
-        function onKeyboardChanged(): void { root._record("keyboard", Brightness.keyboard); }
+        function onDisplayChanged(): void { root._recordDisplay(); }
+        function onKeyboardChanged(): void { root._record("keyboard", Brightness.keyboard, false); }
     }
 
     screen: _targetScreen

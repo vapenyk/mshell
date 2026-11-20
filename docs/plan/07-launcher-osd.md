@@ -22,8 +22,9 @@ Before starting launcher work (7.1 or 7.2), contact the user to discuss how it s
 - Read: `../design/BEHAVIOR.md` sections 1, 2, 4, 5 and the OSD row in section 6, `../design/MOTION.md`, `../design/COMPONENTS.md`, and `../conventions/TESTING.md`.
 - Create: `modules/osd/Osd.qml`, `modules/osd/Osd.model.js`, and `tests/modules/osd/Osd.model.test.js`.
 - Move `ValueSlider.qml` and its model to `components/sliders/` and move the model test to `tests/components/sliders/`. Update its Control Center consumers and catalogue links.
-- Update: `shell.qml`, `services/Brightness.qml` and its model and tests, `modules/controlcenter/TopControls.qml`, `config/Sizing.qml`, `config/Motion.qml`, and the design docs.
+- Update: `shell.qml`, `services/Brightness.qml` and its model and tests, `services/Audio.qml`, `modules/controlcenter/TopControls.qml`, `config/Sizing.qml`, `config/Motion.qml`, and the design docs.
 - [x] Observe output volume/mute, display brightness, and keyboard backlight changes after the initial device readings. Show one click-through pill under the bar on the focused screen, with a horizontal track, handle, and current state icon. Restart the 1.5 s timeout on each change.
 - [x] Render keyboard backlight with stop indicators from its reported integer range, including off. The shared slider supports both continuous and stepped tracks. Keep the existing interactive Control Center sliders working.
+- [x] Use the Control Center sliders themselves as feedback for adjustments made there. Keep the OSD available for external changes while Control Center is open.
 - Done when: volume, mute, display brightness, and stepped keyboard backlight update in the nested session. Verify repeated input, hidden startup, timeout, and layer placement.
-- Verified in nested Hyprland with two outputs, a test PipeWire sink, and simulated brightness devices. Checked output changes and removal, click-through, and writes from both Control Center sliders.
+- Verified in nested Hyprland with two outputs, a test PipeWire sink, and simulated brightness devices. Checked output changes and removal, click-through, slider writes without OSD, and external changes with Control Center open.
