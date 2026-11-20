@@ -15,91 +15,46 @@ Scope {
     id: root
 
     required property list<QtObject> barWindows
-    required property Component powerActions
 
     readonly property Item requestedAnchor: UiState.openPopup === "controlcenter" ? UiState.popupAnchor : null
-    property Item _mountedAnchor: null
 
     onRequestedAnchorChanged: {
         UiState.editMode = false;
-        Qt.callLater(_syncPopup);
     }
 
-    function _syncPopup(): void {
-        if (!requestedAnchor) {
-            if (UiState.openPopup === "controlcenter")
-                UiState.close();
-            if (!_mountedAnchor)
-                _unmountPopup();
-            return;
-        }
+    PowerMenu {
+        id: powerMenu
 
-        if (requestedAnchor !== _mountedAnchor) {
-            popupLoader.active = false;
-            _mountedAnchor = requestedAnchor;
-            popupLoader.active = true;
-        }
+        anchorItem: root.requestedAnchor
     }
 
-    function _unmountPopup(): void {
-        if (!requestedAnchor) {
-            popupLoader.active = false;
-            _mountedAnchor = null;
-        }
-    }
+    Components.AnchoredPopup {
+        requestedAnchor: root.requestedAnchor
+        preferredWidth: Sizing.controlCenterWidth
+        barWindows: root.barWindows
+        onDismissRequested: UiState.close()
 
-    function _dismissPopup(window: QtObject): void {
-        if (window && popupLoader.item === window && window.opened)
-            UiState.close();
-    }
+        content: Components.PageStack {
+            id: pages
 
-    LazyLoader {
-        id: popupLoader
-
-        active: false
-
-        Components.PopupWindow {
-            id: popup
-
-            anchorItem: root._mountedAnchor
-            opened: anchorItem !== null && root.requestedAnchor === anchorItem
-            preferredWidth: Sizing.controlCenterWidth
-            contentViewportHeight: pages.viewportHeight
-            barWindows: root.barWindows
-            onDismissRequested: Qt.callLater(root._dismissPopup, popup)
-            onExited: Qt.callLater(root._unmountPopup)
-
-            Components.PageStack {
-                id: pages
-
-                width: parent.width
-                initialPage: MainPage {
-                    powerActions: root.powerActions
-                    onMixerRequested: pages.push(audioPage)
-                    onSettingsRequested: tileId => {
-                        if (tileId === "modes")
-                            pages.push(modesPage);
-                        else if (tileId === "wifi")
-                            pages.push(networkPage);
-                        else if (tileId === "bluetooth")
-                            pages.push(bluetoothPage);
-                    }
+            width: parent.width
+            initialPage: MainPage {
+                powerButton: powerMenu.button
+                onMixerRequested: pages.push(audioPage)
+                onSettingsRequested: tileId => {
+                    if (tileId === "modes")
+                        pages.push(modesPage);
+                    else if (tileId === "wifi")
+                        pages.push(networkPage);
+                    else if (tileId === "bluetooth")
+                        pages.push(bluetoothPage);
                 }
+            }
 
-                onRootEscapePressed: event => {
-                    if (UiState.editMode) {
-                        UiState.editMode = false;
-                        event.accepted = true;
-                    }
-                }
-
-                Connections {
-                    target: UiState
-
-                    function onPowerMenuOpenChanged(): void {
-                        if (UiState.powerMenuOpen)
-                            pages.pop();
-                    }
+            onRootEscapePressed: event => {
+                if (UiState.editMode) {
+                    UiState.editMode = false;
+                    event.accepted = true;
                 }
             }
 

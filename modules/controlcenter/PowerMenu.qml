@@ -1,17 +1,18 @@
 pragma ComponentBehavior: Bound
 
 import qs.components as Components
+import qs.config
 import qs.services
 
 import Quickshell
-import Quickshell.Io
 import QtQml
 import QtQuick as QQ
+import QtQuick.Controls as QQC
 
 Scope {
     id: root
 
-    required property list<QtObject> barWindows
+    required property QQ.Item anchorItem
     property var _request: null
     readonly property ShellScreen confirmScreen: _request?.screen ?? null
 
@@ -20,7 +21,56 @@ Scope {
             _request = null;
     }
 
-    readonly property Component actions: QQ.Column {
+    readonly property Component button: Components.IconButton {
+        id: powerButton
+
+        readonly property QQ.Item controlCenterAnchor: root.anchorItem
+
+        iconName: "power_settings_new"
+        trailingIconName: selected ? "expand_less" : "expand_more"
+        text: qsTr("Power")
+        toggle: true
+        selected: dropdown.visible
+        tooltipEnabled: !selected
+        onClicked: dropdown.visible ? dropdown.close() : dropdown.open()
+        onControlCenterAnchorChanged: dropdown.close()
+
+        QQC.Popup {
+            id: dropdown
+
+            parent: powerButton
+            width: Sizing.powerMenuWidth
+            padding: Sizing.pillGap
+            margins: Sizing.pillGap
+            x: powerButton.width - width
+            y: powerButton.height + Sizing.pillGap
+            popupType: QQC.Popup.Item
+            focus: true
+            modal: true
+            dim: false
+            closePolicy: QQC.Popup.CloseOnEscape | QQC.Popup.CloseOnPressOutside
+
+            contentItem: QQ.Loader {
+                active: dropdown.visible
+                focus: true
+                sourceComponent: root._actions
+            }
+
+            background: Components.Surface {
+                container: Theme.surfaceContainerHigh
+                radius: Shape.large
+            }
+
+            enter: QQ.Transition {
+                QQ.NumberAnimation { property: "opacity"; from: 0; to: 1; duration: Motion.fadeThroughInDuration }
+            }
+            exit: QQ.Transition {
+                QQ.NumberAnimation { property: "opacity"; to: 0; duration: Motion.fadeThroughOutDuration }
+            }
+        }
+    }
+
+    readonly property Component _actions: QQ.Column {
         ActionRow {
             id: lockAction
 
@@ -64,7 +114,7 @@ Scope {
     }
 
     function _select(action: string): void {
-        const screen = UiState.popupAnchor?.QsWindow.window?.screen ?? Compositor.focusedScreen;
+        const screen = anchorItem?.QsWindow.window?.screen ?? null;
         UiState.close();
         if (Power.requiresConfirmation(action))
             _request = screen ? { action: action, screen: screen } : null;
@@ -90,27 +140,6 @@ Scope {
         function onLockActiveChanged(): void {
             if (UiState.lockActive)
                 root._request = null;
-        }
-    }
-
-    IpcHandler {
-        target: "powermenu"
-
-        function toggle(): void {
-            if (UiState.lockActive)
-                return;
-            if (root._request) {
-                root._request = null;
-            } else if (UiState.powerMenuOpen) {
-                UiState.powerMenuOpen = false;
-            } else {
-                const bar = root.barWindows.find(window => window?.screen === Compositor.focusedScreen)
-                    ?? root.barWindows[0];
-                if (bar) {
-                    UiState.openAt("controlcenter", bar.statusAnchor);
-                    UiState.powerMenuOpen = true;
-                }
-            }
         }
     }
 

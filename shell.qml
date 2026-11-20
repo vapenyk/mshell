@@ -6,7 +6,6 @@ import qs.modules.keyboard
 import qs.modules.lock
 import qs.modules.notifications
 import qs.modules.osd
-import qs.modules.powermenu
 import qs.services
 
 import Quickshell
@@ -15,16 +14,7 @@ import QtQml
 ShellRoot {
     Bar { id: bar }
 
-    ControlCenter {
-        barWindows: bar.instances
-        powerActions: powerMenu.actions
-    }
-
-    PowerMenu {
-        id: powerMenu
-
-        barWindows: bar.instances
-    }
+    ControlCenter { barWindows: bar.instances }
 
     NotifPopup {}
     Osd {}

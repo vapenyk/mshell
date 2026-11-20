@@ -29,7 +29,7 @@ Components that exist in M3 keep the M3 name: `Button`, `IconButton`, `Switch`, 
 - Signals: past participle or event noun: `toggled`, `settingsRequested`, `seeked`. Handlers `onToggled`.
 - Services expose **state as readonly properties** and **actions as verbs**: `Audio.volume`, `Audio.setVolume(v)`, `Network.toggle()`.
 - Token access always through the singleton: `Theme.primary`, `Shape.full`, `Typography.labelMedium`, `Motion.spatialDefault`. Names equal M3 token names.
-- IPC targets: lowercase module/service name: `config`, `controlcenter`, `launcher`, `osd`, `lock`, `powermenu`, `notifs`. Functions are verbs: `toggle`, `open`, `close`, `setAccent`.
+- IPC targets: lowercase module/service name: `config`, `controlcenter`, `launcher`, `osd`, `lock`, `notifs`. Functions are verbs: `toggle`, `open`, `close`, `setAccent`.
 - Config keys: lowercase camelCase, only those in SPEC (`accent`, `tiles`).
 - Icons: Material Symbols names exactly as in the font (`wifi`, `bluetooth_connected`, `do_not_disturb_on`).
 
@@ -39,14 +39,13 @@ One row = one feature. If you add a feature, add its row here first.
 | Feature | Module folder | Service(s) | Model(s) | IPC target | Persisted | Reference |
 |---|---|---|---|---|---|---|
 | Bar | `modules/bar` | `Time`, `Network`, `Bluetooth`, `Battery`, `Media`, `Keyboard`, `Modes`, `Notifs` (read-only) | `StatusPill.model.js`, `ClockPill.model.js` | — | — | 07, 10, 12 |
-| Control center | `modules/controlcenter` | `Audio`, `Brightness`, `Network`, `Bluetooth`, `Modes`, `UiState` | `TileGrid.model.js` | `controlcenter` | tiles order in `Config` | 01, 05, 06, 07 |
+| Control center and power menu | `modules/controlcenter` | `Audio`, `Brightness`, `Network`, `Bluetooth`, `Modes`, `UiState`, `Power` | `TileGrid.model.js`, `Power.model.js` | `controlcenter` | tiles order in `Config` | 01, 05, 06, 07, 40 |
 | Notifications | `modules/notifications` | `Notifs`, `Modes` | `Grouping` (utils or local) | `notifs` | — | 08, 17 |
 | Media | `modules/media` | `Media` | `MediaCard.model.js`, `WavyBar.model.js` | — | — | 10, 11 |
 | Calendar | `modules/calendar` | `Time` | `Calendar.model.js` | — | — | 12 |
 | Launcher | `modules/launcher` | `Apps` | `Fuzzy.js` (utils) | `launcher` | — | 13 |
 | OSD | `modules/osd` | `Audio`, `Brightness`, `Compositor`, `UiState`, `AsusKeyboardBacklight` | `Osd.model.js` | `osd` | — | 41–43 |
 | Lock | `modules/lock` | `Time`, `UiState`, `Quickshell.Services.Pam` | — | `lock` | — | 57, 18 |
-| Power menu | `modules/powermenu` | `UiState`, `Power`, `Compositor` | `Power.model.js` | `powermenu` | — | 40 |
 
 ### Relations between features (allowed ways to talk)
 ```

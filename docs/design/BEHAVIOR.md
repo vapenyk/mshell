@@ -62,7 +62,6 @@ Interactive popups opened by a pill click or a Hyprland IPC action use `UiState.
 | `controlcenter` | `toggle`, `close` |
 | `notifs` | `toggleDnd`, `clear` |
 | `osd` | `volumeUp`, `volumeDown`, `toggleMute`, `brightnessUp`, `brightnessDown`, `keyboardBrightnessUp`, `keyboardBrightnessDown` |
-| `powermenu` | `toggle` |
 | `lock` | `lock` |
 | `config` | `setAccent <name>` |
 Example: `bind = SUPER, Space, exec, qs -c mshell ipc call launcher toggle`
@@ -100,7 +99,7 @@ Opening a popup via keyboard puts focus on its first focusable element (launcher
 | Notification popup | arrival | timeout, dismiss, action, DND | fade + slide / fade + slide |
 | Launcher | IPC | Esc, outside, launch | fade + scale / fade |
 | OSD | volume, mute, or brightness IPC action or ASUS keyboard backlight hardware event | 1.5 s timeout from the last action, Control Center opens, session locks, or output is removed | fade + slide / fade on timeout |
-| Power menu | CC power button, IPC | Esc, outside, button, action | fade through |
+| Power menu | Power button on the Control Center main page | Esc, outside, button, action | fade through |
 | Power confirmation | Restart or Power off | Esc, outside, Cancel, confirm | |
 | Lock | Power menu, IPC, future idle trigger | successful PAM auth | fade in |
 

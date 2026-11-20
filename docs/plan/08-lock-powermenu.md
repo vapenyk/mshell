@@ -8,14 +8,14 @@
 
 ## 8.2 PowerMenu
 - On-device reference: [40](../design/reference/40-device-power-dropdown.png) for the dropdown anchor and action grouping.
-- Create: `modules/powermenu/PowerMenu.qml`, `services/Power.qml`, `services/Power.model.js`, and `tests/services/Power.model.test.js`.
+- Create: `modules/controlcenter/PowerMenu.qml`, `services/Power.qml`, `services/Power.model.js`, and `tests/services/Power.model.test.js`.
 - Update: `shell.qml`, `ControlCenter.qml`, `MainPage.qml`, `UiState.qml`, `IconButton.qml`, `Sizing.qml`, the component catalogue, and popup behavior.
 - [x] Anchored menu with Lock, Sign out, Restart, and Power off as in shot 40. Centered confirmation for Restart and Power off with tonal Cancel and a destructive confirm button.
 - [x] Commands via `Quickshell.execDetached` using argument arrays. Prefer `hyprshutdown` for sign-out when available. The Lock row invokes the shell's own lock action from 8.3.
-- [x] The Control Center power button and IPC `powermenu toggle` open the same dropdown on the relevant display.
+- [x] The main page Power button opens Control Center's own dropdown on its display.
 - Done when: input, confirmation, cancel, and command dispatch work in the nested sandbox with substitute executables.
-- Verified mouse, Escape, outside-click dismissal, IPC from a Control Center subpage, and one command per confirmed action in nested Hyprland.
-- `shell.qml` passes `PowerMenu.actions` to Control Center. The header toggles `UiState.powerMenuOpen` and hosts the dropdown. The loader gives focus to the content, and PowerMenu assigns the initial row. Verified arrow navigation and Enter from Sign out to Restart.
+- Control Center owns the power menu. The header hosts its button and dropdown, and the Control Center scope keeps a confirmation alive while the panel closes. The existing `controlcenter` and `lock` IPC targets remain available.
+- Verified the Power button toggle, outside-click dismissal, Escape, arrow navigation, and Restart and Power off confirmations in nested Hyprland with substitute executables. The IPC listing includes `controlcenter` and `lock`.
 
 ## 8.3 Lock
 - Read: on-device photo [57](../design/reference/57-device-lock-screen.jpg), shot 18, [WlSessionLock](https://quickshell.org/docs/v0.3.2/types/Quickshell.Wayland/WlSessionLock/), and [PamContext](https://quickshell.org/docs/v0.3.2/types/Quickshell.Services.Pam/PamContext/).
