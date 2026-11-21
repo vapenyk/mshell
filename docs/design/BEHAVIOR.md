@@ -15,7 +15,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Confirmation dialog | Overlay | exclusive while open | whole + scrim | screen where the action was chosen | |
 | Lock | session lock | exclusive | whole | every screen | nothing else is visible |
 
-Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. The popup window includes room for the panel shadow up to the output edges. Its `Region` input mask follows the rounded panel. Clicks on the shadow count as outside clicks. `HyprlandFocusGrab.cleared()` handles clicks outside the panel and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
+Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. The layer window reserves room for the maximum available panel height and its shadow. Its size stays fixed as content changes on the same output. The `Region` input mask follows the visible rounded panel. Clicks on the shadow count as outside clicks. `HyprlandFocusGrab.cleared()` handles clicks outside the panel and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
 
 Notification popups use the same overlay and exclusion settings with `WlrKeyboardFocus.None` on arrival. Opening the inline reply editor temporarily uses `WlrKeyboardFocus.Exclusive`. The window's input mask combines the visible card regions, while each card owns its hover timer. Verified in nested Hyprland with two outputs. In Quickshell 0.3.2, a 1400 ms `notify-send` timeout arrives as `expireTimeout: 1400`.
 
@@ -50,6 +50,8 @@ Interactive popups opened by a pill click or a Hyprland IPC action use `UiState.
 - A panel with sub-pages uses `PageStack`: header = back button (when depth > 1) + title + optional trailing action.
 - Pages are entered from the main page: tile right-click, "mixer" button, list row with chevron. Max depth 2 (main → sub). No deeper trees.
 - Transition: **shared axis X** (see `MOTION.md`). Back = reverse.
+- The visible panel animates toward the current page height, including when devices arrive after the page opens. Shrinking during navigation waits for the outgoing page to fade.
+- Wi-Fi, Bluetooth, and Audio lay out their rows at their content height. Wi-Fi scanning and Audio device tracking start as the page enters and continue through its exit fade, so Audio rows remain visible until the page has faded.
 - Header back, `Esc`, `Backspace` (when no text field focused), and mouse back button all pop.
 - Titles use the page name and `titleLarge`. The control center root header shows Edit tiles, Settings, and Power actions in place of its title.
 - Edit mode (control center): the edit button toggles it; `Esc` leaves edit mode first, then closes.

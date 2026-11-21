@@ -10,8 +10,10 @@ import QtQuick as QQ
 import QtQuick.Controls as QQC
 import QtQuick.Layouts as QQL
 
-QQL.ColumnLayout {
+QQ.Item {
     id: root
+
+    implicitHeight: content.implicitHeight
 
     readonly property string title: qsTr("Internet")
     readonly property QQ.Component headerAction: Components.IconButton {
@@ -20,66 +22,72 @@ QQL.ColumnLayout {
         enabled: false
     }
 
-    spacing: Sizing.popupGap
-
     QQ.Binding {
         target: Services.Network
         property: "scanning"
         value: true
-        when: root.QQC.StackView.status === QQC.StackView.Active
+        when: root.QQC.StackView.status !== QQC.StackView.Inactive
     }
 
-    Components.ToggleSwitch {
-        QQL.Layout.fillWidth: true
-        text: qsTr("Wi-Fi")
-        checked: Services.Network.enabled
-        enabled: Services.Network.available
+    QQL.ColumnLayout {
+        id: content
 
-        onToggled: Services.Network.toggle()
-    }
+        width: parent.width
+        height: implicitHeight
+        spacing: Sizing.popupGap
 
-    Components.Text {
-        QQL.Layout.fillWidth: true
-        QQL.Layout.margins: Sizing.popupGap
-        visible: Services.Network.enabled && Services.Network.networks.length === 0
-        text: qsTr("No networks found")
-        color: Theme.onSurfaceVariant
-        horizontalAlignment: QQ.Text.AlignHCenter
-    }
+        Components.ToggleSwitch {
+            QQL.Layout.fillWidth: true
+            text: qsTr("Wi-Fi")
+            checked: Services.Network.enabled
+            enabled: Services.Network.available
 
-    QQ.Repeater {
-        model: ScriptModel {
-            values: Services.Network.networks
+            onToggled: Services.Network.toggle()
         }
 
-        delegate: ConnectionRow {
-            id: row
-
-            required property Native.WifiNetwork modelData
-            property bool connectionFailed: false
-            readonly property bool selectable: Services.Network.canConnect(modelData)
-
+        Components.Text {
             QQL.Layout.fillWidth: true
-            connected: modelData.connected
-            iconName: "wifi"
-            text: modelData.name
-            enabled: !modelData.stateChanging && (connected || selectable)
-            trailingIcon: connected ? "link_off" : selectable ? "chevron_right" : "lock"
-            subtitle: modelData.stateChanging ? qsTr("Changing connection…")
-                : connected ? qsTr("Connected")
-                : connectionFailed ? qsTr("Could not connect")
-                : modelData.known ? qsTr("Saved network")
-                : selectable ? qsTr("Open network") : qsTr("Credentials required")
+            QQL.Layout.margins: Sizing.popupGap
+            visible: Services.Network.enabled && Services.Network.networks.length === 0
+            text: qsTr("No networks found")
+            color: Theme.onSurfaceVariant
+            horizontalAlignment: QQ.Text.AlignHCenter
+        }
 
-            onClicked: {
-                connectionFailed = false;
-                Services.Network.activate(modelData);
+        QQ.Repeater {
+            model: ScriptModel {
+                values: Services.Network.networks
             }
 
-            QQ.Connections {
-                target: row.modelData
-                function onConnectionFailed(): void {
-                    row.connectionFailed = true;
+            delegate: ConnectionRow {
+                id: row
+
+                required property Native.WifiNetwork modelData
+                property bool connectionFailed: false
+                readonly property bool selectable: Services.Network.canConnect(modelData)
+
+                QQL.Layout.fillWidth: true
+                connected: modelData.connected
+                iconName: "wifi"
+                text: modelData.name
+                enabled: !modelData.stateChanging && (connected || selectable)
+                trailingIcon: connected ? "link_off" : selectable ? "chevron_right" : "lock"
+                subtitle: modelData.stateChanging ? qsTr("Changing connection…")
+                    : connected ? qsTr("Connected")
+                    : connectionFailed ? qsTr("Could not connect")
+                    : modelData.known ? qsTr("Saved network")
+                    : selectable ? qsTr("Open network") : qsTr("Credentials required")
+
+                onClicked: {
+                    connectionFailed = false;
+                    Services.Network.activate(modelData);
+                }
+
+                QQ.Connections {
+                    target: row.modelData
+                    function onConnectionFailed(): void {
+                        row.connectionFailed = true;
+                    }
                 }
             }
         }

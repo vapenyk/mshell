@@ -24,6 +24,8 @@ Common read: `../design/SPEC.md` (Control center rules), `../design/reference/IN
 - [x] `push(component, props)`, `pop()`, `depth`
 - Done when: ControlCenter hosts it with `MainPage` as the root
 
+Follow-up verified in nested Hyprland. The layer window kept the same size across page transitions and the arrival of an extra PipeWire output. Wi-Fi, Bluetooth, and Audio rows kept their positions during exit. See the [navigation behavior](../design/BEHAVIOR.md#3-navigation-inside-a-panel).
+
 ## 4.3 ValueSlider
 - The component now lives in `components/sliders/`. [Step 10](10-slider.md) defines the size presets, handle geometry, and icon placement that supersede the initial look below.
 - Visual reference: shot [19](../design/reference/19-control-center-final.webp) for the two tracks and the gap around the handle.

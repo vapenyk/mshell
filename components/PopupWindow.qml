@@ -31,7 +31,7 @@ PanelWindow {
     readonly property var _placement: Model.placement(
         _anchorScreen?.width ?? 0, _anchorScreen?.height ?? 0,
         anchorItem?.x ?? 0, anchorItem?.width ?? 0, _anchorWindow?.height ?? Sizing.barHeight,
-        preferredWidth, body.implicitHeight + 2 * Sizing.popupInnerPadding,
+        preferredWidth, _anchorScreen?.height ?? 0,
         Sizing.barSideMargin, Sizing.popupGap, centerOnAnchor, Theme.popupShadow, Motion.popupSlideDistance)
 
     screen: _anchorScreen

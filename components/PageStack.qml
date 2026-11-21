@@ -14,39 +14,59 @@ QQ.FocusScope {
     readonly property int _exitDuration: Math.round(Motion.medium2 * Motion.sharedAxisFadeOutFraction)
     readonly property int _enterDuration: Motion.medium2 - _exitDuration
     readonly property real _pageHeight: stack.currentItem?.implicitHeight ?? 0
-    property real _previousHeight: 0
-    property bool _animateHeight: false
-    readonly property bool _shrinking: header.height + _pageHeight < _previousHeight
+    readonly property real _wantedHeight: header.height + _pageHeight
+    property real _targetHeight: 0
+    property bool _transitioning: false
+    property bool _ready: false
     property bool _popPending: false
-    property real viewportHeight: header.height + _pageHeight
-    // Keep the window large enough for both pages while the visible panel animates.
-    implicitHeight: stack.busy || heightAnimation.running
-        ? Math.max(_previousHeight, header.height + _pageHeight) : viewportHeight
+
+    // Visible height of the stack. It follows the current page's height, so
+    // late changes (lists filling in after the transition) animate instead of jumping.
+    // The popup window must not depend on this value: it keeps its own fixed size.
+    property real viewportHeight: 0
+    readonly property real _timeConstant: Motion.medium2 / 4000
+    implicitHeight: viewportHeight
     clip: true
     focus: true
 
-    QQ.Behavior on viewportHeight {
-        enabled: root._animateHeight
-        QQ.SequentialAnimation {
-            id: heightAnimation
-            QQ.PauseAnimation { duration: root._shrinking ? root._exitDuration : 0 }
-            QQ.NumberAnimation {
-                duration: root._shrinking ? root._enterDuration : Motion.medium2
-                easing.type: QQ.Easing.BezierSpline
-                easing.bezierCurve: Motion.emphasized
-            }
+    on_TargetHeightChanged: {
+        if (!_ready)
+            viewportHeight = _targetHeight;
+    }
 
-            onRunningChanged: {
-                if (!running && !stack.busy)
-                    root._animateHeight = false;
-            }
+    // Exponential approach to the target. Changing the target while it runs only moves
+    // the goal, so rows arriving mid-animation do not restart the motion. It settles in
+    // about Motion.medium2 and stops running once it has arrived.
+    QQ.FrameAnimation {
+        running: root._ready && root.viewportHeight !== root._targetHeight
+        onTriggered: {
+            const distance = root._targetHeight - root.viewportHeight;
+            root.viewportHeight = Math.abs(distance) < 0.5 ? root._targetHeight
+                : root.viewportHeight + distance * (1 - Math.exp(-frameTime / root._timeConstant));
+        }
+    }
+
+    on_WantedHeightChanged: _retarget()
+
+    Component.onCompleted: {
+        _targetHeight = _wantedHeight;
+        Qt.callLater(() => { root._ready = true; });
+    }
+
+    // Growing starts at once. Shrinking during a page transition waits until the
+    // outgoing page has faded out, so its content is not clipped while visible.
+    function _retarget(): void {
+        if (_wantedHeight < _targetHeight && _transitioning) {
+            shrinkDelay.restart();
+        } else {
+            shrinkDelay.stop();
+            _targetHeight = _wantedHeight;
         }
     }
 
     function push(page: Component, props: var): void {
         if (depth === 1 && !stack.busy) {
-            _previousHeight = viewportHeight;
-            _animateHeight = true;
+            _transitioning = true;
             stack.pushItem(page, props ?? {}, QQC.StackView.PushTransition);
         }
     }
@@ -57,8 +77,7 @@ QQ.FocusScope {
         if (stack.busy) {
             _popPending = true;
         } else {
-            _previousHeight = viewportHeight;
-            _animateHeight = true;
+            _transitioning = true;
             stack.popCurrentItem(QQC.StackView.PopTransition);
         }
         return true;
@@ -80,6 +99,13 @@ QQ.FocusScope {
     QQ.TapHandler {
         acceptedButtons: Qt.BackButton
         onTapped: root.pop()
+    }
+
+    QQ.Timer {
+        id: shrinkDelay
+
+        interval: root._exitDuration
+        onTriggered: root._targetHeight = root._wantedHeight
     }
 
     QQ.Item {
@@ -137,8 +163,10 @@ QQ.FocusScope {
             left: parent.left
             right: parent.right
         }
-        // StackView skips the push transition when the viewport is empty.
-        height: Math.max(1, parent.height - header.height)
+        // Tall enough for the current page and for the visible area, so pages keep
+        // their natural size while the panel animates. StackView skips the push
+        // transition when its viewport is empty, hence the minimum of 1.
+        height: Math.max(1, root._pageHeight, root.viewportHeight - header.height)
         clip: true
         focus: true
         initialItem: root.initialPage
@@ -148,9 +176,10 @@ QQ.FocusScope {
         popExit: PageTransition { entering: false; offset: Motion.sharedAxisDistance }
 
         onBusyChanged: {
-            if (!busy && !heightAnimation.running)
-                root._animateHeight = false;
-            if (!busy && root._popPending) {
+            if (busy)
+                return;
+            root._transitioning = false;
+            if (root._popPending) {
                 root._popPending = false;
                 Qt.callLater(root.pop);
             }
