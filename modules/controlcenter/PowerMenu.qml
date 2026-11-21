@@ -57,8 +57,10 @@ Scope {
             }
 
             background: Components.Surface {
-                container: Theme.surfaceContainerHigh
-                radius: Shape.large
+                container: Theme.surfaceContainer
+                radius: Shape.extraLarge
+                border.color: Theme.outlineVariant
+                border.width: Sizing.outlineWidth
             }
 
             enter: QQ.Transition {

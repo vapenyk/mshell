@@ -7,7 +7,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Surface | Layer | Keyboard focus | Input | Per screen | Notes |
 |---|---|---|---|---|---|
 | Bar | Top | none | whole bar | every screen | exclusive zone = bar height |
-| Popup (control center, notification center, calendar, media, keyboard) | Overlay | on demand (only while open) | whole popup | screen of the pill that opened it | closes on outside click via focus grab |
+| Popup (control center, notification center, calendar, media, keyboard) | Overlay | on demand (only while open) | rounded panel | screen of the pill that opened it | closes on outside click via focus grab |
 | Notification popups | Overlay | none on arrival, on demand during an explicitly opened inline reply | **only over the cards** (input mask), rest click-through | focused screen | stack under the bar, top-right |
 | Launcher | Overlay | exclusive while open | whole | focused screen | |
 | OSD | Overlay | none | **none** (fully click-through) | focused screen at each OSD action | one pill, bottom center |
@@ -15,7 +15,7 @@ Names of Quickshell/Hyprland properties below are from memory of the API — **v
 | Confirmation dialog | Overlay | exclusive while open | whole + scrim | screen where the action was chosen | |
 | Lock | session lock | exclusive | whole | every screen | nothing else is visible |
 
-Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. A `Region` input mask restricts clicks to the surface, and `HyprlandFocusGrab.cleared()` handles clicks outside the popup and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
+Quickshell 0.3.2 popup APIs verified in nested Hyprland. Set `WlrLayershell.layer: WlrLayer.Overlay` and use `WlrKeyboardFocus.OnDemand` while open. `ExclusionMode.Ignore` places the layer relative to the output edges, so the popup accounts for the bar's reserved space itself. The popup window includes room for the panel shadow up to the output edges. Its `Region` input mask follows the rounded panel. Clicks on the shadow count as outside clicks. `HyprlandFocusGrab.cleared()` handles clicks outside the panel and the bar windows. The bar handles its own outside clicks so pills can still toggle or swap popups.
 
 Notification popups use the same overlay and exclusion settings with `WlrKeyboardFocus.None` on arrival. Opening the inline reply editor temporarily uses `WlrKeyboardFocus.Exclusive`. The window's input mask combines the visible card regions, while each card owns its hover timer. Verified in nested Hyprland with two outputs. In Quickshell 0.3.2, a 1400 ms `notify-send` timeout arrives as `expireTimeout: 1400`.
 

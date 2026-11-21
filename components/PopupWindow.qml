@@ -25,14 +25,14 @@ PanelWindow {
     readonly property ShellScreen _anchorScreen: _anchorWindow?.screen ?? null
     readonly property bool _shown: _ready && opened && _layoutSettled
     readonly property bool _layoutReady: _ready && opened && contentViewportHeight > 0
-        && width === Math.round(_placement.width) && height === Math.round(_placement.height)
+        && width === _placement.window.width && height === _placement.window.height
     property bool _ready: false
     property bool _layoutSettled: false
     readonly property var _placement: Model.placement(
         _anchorScreen?.width ?? 0, _anchorScreen?.height ?? 0,
         anchorItem?.x ?? 0, anchorItem?.width ?? 0, _anchorWindow?.height ?? Sizing.barHeight,
         preferredWidth, body.implicitHeight + 2 * Sizing.popupInnerPadding,
-        Sizing.barSideMargin, Sizing.popupGap, centerOnAnchor)
+        Sizing.barSideMargin, Sizing.popupGap, centerOnAnchor, Theme.popupShadow, Motion.popupSlideDistance)
 
     screen: _anchorScreen
     visible: _anchorScreen !== null
@@ -40,10 +40,10 @@ PanelWindow {
         left: true
         top: true
     }
-    margins.left: _placement.x
-    margins.top: _placement.y
-    implicitWidth: _placement.width
-    implicitHeight: _placement.height
+    margins.left: _placement.window.x
+    margins.top: _placement.window.y
+    implicitWidth: _placement.window.width
+    implicitHeight: _placement.window.height
     exclusionMode: ExclusionMode.Ignore
     color: Theme.transparent
     WlrLayershell.layer: WlrLayer.Overlay
@@ -52,6 +52,7 @@ PanelWindow {
 
     mask: Region {
         item: root._shown ? surface : null
+        radius: Math.round(surface.radius * surface.scale)
     }
 
     Component.onCompleted: _ready = true
@@ -87,12 +88,14 @@ PanelWindow {
         Surface {
             id: surface
 
-            width: parent.width
-            height: Math.min(root.height, root.contentViewportHeight + 2 * Sizing.popupInnerPadding)
+            x: root._placement.x - root._placement.window.x
+            y: root._placement.y - root._placement.window.y + Motion.popupSlideDistance * (_progress - 1)
+            width: root._placement.width
+            height: Math.min(root._placement.height, root.contentViewportHeight + 2 * Sizing.popupInnerPadding)
             container: Theme.surfaceContainer
             radius: Shape.extraLarge
+            shadow: true
             scale: Motion.enterScale + (1 - Motion.enterScale) * _progress
-            y: Motion.popupSlideDistance * (_progress - 1)
             opacity: root._shown ? 1 : 0
             enabled: root.opened
 

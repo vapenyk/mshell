@@ -85,10 +85,12 @@ Control Center, Notification Center, Calendar, and the keyboard layout picker us
 
 ### Panel code and verification checklist
 
-- [ ] Keep the shared `AnchoredPopup → PopupWindow → Surface` structure for Control Center, Notification Center, Calendar, and the keyboard layout picker. Use `surfaceContainer`, `Shape.extraLarge`, and the soft shadow from `Theme.popupShadow` for large panels.
-- [ ] Check that the shadow is visible along the window edges. Add transparent space for the blur in `PopupWindow` if needed. `preferredWidth` defines the visible panel width, and the input region matches the panel itself. Verify placement near screen edges and dismissal when clicking outside. Update the existing placement model and tests if the geometry calculation changes.
-- [ ] Style the power dropdown as a compact `Panel` variant. Use `surfaceContainer` and `Shape.extraLarge` in the existing menu inside Control Center. Verify that the menu boundary is visible against the panel. Continue to use `Dialog.qml` for confirmations.
-- [ ] Review the existing surfaces in nested Hyprland. Check the four large panels, power dropdown, notification card, toast, bottom-center OSD, and dialog. Check the shadow against light and dark backgrounds.
+- [x] Keep the shared `AnchoredPopup → PopupWindow → Surface` structure for Control Center, Notification Center, Calendar, and the keyboard layout picker. Use `surfaceContainer`, `Shape.extraLarge`, and the soft shadow from `Theme.popupShadow` for large panels.
+- [x] Check that the shadow is visible along the window edges. Add transparent space for the blur in `PopupWindow` if needed. `preferredWidth` defines the visible panel width, and the input region matches the panel itself. Verify placement near screen edges and dismissal when clicking outside. Update the existing placement model and tests if the geometry calculation changes.
+- [x] Style the power dropdown as a compact `Panel` variant. Use `surfaceContainer` and `Shape.extraLarge` in the existing menu inside Control Center. Verify that the menu boundary is visible against the panel. Continue to use `Dialog.qml` for confirmations.
+- [x] Review the existing surfaces in nested Hyprland. Check the four large panels, power dropdown, notification card, toast, bottom-center OSD, and dialog. Check the shadow against light and dark backgrounds.
+
+Verified these surfaces and the interactions below on nested Hyprland outputs at 1280×800 and 480×320. Checked the shadow against both backgrounds and clicked in its padding to verify dismissal. The dialog confirmation reached a simulated power action. OSD checks used simulated display brightness and included native session lock and removal of the smaller output.
 
 ### Behavior to verify
 

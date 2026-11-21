@@ -16,7 +16,7 @@ The [component catalogue](COMPONENTS.md#container-roles) maps roles to their imp
 
 | Role | Container | Shape | Content |
 |---|---|---|---|
-| Panel | `surfaceContainer` | `Shape.extraLarge` | `onSurface` |
+| Panel | `surfaceContainer`. The inline power dropdown adds an `outlineVariant` border at `Sizing.outlineWidth`. | `Shape.extraLarge` | `onSurface` |
 | Card | `surfaceContainerHigh` | `Shape.large`. Joined corners in expanded notification groups use `Shape.extraSmall`. | `onSurface`. Notification toasts use the same Card. |
 | Tile | Inactive `surfaceContainerHigh`, active `primary` | `Shape.extraLarge` | Inactive `onSurface` with `onSurfaceVariant` subtitle, active `onPrimary` |
 | Bar Pill | Idle `transparent`, active or pressed `secondaryContainer` | `Shape.full` | Idle `onSurface`, active or pressed `onSecondaryContainer` |
