@@ -59,6 +59,18 @@ Singleton {
         return true;
     }
 
+    function adjustVolume(points: real): bool {
+        if (!available)
+            return false;
+
+        const next = Model.volumeAfterDelta(volume, points);
+        if (next === null)
+            return false;
+
+        setVolume(next);
+        return true;
+    }
+
     function toggleMute(): bool {
         if (!available)
             return false;

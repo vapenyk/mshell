@@ -55,6 +55,7 @@ PanelWindow {
 
         function volumeUp(): void { root._show("volume", Audio.stepVolume(1)); }
         function volumeDown(): void { root._show("volume", Audio.stepVolume(-1)); }
+        function adjustVolume(points: real): void { root._show("volume", Audio.adjustVolume(points)); }
         function toggleMute(): void { root._show("volume", Audio.toggleMute()); }
         function brightnessUp(): void { root._show("display", Brightness.step("display", 1)); }
         function brightnessDown(): void { root._show("display", Brightness.step("display", -1)); }

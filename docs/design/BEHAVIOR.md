@@ -107,6 +107,8 @@ On the lock surface the bar displays its live indicators. Clicking the bar focus
 
 The OSD opens and extends its timeout on key actions delivered through IPC or an ASUS keyboard backlight hardware event. The ASUS adapter watches `brightness_hw_changed` and requests a fresh reading from `Brightness`. The ASUS driver performs the hardware write. An action selects the focused screen and updates the contents of the same pill. A visible pill follows the live system level. Control Center sliders and ordinary software writes only update that level. Opening Control Center or locking the session hides the OSD immediately. The keys continue to change levels in both states. Muted output displays an empty track. Keyboard backlight uses discrete stops from off through the reported hardware maximum.
 
+Hyprland's three-finger vertical swipe calls `qs -c mshell ipc call osd adjustVolume -- <points>` with a signed, possibly fractional change in percentage points. The action updates the OSD and preserves the output's mute state.
+
 ## 7. Notifications (freedesktop semantics, not M3)
 - Low urgency goes to Silent. Normal urgency opens a toast for 5 s or the sender's `expire_timeout` in milliseconds. Critical urgency opens a toast without a timeout.
 - Hovering or expanding a toast pauses its timeout. Collapsing and moving the pointer away resumes the remaining time.

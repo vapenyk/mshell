@@ -12,9 +12,13 @@ function streamName(node) {
     return node?.properties?.["application.name"] || deviceName(node);
 }
 
+function volumeAfterDelta(volume, points) {
+    return Number.isFinite(points) ? Math.max(0, Math.min(1, volume + points / 100)) : null;
+}
+
 function volumeStep(volume, muted, direction) {
     return {
-        volume: Math.max(0, Math.min(1, volume + direction * 0.02)),
+        volume: volumeAfterDelta(volume, direction * 2),
         muted: muted && direction < 0,
     };
 }
